@@ -1,0 +1,43 @@
+/*
+Error: Invalid CSS after "...nse-code.less %": expected "{", was "}"
+        on line 3 of /Users/zhengxiaowen/Documents/my-project/static/Font-Awesome-3.2.1/src/assets/font-awesome/scss/font-awesome.scss
+
+1: ---
+2: ---
+3: {% include license-code.less %}
+4: 
+5: @import "variables";
+6: @import "mixins";
+7: @import "path";
+8: @import "core";
+
+Backtrace:
+/Users/zhengxiaowen/Documents/my-project/static/Font-Awesome-3.2.1/src/assets/font-awesome/scss/font-awesome.scss:3
+/private/var/folders/b2/f8y26pcd3mz1jr_8jvcz7b580000gp/T/AppTranslocation/6D48CD45-84DD-422F-90A6-75C9FD95D082/d/Koala.app/Contents/Resources/app.nw/rubygems/gems/sass-3.4.9/lib/sass/scss/parser.rb:1165:in `expected'
+/private/var/folders/b2/f8y26pcd3mz1jr_8jvcz7b580000gp/T/AppTranslocation/6D48CD45-84DD-422F-90A6-75C9FD95D082/d/Koala.app/Contents/Resources/app.nw/rubygems/gems/sass-3.4.9/lib/sass/scss/parser.rb:1101:in `expected'
+/private/var/folders/b2/f8y26pcd3mz1jr_8jvcz7b580000gp/T/AppTranslocation/6D48CD45-84DD-422F-90A6-75C9FD95D082/d/Koala.app/Contents/Resources/app.nw/rubygems/gems/sass-3.4.9/lib/sass/scss/parser.rb:1096:in `tok!'
+/private/var/folders/b2/f8y26pcd3mz1jr_8jvcz7b580000gp/T/AppTranslocation/6D48CD45-84DD-422F-90A6-75C9FD95D082/d/Koala.app/Contents/Resources/app.nw/rubygems/gems/sass-3.4.9/lib/sass/scss/parser.rb:641:in `block'
+/private/var/folders/b2/f8y26pcd3mz1jr_8jvcz7b580000gp/T/AppTranslocation/6D48CD45-84DD-422F-90A6-75C9FD95D082/d/Koala.app/Contents/Resources/app.nw/rubygems/gems/sass-3.4.9/lib/sass/scss/parser.rb:711:in `declaration_or_ruleset'
+/private/var/folders/b2/f8y26pcd3mz1jr_8jvcz7b580000gp/T/AppTranslocation/6D48CD45-84DD-422F-90A6-75C9FD95D082/d/Koala.app/Contents/Resources/app.nw/rubygems/gems/sass-3.4.9/lib/sass/scss/parser.rb:661:in `block_child'
+/private/var/folders/b2/f8y26pcd3mz1jr_8jvcz7b580000gp/T/AppTranslocation/6D48CD45-84DD-422F-90A6-75C9FD95D082/d/Koala.app/Contents/Resources/app.nw/rubygems/gems/sass-3.4.9/lib/sass/scss/parser.rb:650:in `block_contents'
+/private/var/folders/b2/f8y26pcd3mz1jr_8jvcz7b580000gp/T/AppTranslocation/6D48CD45-84DD-422F-90A6-75C9FD95D082/d/Koala.app/Contents/Resources/app.nw/rubygems/gems/sass-3.4.9/lib/sass/scss/parser.rb:642:in `block'
+/private/var/folders/b2/f8y26pcd3mz1jr_8jvcz7b580000gp/T/AppTranslocation/6D48CD45-84DD-422F-90A6-75C9FD95D082/d/Koala.app/Contents/Resources/app.nw/rubygems/gems/sass-3.4.9/lib/sass/scss/parser.rb:635:in `ruleset'
+/private/var/folders/b2/f8y26pcd3mz1jr_8jvcz7b580000gp/T/AppTranslocation/6D48CD45-84DD-422F-90A6-75C9FD95D082/d/Koala.app/Contents/Resources/app.nw/rubygems/gems/sass-3.4.9/lib/sass/scss/parser.rb:660:in `block_child'
+/private/var/folders/b2/f8y26pcd3mz1jr_8jvcz7b580000gp/T/AppTranslocation/6D48CD45-84DD-422F-90A6-75C9FD95D082/d/Koala.app/Contents/Resources/app.nw/rubygems/gems/sass-3.4.9/lib/sass/scss/parser.rb:650:in `block_contents'
+/private/var/folders/b2/f8y26pcd3mz1jr_8jvcz7b580000gp/T/AppTranslocation/6D48CD45-84DD-422F-90A6-75C9FD95D082/d/Koala.app/Contents/Resources/app.nw/rubygems/gems/sass-3.4.9/lib/sass/scss/parser.rb:117:in `stylesheet'
+/private/var/folders/b2/f8y26pcd3mz1jr_8jvcz7b580000gp/T/AppTranslocation/6D48CD45-84DD-422F-90A6-75C9FD95D082/d/Koala.app/Contents/Resources/app.nw/rubygems/gems/sass-3.4.9/lib/sass/scss/parser.rb:42:in `parse'
+/private/var/folders/b2/f8y26pcd3mz1jr_8jvcz7b580000gp/T/AppTranslocation/6D48CD45-84DD-422F-90A6-75C9FD95D082/d/Koala.app/Contents/Resources/app.nw/rubygems/gems/sass-3.4.9/lib/sass/engine.rb:393:in `_to_tree'
+/private/var/folders/b2/f8y26pcd3mz1jr_8jvcz7b580000gp/T/AppTranslocation/6D48CD45-84DD-422F-90A6-75C9FD95D082/d/Koala.app/Contents/Resources/app.nw/rubygems/gems/sass-3.4.9/lib/sass/engine.rb:368:in `_render_with_sourcemap'
+/private/var/folders/b2/f8y26pcd3mz1jr_8jvcz7b580000gp/T/AppTranslocation/6D48CD45-84DD-422F-90A6-75C9FD95D082/d/Koala.app/Contents/Resources/app.nw/rubygems/gems/sass-3.4.9/lib/sass/engine.rb:285:in `render_with_sourcemap'
+/private/var/folders/b2/f8y26pcd3mz1jr_8jvcz7b580000gp/T/AppTranslocation/6D48CD45-84DD-422F-90A6-75C9FD95D082/d/Koala.app/Contents/Resources/app.nw/rubygems/gems/sass-3.4.9/lib/sass/exec/sass_scss.rb:396:in `run'
+/private/var/folders/b2/f8y26pcd3mz1jr_8jvcz7b580000gp/T/AppTranslocation/6D48CD45-84DD-422F-90A6-75C9FD95D082/d/Koala.app/Contents/Resources/app.nw/rubygems/gems/sass-3.4.9/lib/sass/exec/sass_scss.rb:62:in `process_result'
+/private/var/folders/b2/f8y26pcd3mz1jr_8jvcz7b580000gp/T/AppTranslocation/6D48CD45-84DD-422F-90A6-75C9FD95D082/d/Koala.app/Contents/Resources/app.nw/rubygems/gems/sass-3.4.9/lib/sass/exec/base.rb:52:in `parse'
+/private/var/folders/b2/f8y26pcd3mz1jr_8jvcz7b580000gp/T/AppTranslocation/6D48CD45-84DD-422F-90A6-75C9FD95D082/d/Koala.app/Contents/Resources/app.nw/rubygems/gems/sass-3.4.9/lib/sass/exec/base.rb:19:in `parse!'
+/private/var/folders/b2/f8y26pcd3mz1jr_8jvcz7b580000gp/T/AppTranslocation/6D48CD45-84DD-422F-90A6-75C9FD95D082/d/Koala.app/Contents/Resources/app.nw/rubygems/gems/sass-3.4.9/bin/sass:13:in `<top (required)>'
+/private/var/folders/b2/f8y26pcd3mz1jr_8jvcz7b580000gp/T/AppTranslocation/6D48CD45-84DD-422F-90A6-75C9FD95D082/d/Koala.app/Contents/Resources/app.nw/bin/sass:18:in `load'
+/private/var/folders/b2/f8y26pcd3mz1jr_8jvcz7b580000gp/T/AppTranslocation/6D48CD45-84DD-422F-90A6-75C9FD95D082/d/Koala.app/Contents/Resources/app.nw/bin/sass:18:in `<main>'
+*/
+body:before {
+  white-space: pre;
+  font-family: monospace;
+  content: "Error: Invalid CSS after \"...nse-code.less %\": expected \"{\", was \"}\"\A         on line 3 of /Users/zhengxiaowen/Documents/my-project/static/Font-Awesome-3.2.1/src/assets/font-awesome/scss/font-awesome.scss\A \A 1: ---\A 2: ---\A 3: {% include license-code.less %}\A 4: \A 5: @import \"variables\";\A 6: @import \"mixins\";\A 7: @import \"path\";\A 8: @import \"core\";"; }
