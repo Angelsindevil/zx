@@ -5,9 +5,9 @@
       <img src="../../static/img/toTop.png" title="点击回到顶部">
     </div> -->
     <div class="rightBar">
-      <p>信息平台-全部信息：
+      <p>资讯数据-{{topTips}}
         <!-- <span>今日更新<span>136</span>篇，今日收录<span>12</span>篇</span> -->
-        <span>今日更新<span>{{totalNum}}</span>篇，今日收录<span>{{todayNum}}</span>篇</span>
+        <!-- <span>今日更新<span>{{totalNum}}</span>篇，今日收录<span>{{todayNum}}</span>篇</span> -->
       </p>
       <el-select v-model="value" placeholder="" @change="optionChangeHandler" class="selectStyle">
         <el-option
@@ -51,7 +51,7 @@
               {{(level==0||(level==2))?(item.isInstructions=='0'?'批示':'批示中'):((level==1||level==4)?(item.isInclude=='0'?'收录':'已收录'):false)}}
               </span>
             </span>
-            <router-link :to="{ path: '/homePage/articleDetail', query: { id:item.id,index:index,edit:'0'}}">
+            <router-link target="_blank" :to="{ path: '/homePage/articleDetail', query: { id:item.id,index:index,edit:'0'}}">
               <div class="rightContent">
                 <p class="title_bar" style="padding-right: 160px;">
                   <span class="ellipsis" style="display:block">{{item.title}}</span>
@@ -179,6 +179,7 @@ export default {
         value: 'manual',
         label: '校内信息'
       }],
+      topTips:"全部内容",
       // options: [],
       value: '全部内容',
       userid:'',
@@ -215,6 +216,7 @@ export default {
       this.keyword = this.$route.query.keyword;
       this.add = this.$route.query.add;
       this.type=this.$route.query.type;
+      this.topTips=this.$route.query.type;
       this.value='全部内容';
       this.articlesAarry=[];
       var that=this;
@@ -230,9 +232,13 @@ export default {
             })
             that.flag=false;
           }
-          else{
-            alert(data.data);
-          }
+          else if(data.state=='9000'){
+              alert("用户未登录！")
+              that.$router.push({path:'/login',query: {}});
+            }
+            else{
+              alert(data.data);
+            }
         })
       }
       else{//this.add=='全部'以及其他所有可能
@@ -244,6 +250,10 @@ export default {
                 $(document).scrollTop(0);
               })
                   // that.articlesAarry=data.data.list;
+            }
+            else if(data.state=='9000'){
+              alert("用户未登录！")
+              that.$router.push({path:'/login',query: {}});
             }
             else{
               alert(data.data);
@@ -314,6 +324,7 @@ export default {
     },
     includeThis:function(e){
       // e.stopPropagation();
+      var that=this;
       if(this.btnState!='批示'){
         e.stopPropagation();
         var el=$(e.target).closest(".includeBtn");
@@ -325,6 +336,10 @@ export default {
               el.removeClass("grey red").find("span").text("收录");
               el.find("img").attr("src","./static/img/plus.png");
             }
+            else if(data.state=='9000'){
+              alert("用户未登录！")
+              that.$router.push({path:'/login',query: {}});
+            }
             else{
               alert(data.data);
             }
@@ -333,6 +348,10 @@ export default {
         else{
           $.when(included(id,this.userid)).done(function(data){
             if(data.state=="0"){
+            }
+            else if(data.state=='9000'){
+              alert("用户未登录！")
+              that.$router.push({path:'/login',query: {}});
             }
             else{
               alert(data.data);
@@ -446,6 +465,10 @@ export default {
                 $(document).scrollTop(height-350);
               })
             }
+            else if(data.state=='9000'){
+              alert("用户未登录！")
+              that.$router.push({path:'/login',query: {}});
+            }
             else{
               alert(data.data);
             }
@@ -461,6 +484,10 @@ export default {
               $(document).scrollTop(height-350);
             })
             // that.articlesAarry=data.data.list;
+          }
+          else if(data.state=='9000'){
+            alert("用户未登录！")
+            that.$router.push({path:'/login',query: {}});
           }
           else{
             alert(data.data);

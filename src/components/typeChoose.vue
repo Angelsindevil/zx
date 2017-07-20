@@ -70,12 +70,20 @@
             that.hideUserBox();
             window.location.reload();
           }
+          else if(data.state=='9000'){
+            alert("用户未登录！")
+            that.$router.push({path:'/login',query: {}});
+          }
           else{
             alert(data.data);
           }
         })
         $.when(editArticleType(this.id,this.form.type)).done(function(data){
           if(data.state=="0"){
+          }
+          else if(data.state=='9000'){
+            alert("用户未登录！")
+            that.$router.push({path:'/login',query: {}});
           }
           else{
             alert(data.data);
@@ -110,6 +118,10 @@
           // else{
             that.form.type=that.options[0].value;
           // }
+        }
+        else if(data.state=='9000'){
+          alert("用户未登录！")
+          that.$router.push({path:'/login',query: {}});
         }
         else{
           alert(data.data);

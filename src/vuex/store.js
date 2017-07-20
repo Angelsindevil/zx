@@ -42,7 +42,11 @@ const state = {
 	},
 	clrId:'',
 	unitVal:'',
-	mesId:'',
+	// mesId:'',
+	mesState:{
+		id:'',
+		method:''
+	},
 	reportObj:[],
 	wordObj:{},
 	mesObj:{

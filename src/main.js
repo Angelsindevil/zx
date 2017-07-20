@@ -7,16 +7,17 @@ import router from './router'
 import VueCookie from 'vue-cookie'
 import draggable from 'vuedraggable'
 // import Echarts from 'vue-echarts'
-import ECharts from 'vue-echarts/components/ECharts.vue'
-import 'echarts/lib/chart/bar'
-import 'echarts/lib/chart/pie'
-import 'echarts/lib/chart/line'
-import 'echarts/lib/component/tooltip'
-import 'echarts/lib/component/toolbox'
-import 'echarts/lib/component/legend'
-import 'echarts/lib/component/title'
+// import ECharts from 'vue-echarts/components/ECharts.vue'
+// import 'echarts/lib/chart/bar'
+// import 'echarts/lib/chart/pie'
+// import 'echarts/lib/chart/line'
+// import 'echarts/lib/component/tooltip'
+// import 'echarts/lib/component/toolbox'
+// import 'echarts/lib/component/legend'
+// import 'echarts/lib/component/title'
 import 'element-ui/lib/theme-default/index.css'
 import ElementUI from 'element-ui'
+// import { Button, Select,Input,Menu,Radio,Table,DatePicker,Dropdown} from 'element-ui'
 import store from './vuex/store'
 
 // const App = resolve => require(['./App'], resolve)
@@ -29,6 +30,14 @@ import store from './vuex/store'
 
 Vue.use(ElementUI);
 // Vue.use(VueRouter);
+// Vue.use(Button);
+// Vue.use(Select);
+// Vue.use(Input);
+// Vue.use(Menu);
+// Vue.use(Radio);
+// Vue.use(Table);
+// Vue.use(DatePicker);
+// Vue.use(Dropdown);
 Vue.use(VueCookie);
 /* eslint-disable no-new */
 Vue.component('draggable', require('vuedraggable'));

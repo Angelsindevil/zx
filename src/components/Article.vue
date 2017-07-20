@@ -4,7 +4,8 @@
       <p style="padding-right:110px">
         <span class="ellipsis" style="display:block;font-size: 18px;color: #222;padding-top:0">{{title}}</span>
         <span>
-          <span>来源：<span>{{source}}</span></span>
+          <span>来源：<span class="ellipsis" style="display: inline-block;width: 65%;vertical-align: middle;">{{source}}</span></span>
+          <span class="linkStyle" @click="goSomewhere($event,link)" style="color: blue;text-decoration: underline;">来源链接</span>
           <span>类别：<span>{{type}}</span></span>
           <span>时间：<span>{{date}}</span></span>
         </span> 
@@ -12,8 +13,16 @@
       <router-link :to="{path:'/homePage/contentAdd', query: { id:id}}" class="art_edit">
         <el-button type="text" size="small" class="editBtn">编辑</el-button>
       </router-link>
-      <span class="includeBtn includeBtn_fb" @click="releaseBtn(id,$event,type)" style="width:80px;font-size:12px"><span>发布</span></span>
-      <span class="includeBtn includeBtn_cfb" @click="clickBtn($event,id)" @mouseover="overBtn" @mouseout="outBtn"><span>已发布</span></span>
+      <!-- <span class="includeBtn includeBtn_fb" @click="releaseBtn(id,$event,type)" style="width:80px;font-size:12px"><span>发布</span></span>
+      <span class="includeBtn includeBtn_cfb" @click="clickBtn($event,id)" @mouseover="overBtn" @mouseout="outBtn"><span>已发布</span></span> -->
+      <span class="includeBtn includeBtn_fb"
+       @click="releaseChange(id,$event,type,isRelease)" 
+       style="width:80px;font-size:12px"
+       v-show="(level!=3)?true:false"
+       :class="isRelease=='1'?'grey':false"
+       >
+        <span>{{isRelease=='1'?'已发布':'发布'}}</span>
+       </span>
       <span class="includeBtn includeBtn_sl" 
         v-show="(level!=3)?true:false"
         :class="((level==0||level==2)?(isInstructions=='0'?'':'grey'):((level==1||level==4)?(isInclude=='0'?'':'grey'):''))"
@@ -83,12 +92,31 @@ export default {
     doThis:function(){
 
     },
+    goSomewhere(e,link){
+      var ele=e.currentTarget;
+      e.preventDefault();
+      window.open(link);
+    },
+    releaseChange(id,e,type,isRelease){
+      console.log(isRelease);
+      if(isRelease=='1'){
+        this.clickBtn(e,id);
+      }
+      else{
+        this.releaseBtn(id,e,type);
+      }
+    },
     clickBtn:function(e,id){
+      var that=this;
       e.stopPropagation();
       e.preventDefault();
       $.when(cancelArticle(id)).done(function(data){
         if(data.state=="0"){
           window.location.reload();
+        }
+        else if(data.state=='9000'){
+          alert("用户未登录！")
+          that.$router.push({path:'/login',query: {}});
         }
         else{
           alert(data.data);
@@ -222,13 +250,18 @@ export default {
     },
     includeThis:function(e){
       if(this.btnState!='批示'){
+        var that=this;
         e.stopPropagation();
         var el=$(e.target).closest(".includeBtn");
         var class_=el.hasClass('red');
         var id=$(el).attr("data-id");
         if(class_){
-          $.when(canceled(id)).done(function(data){
+          $.when(canceled(id,this.userid)).done(function(data){
             if(data.state=="0"){
+            }
+            else if(data.state=='9000'){
+              alert("用户未登录！")
+              that.$router.push({path:'/login',query: {}});
             }
             else{
               alert(data.data);
@@ -238,8 +271,12 @@ export default {
           el.find("img").attr("src","./static/img/plus.png");
         }
         else{
-          $.when(included(id)).done(function(data){
+          $.when(included(id,this.userid)).done(function(data){
             if(data.state=="0"){
+            }
+            else if(data.state=='9000'){
+              alert("用户未登录！")
+              that.$router.push({path:'/login',query: {}});
             }
             else{
               alert(data.data);
@@ -295,28 +332,33 @@ export default {
       this.btnState='收录';
     }
     else{}
-    if(this.edit=='0'){//已发布文章列表点击查看文章详情
+    if(this.edit=='0'&&this.level!=3){//已发布文章列表点击查看文章详情
       this.$nextTick(function(){
         $(".art_edit").removeClass("showBtn");
         $(".includeBtn").hide();
         $(".includeBtn_sl").show();
+        $(".linkStyle").hide();
       })
     }
-    else if(this.edit=='1'){
+    else if(this.edit=='1'&&this.level!=3){
       localStorage.setItem("editor",JSON.stringify(this.datanew));
       this.$nextTick(function(){
         $(".art_edit").addClass("showBtn");
         $(".includeBtn").hide();
         $(".includeBtn_fb").show();
+        $(".linkStyle").show();
       })
     }
-    else{
+    else if(this.level!=3){
       this.$nextTick(function(){
         $(".art_edit").removeClass("showBtn");
         $(".includeBtn").hide();
-        $(".includeBtn_cfb").show();
+        // $(".includeBtn_cfb").show();
+        $(".includeBtn_fb").show();
+        $(".linkStyle").hide();
       })
     }
+    else{}
     var that=this;
     if(this.id!=''){
       $.when(getArticleDetail(that.id,this.userid)).done(function(data){
@@ -338,11 +380,17 @@ export default {
           that.date=res.time;
           that.type=res.type;
           that.source=res.source;
+          that.link=res.link;
           that.title=res.title;
           that.isInclude=res.isInclude;
           that.isInstructions=res.isInstructions;
           that.instructionId=res.instructionId;
           that.isAdded=res.isAdded;
+          that.isRelease=res.isRelease;
+        }
+        else if(data.state=='9000'){
+          alert("用户未登录！")
+          that.$router.push({path:'/login',query: {}});
         }
         else{
           alert(data.data);
@@ -382,7 +430,7 @@ export default {
           // font-size:14px;
           font-size: 12px;
           display:inline-block;
-          width:25%;
+          width:20%;
         }
       }
     }

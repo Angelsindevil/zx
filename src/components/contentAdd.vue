@@ -1,7 +1,7 @@
 <template>
   <div class="contentAdd">
     <div class="rightBar">
-      <p>内容编辑
+      <p>内容管理-内容编辑
       </p>
       <el-button class="btn_position" @click="releaseBtn">发布</el-button>
     </div>
@@ -201,6 +201,10 @@ export default {
               // that.quill.setText("");
               // that.addId=data.data.id;
             }
+            else if(data.state=='9000'){
+              alert("用户未登录！")
+              that.$router.push({path:'/login',query: {}});
+            }
             else{
               alert(data.data);
             }
@@ -211,6 +215,10 @@ export default {
             if(data.state=="0"){
               alert("已保存至内容筛选列表！");
               that.resetBtn();
+            }
+            else if(data.state=='9000'){
+              alert("用户未登录！")
+              that.$router.push({path:'/login',query: {}});
             }
             else{
               alert(data.data);
@@ -232,6 +240,7 @@ export default {
     releaseBtn(id){
       this.txt=document.querySelector("#editor .ql-editor").innerHTML;
       var that=this;
+      console.log(this.form.date);
       if(this.form.title==""){
         alert("请输入文章标题！");
       }
@@ -248,6 +257,10 @@ export default {
               alert("文章发布成功！");
               that.resetBtn();
             }
+            else if(data.state=='9000'){
+              alert("用户未登录！")
+              that.$router.push({path:'/login',query: {}});
+            }
             else{
               alert(data.data);
             }
@@ -255,6 +268,10 @@ export default {
           $.when(editArticle(this.id,this.form.type,this.form.source,this.form.link,this.form.title,this.form.date,this.txt)).done(function(data){
             if(data.state=="0"){
               that.resetBtn();
+            }
+            else if(data.state=='9000'){
+              alert("用户未登录！")
+              that.$router.push({path:'/login',query: {}});
             }
             else{
               alert(data.data);
@@ -269,10 +286,18 @@ export default {
                   alert("文章发布成功！");
                   that.resetBtn();
                 }
+                else if(res.state=='9000'){
+                  alert("用户未登录！")
+                  that.$router.push({path:'/login',query: {}});
+                }
                 else{
-                  alert(res.data);
+                  alert(data.data);
                 }
               })
+            }
+            else if(data.state=='9000'){
+              alert("用户未登录！")
+              that.$router.push({path:'/login',query: {}});
             }
             else{
               alert(data.data);
@@ -328,7 +353,7 @@ export default {
         this.form.source=this.source.source;
         this.form.link=this.source.link;
         this.form.title=this.source.title;
-        this.form.date=this.source.date;
+        this.form.date=this.source.time;
         this.form.text=this.source.content;
         this.isAdded=this.source.isAdded;
       }
@@ -357,6 +382,10 @@ export default {
           that.form.type=that.options[0].value;
           that.initType=that.options[0].value;
         }
+      }
+      else if(data.state=='9000'){
+        alert("用户未登录！")
+        that.$router.push({path:'/login',query: {}});
       }
       else{
         alert(data.data);

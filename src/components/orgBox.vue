@@ -91,6 +91,7 @@
 	    },
 		methods:{
 		  operateUser(){
+		  	var that=this;
 		  	if(this.form.org==""){
 	          alert("组织名称不能为空！");
 	        }
@@ -102,9 +103,13 @@
 		              alert("新增组织成功！");
 		              window.location.reload();
 		            }
-		            else{
-		            	alert(data.data);
-		            }
+		            else if(data.state=='9000'){
+			            alert("用户未登录！")
+			            that.$router.push({path:'/login',query: {}});
+			          }
+			          else{
+			            alert(data.data);
+			          }
 		          })
 		        }
 		        else{//编辑组织
@@ -114,23 +119,32 @@
 		              alert("编辑组织成功！");
 		              window.location.reload();
 		            }
-		            else{
-		            	alert(data.data);
-		            }
+		            else if(data.state=='9000'){
+			            alert("用户未登录！")
+			            that.$router.push({path:'/login',query: {}});
+			          }
+			          else{
+			            alert(data.data);
+			          }
 		          })
 		        }
 		    }
 	      },
 	      deleteUser(){
+	      	var that=this;
 	      	if(confirm("确认删除该组织？")){
 	      	  $.when(deleteOrg(this.orgid)).done(function(data){
 		        if(data.state=="0"){
 		        	alert("删除成功！");
 		        	window.location.reload();
 		        }
-		        else{
-	            	alert(data.data);
-	            }
+		        else if(data.state=='9000'){
+		            alert("用户未登录！")
+		            that.$router.push({path:'/login',query: {}});
+		          }
+		          else{
+		            alert(data.data);
+		          }
 		      })
 	      	}
 	      },

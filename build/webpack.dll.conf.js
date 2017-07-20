@@ -3,7 +3,7 @@ const webpack = require('webpack');
 
 module.exports = {
   entry: {
-    vendor: ['vue/dist/vue.common.js','vue-router', 'babel-polyfill','vue-cookie','element-ui']
+    vendor: ['vue/dist/vue.common.js','vue-router','vue-cookie','element-ui','vuedraggable']
   },
   output: {
     path: path.join(__dirname, '../static/js'),

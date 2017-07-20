@@ -111,6 +111,10 @@
             that.$router.push('/homePage/ReportList');
             // this.$store.dispatch('changeWord',{wordObj:data.data}).then(function(resp){});
           }
+          else if(data.state=='9000'){
+            alert("用户未登录！")
+            that.$router.push({path:'/login',query: {}});
+          }
           else{
             alert(data.data);
           }

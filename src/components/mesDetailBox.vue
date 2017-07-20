@@ -46,19 +46,23 @@
     },
     computed: {
       ...mapGetters({
-        mesId: 'mesId',
+        mesState: 'mesState',
       })
     },
     watch:{
-      mesId:{
+      mesState:{
         handler: function (val, oldVal) {//监听学校和指标数组，只要学科id没有变化，则不变化
           console.log(val);//用来渲染从文章列表或者文章详情点击进入的批示弹窗 选取文章的时候 事先渲染选中值
           var that=this;
-          if(val!=""){
-            $.when(messageDetail(val)).done(function(data){
+          if(val.id!=""){
+            $.when(messageDetail(val.id,val.method)).done(function(data){
               if(data.state=="0"){
                 that.filterData=data.data;
                 that.getMesRed();
+              }
+              else if(data.state=='9000'){
+                alert("用户未登录！")
+                that.$router.push({path:'/login',query: {}});
               }
               else{
                 alert(data.data);
@@ -106,6 +110,10 @@
                 // that.xtNum=data.data;
               }
               that.$store.dispatch('changeMesCount',{"mesCount":data.data}).then(function(resp){});
+            }
+            else if(data.state=='9000'){
+              alert("用户未登录！")
+              that.$router.push({path:'/login',query: {}});
             }
             else{
               alert(data.data);

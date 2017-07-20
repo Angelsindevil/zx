@@ -184,6 +184,13 @@ export default {
             alert("退出登录成功！");
             that.$router.push({path:'/login',query: {}});
           }
+          else if(data.state=='9000'){
+            alert("用户未登录！")
+            that.$router.push({path:'/login',query: {}});
+          }
+          else{
+            alert(data.data);
+          }
         })
       }
       else{}
@@ -223,14 +230,6 @@ export default {
     this.userId=this.userSource?this.userSource.id:'';
     this.username=this.userSource?this.userSource.username:'';
     scrollFun();
-    $.when(judgeUsers(this.userId)).done(function(data){
-      if(data.state=="0"){
-      }
-      else{
-        alert("用户未登录！")
-        that.$router.push({path:'/login',query: {}});
-      }
-    })
   }
 }
 </script>

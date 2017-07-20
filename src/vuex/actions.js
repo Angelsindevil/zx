@@ -72,7 +72,8 @@ export const changeUserSource=(store,payload)=>{//传入一个store参数 和sto
 }
 export const changeMesId=(store,payload)=>{//传入一个store参数 和store拥有相同的属性和方法，传入另一个参数msg，最终在mutations中赋值给state中的变量subjectid
     return new Promise(function(resolve, reject) {
-        store.commit('changeMesId',{"mesId":payload.mesId});
+        console.log(payload.mesId);
+        store.commit('changeMesId',{"mesId":payload.mesId,"method":payload.method});
         resolve("ok");
     })
 }

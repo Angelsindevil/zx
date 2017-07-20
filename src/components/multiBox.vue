@@ -207,6 +207,13 @@
 	            }
 	          })
 	        }
+	        else if(data.state=='9000'){
+	            alert("用户未登录！")
+	            that.$router.push({path:'/login',query: {}});
+	        }
+	        else{
+	          alert(data.data);
+	        }
 	    })
 	  }
 	}

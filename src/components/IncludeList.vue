@@ -2,7 +2,7 @@
   <div class="report reportStyle">
     <div class="rightBar">
       <p>报告中心-收录管理：
-        <span>今日收录<span>{{totalNum}}</span>篇，选入报告<span>{{todayNum}}</span>篇</span>
+        <!-- <span>今日收录<span>{{totalNum}}</span>篇，选入报告<span>{{todayNum}}</span>篇</span> -->
       </p>
       <!-- <div>
         <input type="" name="" placeholder="搜索已收录的内容">
@@ -39,8 +39,8 @@
             <!-- </label> -->
             <el-checkbox  @change="checkItem($event,index)" class="checkItem" v-model="checkedList[index]"></el-checkbox>
             <span><span class="ellipsis titleEll">{{item.title}}</span> - <span class="dateStyle">{{item.date}}</span></span>
-            <span class="includeBtn_" :class="item.isGenerate==1?'grey':''" :data-id="item.articleId"><span>{{item.isGenerate==1?'已生成报告':'未生成报告'}}</span></span>
-            <span class="includeBtn grey" @click="includeThis($event,item.isGenerate)" @mouseover="canceInclude" @mouseout="includeThis_"><img src="../../static/img/plus_grey.png" alt="" style="margin-bottom: -7px;"><span>已收录</span></span>
+            <span class="includeBtn_" :class="item.isGenerate==1?'grey':''" :data-id="item.id"><span>{{item.isGenerate==1?'已生成报告':'未生成报告'}}</span></span>
+            <span class="includeBtn grey" @click="includeThis($event,item.isGenerate)" @mouseover="canceInclude" @mouseout="includeThis_" :data-id="item.id"><img src="../../static/img/plus_grey.png" alt="" style="margin-bottom: -7px;"><span>已收录</span></span>
           </li>
           <!-- <li>
             <label for="selItem_2">
@@ -237,20 +237,28 @@ export default {
       }
     },
     includeThis:function(e,item){
+      var that=this;
       e.stopPropagation();
       var el=$(e.target).closest(".includeBtn");
-      var class_=el.hasClass('red');
+      var li_item=$(el).closest("li");
+      var class_=$(el).hasClass('red');
       var id=$(el).attr("data-id");
+      console.log(id);
       if(class_){
         //执行取消
         if(item==1){//已生成报告 不允许取消
           alert("已生成报告，不可取消收录！");
         }
         else{
-          $.when(canceled(id)).done(function(data){
+          $.when(canceled(id,this.userid)).done(function(data){
             if(data.state=="0"){
+              $(li_item).remove();
               el.removeClass("grey red").find("span").text("收录");
               el.find("img").attr("src","./static/img/plus.png");
+            }
+            else if(data.state=='9000'){
+              alert("用户未登录！")
+              that.$router.push({path:'/login',query: {}});
             }
             else{
               alert(data.data);
@@ -269,6 +277,10 @@ export default {
         if(data.state=="0"){
           that.insertData(data);
         }
+        else if(data.state=='9000'){
+          alert("用户未登录！")
+          that.$router.push({path:'/login',query: {}});
+        }
         else{
           alert(data.data);
         }
@@ -281,6 +293,10 @@ export default {
       $.when(getIncludedSearch(that.userid,that.input2,val,that.pageNo)).done(function(data){
         if(data.state=="0"){
           that.insertData(data);
+        }
+        else if(data.state=='9000'){
+          alert("用户未登录！")
+          that.$router.push({path:'/login',query: {}});
         }
         else{
           alert(data.data);
@@ -344,6 +360,10 @@ export default {
             $(document).scrollTop(height-350);
           })
         }
+        else if(data.state=='9000'){
+          alert("用户未登录！")
+          that.$router.push({path:'/login',query: {}});
+        }
         else{
           alert(data.data);
         }
@@ -366,6 +386,10 @@ export default {
     $.when(getIncludedList(that.userid,that.value,that.pageNo)).done(function(data){
       if(data.state=='0'){
         that.insertData(data);;
+      }
+      else if(data.state=='9000'){
+        alert("用户未登录！")
+        that.$router.push({path:'/login',query: {}});
       }
       else{
         alert(data.data);

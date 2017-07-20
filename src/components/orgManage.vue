@@ -2,7 +2,7 @@ i<template>
   <div class="message orgManage">
     <div class="rightBar">
       <p>
-        组织信息
+        平台管理-组织信息
       </p>
       <el-button class="btn_position" @click="showUserBox">新增</el-button>
       <el-input
@@ -194,6 +194,10 @@ export default {
             "pid":value.parentOrgId,
           }
         })
+      }
+      else if(data.state=='9000'){
+        alert("用户未登录！")
+        that.$router.push({path:'/login',query: {}});
       }
       else{
         alert(data.data);

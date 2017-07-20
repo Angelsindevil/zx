@@ -120,6 +120,10 @@ export default {
         if(data.state=="0"){
           that.insertData(data);
         }
+        else if(data.state=='9000'){
+          alert("用户未登录！")
+          that.$router.push({path:'/login',query: {}});
+        }
         else{
           alert(data.data);
         }
@@ -132,6 +136,10 @@ export default {
         $.when(searchInstructionList(that.userid,that.input2,val,that.pageNo)).done(function(data){
           if(data.state=="0"){
             that.insertData(data);
+          }
+          else if(data.state=='9000'){
+            alert("用户未登录！")
+            that.$router.push({path:'/login',query: {}});
           }
           else{
             alert(data.data);
@@ -283,6 +291,10 @@ export default {
               $(document).scrollTop(height-350);
             })
           }
+          else if(data.state=='9000'){
+            alert("用户未登录！")
+            that.$router.push({path:'/login',query: {}});
+          }
           else{
             alert(data.data);
           }
@@ -345,6 +357,10 @@ export default {
         //   }
         // })
         // that.articlesAarry=that.articles;
+      }
+      else if(data.state=='9000'){
+        alert("用户未登录！")
+        that.$router.push({path:'/login',query: {}});
       }
       else{
         alert(data.data);

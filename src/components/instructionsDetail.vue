@@ -159,6 +159,10 @@ export default {
             alert("流程已关闭");
             that.$router.push('/homePage/managementCenter');
           }
+          else if(data.state=='9000'){
+            alert("用户未登录！")
+            that.$router.push({path:'/login',query: {}});
+          }
           else{
             alert(data.data);
           }
@@ -166,8 +170,13 @@ export default {
       }
     },
     download(name){
+      var that=this;
       $.when(downloadAnnex(name)).done(function(data){
         if(data.state=='0'){
+        }
+        else if(data.state=='9000'){
+          alert("用户未登录！")
+          that.$router.push({path:'/login',query: {}});
         }
         else{
           alert(data.data);
@@ -234,6 +243,10 @@ export default {
             
         //   }
         // }
+      }
+      else if(data.state=='9000'){
+        alert("用户未登录！")
+        that.$router.push({path:'/login',query: {}});
       }
       else{
         alert(data.data);

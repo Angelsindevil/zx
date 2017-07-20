@@ -1,8 +1,8 @@
 <template>
   <div class="contentPublish">
      <div class="rightBar">
-      <p>发布内容-全部资讯：
-        <span>总共发布<span>{{totalNum}}</span>篇,今日发布<span>{{todayNum}}</span>篇</span>
+      <p>内容管理-已发布内容：
+        <!-- <span>总共发布<span>{{totalNum}}</span>篇,今日发布<span>{{todayNum}}</span>篇</span> -->
       </p>
       <el-input
         placeholder="搜索内容"
@@ -14,7 +14,7 @@
 
     <div class="rightContent_" v-for="(item,index) in articlesAarry">
       <span class="includeBtn" @click="clickBtn($event,item.id)" @mouseover="overBtn" @mouseout="outBtn"><span>已发布</span></span>
-      <router-link :to="{ path: '/homePage/articleDetail', query: { id:item.id,edit:'2'}}">
+      <router-link target="_blank" :to="{ path: '/homePage/articleDetail', query: { id:item.id,edit:'2'}}">
         <div class="rightContent">
           <!-- <p class="title_bar">
             <span>{{item.title}}<span>
@@ -112,12 +112,17 @@ export default {
       }
     },
     clickBtn:function(e,id){
+      var that=this;
       console.log(e);
       e.stopPropagation();
       e.preventDefault();
       $.when(cancelArticle(id)).done(function(data){
         if(data.state=="0"){
           window.location.reload();
+        }
+        else if(data.state=='9000'){
+          alert("用户未登录！")
+          that.$router.push({path:'/login',query: {}});
         }
         else{
           alert(data.data);
@@ -174,6 +179,10 @@ export default {
           that.articlesAarry=[];
           that.insertData(data.data);
         }
+        else if(data.state=='9000'){
+          alert("用户未登录！")
+          that.$router.push({path:'/login',query: {}});
+        }
         else{
           alert(data.data);
         }
@@ -194,6 +203,10 @@ export default {
               $(document).scrollTop(height);
             })
           }
+          else if(data.state=='9000'){
+            alert("用户未登录！")
+            that.$router.push({path:'/login',query: {}});
+          }
           else{
             alert(data.data);
           }
@@ -206,6 +219,10 @@ export default {
             that.$nextTick(function(){
               $(document).scrollTop(height);
             })
+          }
+          else if(data.state=='9000'){
+            alert("用户未登录！")
+            that.$router.push({path:'/login',query: {}});
           }
           else{
             alert(data.data);
@@ -227,6 +244,10 @@ export default {
     $.when(getContentList(this.userid,that.pageNo,'1')).done(function(data){
       if(data.state=="0"){
         that.insertData(data.data);
+      }
+      else if(data.state=='9000'){
+        alert("用户未登录！")
+        that.$router.push({path:'/login',query: {}});
       }
       else{
         alert(data.data);

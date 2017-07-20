@@ -65,6 +65,10 @@ export default {
           localStorage.setItem("userSource",JSON.stringify(data.data));
           localStorage.setItem("initPassword",data.data.password);
         }
+        else if(data.state=='9000'){
+          alert("用户未登录！")
+          that.$router.push({path:'/login',query: {}});
+        }
         else{
           alert(data.data);
         }

@@ -111,6 +111,7 @@
 
       },
       addMes(){
+        var that=this;
         var idArr=[];
         // this.$store.dispatch('changeMesInfo',{mesObj:this.form}).then(function(resp){});
         if(this.selectArr.id&&this.selectArr.id.length>0){
@@ -141,6 +142,10 @@
               that.form.area="";
               that.form.accept="";
               // that.$store.dispatch('changeMesInfo',{mesObj:that.form}).then(function(resp){});
+            }
+            else if(data.state=='9000'){
+              alert("用户未登录！")
+              that.$router.push({path:'/login',query: {}});
             }
             else{
               alert(data.data);

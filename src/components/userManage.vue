@@ -2,7 +2,7 @@ i<template>
   <div class="message userManage">
     <div class="rightBar">
       <p>
-        用户管理
+        平台管理-用户管理
       </p>
       <el-button class="btn_position" @click="showUserBox">新增用户</el-button>
       <el-input
@@ -296,6 +296,10 @@ export default {
               "orgid":value.orgId,
             }
           })
+        }
+        else if(data.state=='9000'){
+          alert("用户未登录！")
+          that.$router.push({path:'/login',query: {}});
         }
         else{
           alert(data.data);

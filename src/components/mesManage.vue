@@ -2,9 +2,9 @@
   <div class="message messageStyle">
     <div class="rightBar">
       <p>
-        消息中心-{{titleTop}}：
+        消息中心-{{titleTop}}
         <!-- <span class="mesTop">共<span>{{totalNum}}</span>条消息，未读消息<span>{{todayNum}}</span>条</span> -->
-        <span class="mesTop">未读消息<span>{{todayNum}}</span>条</span>
+        <!-- <span class="mesTop">未读消息<span>{{todayNum}}</span>条</span> -->
       </p>
       <el-button class="btn_position" @click="showMesBox">发送新消息</el-button>
       <el-input
@@ -118,6 +118,10 @@ export default {
           that.insertData(data.data);
           // that.filterArray=data.data.list;有用
         }
+        else if(data.state=='9000'){
+          alert("用户未登录！")
+          that.$router.push({path:'/login',query: {}});
+        }
         else{
           alert(data.data);
         }
@@ -130,6 +134,10 @@ export default {
         if(data.state=="0"){
           that.insertData(data.data);
           // that.filterArray=data.data.list;有用
+        }
+        else if(data.state=='9000'){
+          alert("用户未登录！")
+          that.$router.push({path:'/login',query: {}});
         }
         else{
           alert(data.data);
@@ -145,7 +153,9 @@ export default {
     showDetail(id,index,e){
       $(".mask1").addClass("showBtn");
       $(".mesDetailBox").addClass("showBtn");
-      this.$store.dispatch('changeMesId',{mesId:id}).then(function(resp){});
+      console.log(id);
+      // this.$store.dispatch('changeMesId',{mesId:id}).then(function(resp){});
+      this.$store.dispatch('changeMesId',{mesId:id,method:this.type}).then(function(resp){});
       if(this.type=='1'){
         var el=$(e.target).closest("tr");
         if(this.value=='0'){
@@ -169,7 +179,7 @@ export default {
           $(".input_position").show();
           $(".selectStyle").hide();
           $(".btn_position").show();
-          $(".mesTop").hide();
+          // $(".mesTop").hide();
         })
       }
       else{//系统消息
@@ -179,7 +189,7 @@ export default {
         $(".selectStyle").show();
         this.$nextTick(function(){
           $(".btn_position").hide();
-          $(".mesTop").show();
+          // $(".mesTop").show();
         })
       }
 
@@ -190,6 +200,10 @@ export default {
         if(data.state=="0"){
           that.insertData(data.data);
           that.filterArray=data.data.list;
+        }
+        else if(data.state=='9000'){
+          alert("用户未登录！")
+          that.$router.push({path:'/login',query: {}});
         }
         else{
           alert(data.data);
@@ -242,6 +256,10 @@ export default {
               $(document).scrollTop(height-350);
             })
           }
+          else if(data.state=='9000'){
+            alert("用户未登录！")
+            that.$router.push({path:'/login',query: {}});
+          }
           else{
             alert(data.data);
           }
@@ -254,6 +272,10 @@ export default {
             that.$nextTick(function(){
               $(document).scrollTop(height);
             })
+          }
+          else if(data.state=='9000'){
+            alert("用户未登录！")
+            that.$router.push({path:'/login',query: {}});
           }
           else{
             alert(data.data);

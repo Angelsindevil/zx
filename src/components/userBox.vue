@@ -227,6 +227,7 @@
         {
           if(this.userid==""){//编辑用户的时候就有啦
             var pw=md5(this.pwDefault);
+            var that=this;
             // $.when(addUsers('1',this.form.account,this.form.name,this.form.level,pw)).done(function(data){
             $.when(addUsers(this.orgid,this.form.account,this.form.name,this.form.level,pw)).done(function(data){
               if(data.state=="0"){
@@ -235,6 +236,10 @@
                 // $(".mask1,.userBox").removeClass("showBtn userBoxAdd");
                 window.location.reload();
               }
+              else if(data.state=='9000'){
+                alert("用户未登录！")
+                that.$router.push({path:'/login',query: {}});
+              }
               else{
                 alert(data.data);
               }
@@ -242,11 +247,16 @@
           }
           else{
             var pw_1=md5(this.password);
+            var that=this;
             $.when(editUsers(this.userid,this.orgid,this.form.account,this.form.name,this.form.level,pw_1)).done(function(data){
               if(data.state=="0"){
                 var res=data.data;
                 alert("修改用户成功！");
                 window.location.reload();
+              }
+              else if(data.state=='9000'){
+                alert("用户未登录！")
+                that.$router.push({path:'/login',query: {}});
               }
               else{
                 alert(data.data);
@@ -258,11 +268,16 @@
       cancelUser(){
         if(this.cancelTxt=="注销"){
           if(confirm("确认注销该用户？")){
+            var that=this;
             $.when(cancelUsers(this.userid)).done(function(data){
               if(data.state=="0"){
                 var res=data.data;
                 alert("用户注销成功！");
                 window.location.reload();
+              }
+              else if(data.state=='9000'){
+                alert("用户未登录！")
+                that.$router.push({path:'/login',query: {}});
               }
               else{
                 alert(data.data);
@@ -272,12 +287,17 @@
         }
         else{
           if(confirm("确认反注销该用户？")){
+            var that=this;
             $.when(excancelUsers(this.userid)).done(function(data){
               if(data.state=="0"){
                 var res=data.data;
                 alert("用户反注销成功！");
                 // this.alreadyCancel=false;//是否有这个需求，反注销后 不退出编辑
                 window.location.reload();
+              }
+              else if(data.state=='9000'){
+                alert("用户未登录！")
+                that.$router.push({path:'/login',query: {}});
               }
               else{
                 alert(data.data);
@@ -288,11 +308,16 @@
       },
       deleteUser(){
         if(confirm("确认删除该用户？")){
+          var that=this;
           $.when(deleteUsers(this.userid)).done(function(data){
             if(data.state=="0"){
               var res=data.data;
               alert("用户删除成功！");
               window.location.reload();
+            }
+            else if(data.state=='9000'){
+              alert("用户未登录！")
+              that.$router.push({path:'/login',query: {}});
             }
             else{
               alert(data.data);

@@ -3,7 +3,7 @@
   <div class="report">
     <div class="rightBar">
       <p>报告中心-报告列表：
-        <span>共计生成<span>{{totalNum}}</span>篇报告</span>
+        <!-- <span>共计生成<span>{{totalNum}}</span>篇报告</span> -->
       </p>
       <el-button class="btn_position btnUpload">
         <input type="file" name="" class="file_" @change="linkChange">上传报告
@@ -164,12 +164,17 @@ export default {
   },
   methods:{
     delete_:function(id){
+      var that=this;
       // $(e.target).closest(".rightContent").remove();
       if(confirm("你确认删除该报告？")){
         $.when(deleteReporter(id)).done(function(data){
           if(data.state=="0"){
             alert("删除成功！");
             window.location.reload();
+          }
+          else if(data.state=='9000'){
+            alert("用户未登录！")
+            that.$router.push({path:'/login',query: {}});
           }
           else{
             alert(data.data);
@@ -213,6 +218,10 @@ export default {
           // else{}
           that.insertData(data,that.type);
         }
+        else if(data.state=='9000'){
+          alert("用户未登录！")
+          that.$router.push({path:'/login',query: {}});
+        }
         else{
           alert(data.data);
         }
@@ -242,12 +251,17 @@ export default {
           // }
           that.insertData(data,that.type);
         }
+        else if(data.state=='9000'){
+          alert("用户未登录！")
+          that.$router.push({path:'/login',query: {}});
+        }
         else{
           alert(data.data);
         }
       })
     },
     linkChange:function(e){
+      var that=this;
       var file = e.target.files; //获取图片资源
       var formData = new FormData();
       if(file[0]){
@@ -261,6 +275,10 @@ export default {
             if(data.state=="0"){
               alert("报告上传成功！");
               window.location.reload();
+            }
+            else if(data.state=='9000'){
+              alert("用户未登录！")
+              that.$router.push({path:'/login',query: {}});
             }
             else{
               alert(data.data);
@@ -297,9 +315,13 @@ export default {
               $(document).scrollTop(height);
             })
           }
-          else{
-            alert(data.data);
-          }
+          else if(data.state=='9000'){
+              alert("用户未登录！")
+              that.$router.push({path:'/login',query: {}});
+            }
+            else{
+              alert(data.data);
+            }
         })
       }
       else if(this.activeName=='second'){
@@ -314,9 +336,13 @@ export default {
               $(document).scrollTop(height-350);
             })
           }
-          else{
-            alert(data.data);
-          }
+          else if(data.state=='9000'){
+              alert("用户未登录！")
+              that.$router.push({path:'/login',query: {}});
+            }
+            else{
+              alert(data.data);
+            }
         })
       }
       else{}
@@ -394,6 +420,7 @@ export default {
       matchMenu();
     })
     if(this.level=='0'||this.level=='2'||this.level=='3'){
+      this.type='1';
       this.$nextTick(function(){
         $(".el-tabs__header").hide();
         // $(".el-tabs__header").find(".el-tabs__item").eq(0).hide();
@@ -415,6 +442,10 @@ export default {
         // that.totalNum=res.totalNum;
         // that.listFilter_1=res.list;
         that.insertData(data,that.type);
+      }
+      else if(data.state=='9000'){
+        alert("用户未登录！")
+        that.$router.push({path:'/login',query: {}});
       }
       else{
         alert(data.data);

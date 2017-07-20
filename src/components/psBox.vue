@@ -316,6 +316,10 @@
               that.quill.setText('');
               window.location.reload();
             }
+            else if(data.state=='9000'){
+              alert("用户未登录！")
+              that.$router.push({path:'/login',query: {}});
+            }
             else{
               alert(data.data);
               that.fileFlag=false;
@@ -351,6 +355,10 @@
                 that.$store.dispatch('changeSelArr',{selectArr:{name:[],id:[]}}).then(function(resp){});
                 window.location.reload();
               }
+              else if(data.state=='9000'){
+                alert("用户未登录！")
+                that.$router.push({path:'/login',query: {}});
+              }
               else{
                 alert(data.data);
                 that.fileFlag=false;
@@ -384,6 +392,10 @@
               $(that.$refs.linkBot).text("");
               that.$store.dispatch('changeSelArr',{selectArr:{name:[],id:[]}}).then(function(resp){});
               window.location.reload();
+            }
+            else if(data.state=='9000'){
+              alert("用户未登录！")
+              that.$router.push({path:'/login',query: {}});
             }
             else{
               alert(data.data);

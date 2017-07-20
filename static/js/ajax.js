@@ -1,3 +1,4 @@
+// import router from '../../src/router'
 //以下用户管理
 // var url="http://192.168.2.108:9000";//ct
 // var url="http://192.168.2.173:8888";
@@ -10,7 +11,6 @@ function getAllUsers(){
         url: url+"/api/user/fetchAllUser",
         type: "get",
         data:{}
-
     });
     return ajax;
 }
@@ -472,6 +472,7 @@ function addArticle(type,source,link,title,date,text){//新增文章
   var ajax=$.ajax({
     url:url+'/api/article/save',
     type:'post',
+    // type:'get',
     contentType: "application/json;",
     data:JSON.stringify({
        "type":type,
@@ -523,12 +524,13 @@ function editArticleType(id,type){//编辑类别
 }
 
 //消息相关
-function messageDetail(id){//消息详情
+function messageDetail(id,method){//消息详情
   var ajax=$.ajax({
     url:url+'/api/message/getMessageDetail',
     type:'get',
     data:{
        "id":id,
+       "method":method
     },
   })
   return ajax;
@@ -693,27 +695,14 @@ function logOut(userId){
 }
 function logOut(userId){//退出登录
   var ajax=$.ajax({
-    url:url+'/users/mylogout',
-    type:'post',
-    contentType: "application/json;",
-    // data:{
-    //   "userId":userId,
-    // },
-    data:JSON.stringify({
+    url:url+'/api/user/mylogout',
+    type:'get',
+    data:{
       "userId":userId,
-    })
+    },
+    // data:JSON.stringify({
+    //   "userId":userId,
+    // })
   })
-  return ajax;
-}
-function judgeUsers(userId){//判断用户是否登录
-  var ajax = $.ajax({
-      url: "/users/myauthenticated/",
-      type: "post",
-      // data:{
-      // }
-      data:JSON.stringify({
-        "userId":userId,
-      })
-  });
   return ajax;
 }

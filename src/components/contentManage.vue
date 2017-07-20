@@ -1,7 +1,7 @@
 <template>
   <div class="contentManage contentManage_new">
     <div class="rightBar">
-      <p>内容管理-全部内容
+      <p>内容管理-内容筛选
       </p>
       <el-input
         placeholder="搜索内容"
@@ -13,7 +13,7 @@
 
     <div class="rightContent_" v-for="(item,index) in articlesAarry">
       <span class="includeBtn" @click="releaseBtn(item.id,index,$event,item.type)"><span>发布</span></span>
-      <router-link :to="{ path: '/homePage/articleDetail', query: { id:item.id,edit:'1'}}">
+      <router-link target="_blank" :to="{ path: '/homePage/articleDetail', query: { id:item.id,edit:'1'}}">
         <div class="rightContent">
           <!-- <p class="title_bar">
             <span>{{item.title}}<span>
@@ -175,6 +175,7 @@ export default {
       }
     },
     clickDel(e,id){
+      var that=this;
       console.log(e);
       e.stopPropagation();
       e.preventDefault();
@@ -184,6 +185,10 @@ export default {
           if(data.state=="0"){
             $(el).remove();
             // window.location.reload();
+          }
+          else if(data.state=='9000'){
+            alert("用户未登录！")
+            that.$router.push({path:'/login',query: {}});
           }
           else{
             alert(data.data);
@@ -198,6 +203,10 @@ export default {
         if(data.state=="0"){
           that.articlesAarry=[];
           that.insertData(data.data);
+        }
+        else if(data.state=='9000'){
+          alert("用户未登录！")
+          that.$router.push({path:'/login',query: {}});
         }
         else{
           alert(data.data);
@@ -255,6 +264,10 @@ export default {
               $(document).scrollTop(height);
             })
           }
+          else if(data.state=='9000'){
+            alert("用户未登录！")
+            that.$router.push({path:'/login',query: {}});
+          }
           else{
             alert(data.data);
           }
@@ -267,6 +280,10 @@ export default {
             that.$nextTick(function(){
               $(document).scrollTop(height);
             })
+          }
+          else if(data.state=='9000'){
+            alert("用户未登录！")
+            that.$router.push({path:'/login',query: {}});
           }
           else{
             alert(data.data);
@@ -281,7 +298,7 @@ export default {
       matchMenu();
     })
 
-    that.insertData(that.tableData);//localTest
+    // that.insertData(that.tableData);//localTest
     
     this.userSource=JSON.parse(localStorage.getItem("userSource"));
     // this.level=this.userSource?this.userSource.level:'';
@@ -289,6 +306,10 @@ export default {
     $.when(getContentList(this.userid,that.pageNo,'0')).done(function(data){
       if(data.state=="0"){
         that.insertData(data.data);
+      }
+      else if(data.state=='9000'){
+        alert("用户未登录！")
+        that.$router.push({path:'/login',query: {}});
       }
       else{
         alert(data.data);
