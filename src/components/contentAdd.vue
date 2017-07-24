@@ -202,7 +202,7 @@ export default {
               // that.addId=data.data.id;
             }
             else if(data.state=='9000'){
-              alert("用户未登录！")
+              // alert("用户未登录！")
               that.$router.push({path:'/login',query: {}});
             }
             else{
@@ -217,7 +217,7 @@ export default {
               that.resetBtn();
             }
             else if(data.state=='9000'){
-              alert("用户未登录！")
+              // alert("用户未登录！")
               that.$router.push({path:'/login',query: {}});
             }
             else{
@@ -258,7 +258,7 @@ export default {
               that.resetBtn();
             }
             else if(data.state=='9000'){
-              alert("用户未登录！")
+              // alert("用户未登录！")
               that.$router.push({path:'/login',query: {}});
             }
             else{
@@ -270,7 +270,7 @@ export default {
               that.resetBtn();
             }
             else if(data.state=='9000'){
-              alert("用户未登录！")
+              // alert("用户未登录！")
               that.$router.push({path:'/login',query: {}});
             }
             else{
@@ -287,7 +287,7 @@ export default {
                   that.resetBtn();
                 }
                 else if(res.state=='9000'){
-                  alert("用户未登录！")
+                  // alert("用户未登录！")
                   that.$router.push({path:'/login',query: {}});
                 }
                 else{
@@ -296,7 +296,7 @@ export default {
               })
             }
             else if(data.state=='9000'){
-              alert("用户未登录！")
+              // alert("用户未登录！")
               that.$router.push({path:'/login',query: {}});
             }
             else{
@@ -384,7 +384,7 @@ export default {
         }
       }
       else if(data.state=='9000'){
-        alert("用户未登录！")
+        // alert("用户未登录！")
         that.$router.push({path:'/login',query: {}});
       }
       else{

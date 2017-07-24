@@ -233,7 +233,7 @@ export default {
             that.flag=false;
           }
           else if(data.state=='9000'){
-              alert("用户未登录！")
+              // alert("用户未登录！")
               that.$router.push({path:'/login',query: {}});
             }
             else{
@@ -252,7 +252,7 @@ export default {
                   // that.articlesAarry=data.data.list;
             }
             else if(data.state=='9000'){
-              alert("用户未登录！")
+              // alert("用户未登录！")
               that.$router.push({path:'/login',query: {}});
             }
             else{
@@ -337,7 +337,7 @@ export default {
               el.find("img").attr("src","./static/img/plus.png");
             }
             else if(data.state=='9000'){
-              alert("用户未登录！")
+              // alert("用户未登录！")
               that.$router.push({path:'/login',query: {}});
             }
             else{
@@ -350,7 +350,7 @@ export default {
             if(data.state=="0"){
             }
             else if(data.state=='9000'){
-              alert("用户未登录！")
+              // alert("用户未登录！")
               that.$router.push({path:'/login',query: {}});
             }
             else{
@@ -466,7 +466,7 @@ export default {
               })
             }
             else if(data.state=='9000'){
-              alert("用户未登录！")
+              // alert("用户未登录！")
               that.$router.push({path:'/login',query: {}});
             }
             else{
@@ -486,7 +486,7 @@ export default {
             // that.articlesAarry=data.data.list;
           }
           else if(data.state=='9000'){
-            alert("用户未登录！")
+            // alert("用户未登录！")
             that.$router.push({path:'/login',query: {}});
           }
           else{

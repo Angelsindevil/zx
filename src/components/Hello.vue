@@ -244,7 +244,7 @@ export default {
             }
           }
           else if(data.state=='9000'){
-            alert("用户未登录！")
+            // alert("用户未登录！")
             that.$router.push({path:'/login',query: {}});
           }
           else{
@@ -285,7 +285,7 @@ export default {
             }
           }
           else if(data.state=='9000'){
-            alert("用户未登录！")
+            // alert("用户未登录！")
             that.$router.push({path:'/login',query: {}});
           }
           else{
@@ -312,7 +312,7 @@ export default {
         that.options.splice(0,0,{value:"全部内容",label:"全部资讯"});
       }
       else if(data.state=='9000'){
-        alert("用户未登录！")
+        // alert("用户未登录！")
         that.$router.push({path:'/login',query: {}});
       }
       else{

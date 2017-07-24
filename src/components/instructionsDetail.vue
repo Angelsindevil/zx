@@ -160,7 +160,7 @@ export default {
             that.$router.push('/homePage/managementCenter');
           }
           else if(data.state=='9000'){
-            alert("用户未登录！")
+            // alert("用户未登录！")
             that.$router.push({path:'/login',query: {}});
           }
           else{
@@ -175,7 +175,7 @@ export default {
         if(data.state=='0'){
         }
         else if(data.state=='9000'){
-          alert("用户未登录！")
+          // alert("用户未登录！")
           that.$router.push({path:'/login',query: {}});
         }
         else{
@@ -245,7 +245,7 @@ export default {
         // }
       }
       else if(data.state=='9000'){
-        alert("用户未登录！")
+        // alert("用户未登录！")
         that.$router.push({path:'/login',query: {}});
       }
       else{

@@ -104,7 +104,7 @@
 		              window.location.reload();
 		            }
 		            else if(data.state=='9000'){
-			            alert("用户未登录！")
+			            // alert("用户未登录！")
 			            that.$router.push({path:'/login',query: {}});
 			          }
 			          else{
@@ -120,7 +120,7 @@
 		              window.location.reload();
 		            }
 		            else if(data.state=='9000'){
-			            alert("用户未登录！")
+			            // alert("用户未登录！")
 			            that.$router.push({path:'/login',query: {}});
 			          }
 			          else{
@@ -139,7 +139,7 @@
 		        	window.location.reload();
 		        }
 		        else if(data.state=='9000'){
-		            alert("用户未登录！")
+		            // alert("用户未登录！")
 		            that.$router.push({path:'/login',query: {}});
 		          }
 		          else{

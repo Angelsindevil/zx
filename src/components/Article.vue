@@ -115,7 +115,7 @@ export default {
           window.location.reload();
         }
         else if(data.state=='9000'){
-          alert("用户未登录！")
+          // alert("用户未登录！")
           that.$router.push({path:'/login',query: {}});
         }
         else{
@@ -260,7 +260,7 @@ export default {
             if(data.state=="0"){
             }
             else if(data.state=='9000'){
-              alert("用户未登录！")
+              // alert("用户未登录！")
               that.$router.push({path:'/login',query: {}});
             }
             else{
@@ -275,7 +275,7 @@ export default {
             if(data.state=="0"){
             }
             else if(data.state=='9000'){
-              alert("用户未登录！")
+              // alert("用户未登录！")
               that.$router.push({path:'/login',query: {}});
             }
             else{
@@ -389,7 +389,7 @@ export default {
           that.isRelease=res.isRelease;
         }
         else if(data.state=='9000'){
-          alert("用户未登录！")
+          // alert("用户未登录！")
           that.$router.push({path:'/login',query: {}});
         }
         else{
