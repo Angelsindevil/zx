@@ -1,5 +1,5 @@
 <template>
-  <div class="psBox alertStyle">
+  <div class="psBox alertStyle alertStyle_">
     <div class="alertTop">信息批示<span @click="hidePSBox"><img src="../../static/img/cancel.png"></span></div>
     <div class="alertContent">
       <el-button class="article_btn" @click="showAllArticle"><img src="../../static/img/report.png" alt="">批示文章：<span class="ellipsis titleEll">{{currentRow}}</span></el-button>
@@ -47,7 +47,7 @@
             </el-option>
           </el-select>
         </div></el-col>
-        <el-col :span="6"><div class="grid-content bg-purple-light">
+        <el-col :span="6"><div class="grid-content bg-purple-light" @click="solveSinglePeople">
           <span class="typeLabel">批示人：</span>
           <el-input
             placeholder="请选择"
@@ -117,6 +117,7 @@
       level:'',//权限 一开始就存下来的 登录的时候
       userId:'',
       userName:'',//想一想 先存哪里去 登录的时候
+      psId:'',
     }
   },
   computed: {
@@ -124,6 +125,7 @@
       selectArr: 'selectArr',
       peopleObj:'peopleObj',
       articleObj:'articleObj',
+      singleObj:'singleObj',
       psBox:'psBox',
       psShow:'psShow',
     })
@@ -153,7 +155,10 @@
     },
     peopleObj:{
       handler: function (val, oldVal) {//监听学校和指标数组，只要学科id没有变化，则不变化
-        this.input2=val.value;
+        if(val.value!=undefined){
+          this.input2=val.value;
+          this.psId=val.id;
+        }
       },
       deep:true,
       immediate: true,
@@ -184,6 +189,20 @@
       deep:true,
       immediate: true,
     },
+    singleObj:{
+      handler: function (val, oldVal) {//文章选择后，相应的渲染
+        console.log(val);
+        if(val.value!=undefined){
+          if(this.level=='0'||this.level=='4'){//权限为管理员 批示人可选
+            this.input2=val.value;
+            this.psId=val.id;
+          }
+          else{}
+        }
+      },
+      deep:true,
+      immediate: true,
+    },
     psBox:{
       handler: function (val, oldVal) {//监听学校和指标数组，只要学科id没有变化，则不变化
         if(val.psObj==undefined){
@@ -194,30 +213,43 @@
         }
         this.instructionId=val.instructionId;
         this.value=val.type;
-        this.input2=this.psObj[0];//弹窗不可点击。 有用
-        this.psDisabled=true;//判断不是系统管理员
+        // this.psDisabled=true;//判断不是系统管理员
         if(val.type=='0'){//批示弹窗
           this.$nextTick(function(){
             $(".blueBot").show();
           })
+          if(this.level=='0'||this.level=='4'){//权限为管理员 分发处理人可选
+            this.psDisabled=false;
+          }
+          else{
+            this.psDisabled=true;
+            this.input2=this.userName;
+          }
+          // this.psDisabled=false;
+          this.clDisabled=true;
+          this.input3=this.userName;
           // tinymce.get('tinymce').setContent('<p style="line-height:2">请发展规划处等抓紧时间研究国家双一流方案的细则和教育部有关部门的解读<br><span style="color:#FF6600">（如批示是由纸质材料批示，则由数据与信息中心发起流程并人工输入）</span></p>');
         }
         else if(val.type=='1'){//分发弹窗
           this.currentRow=val.title;
           if(this.level=='0'||this.level=='4'){//权限为管理员 分发处理人可选
             this.clDisabled=false;
-            this.input3="";
           }
           else{}
           this.$nextTick(function(){
             $(".blueBot").hide();
           })
+          this.psDisabled=true;
+          this.input3="";
+          this.input2=this.psObj[0];//弹窗不可点击。 有用
         }
         else if(val.type=='2'){//反馈弹窗
           this.currentRow=val.title;
           // if(this.level=='0'||this.level=='4'){//权限为管理员 反馈处理人可选
             this.clDisabled=true;
+            this.psDisabled=true;
             this.input3=this.userName;
+            this.input2=this.psObj[0];//弹窗不可点击。 有用
           // }
           this.$nextTick(function(){
             $(".blueBot").show();
@@ -231,11 +263,17 @@
     },
   },
   methods:{
+    open(str,type) {
+      this.$message({
+        message: str,
+        type: type
+      });
+    },
     hidePSBox:function(){
       var that=this;
       $(".mask1,.psBox").removeClass("showBtn");
       $(".psBox").removeClass("alertStyle_");
-      $(".el-row").removeClass("show_row");
+      // $(".el-row").removeClass("show_row");
       that.fileFlag=false;
       that.quill.setText('');
       $(that.$refs.linkBot).text("");
@@ -282,6 +320,11 @@
       //   $(".mask1").removeClass("showBtn");
       // }
     },
+    solveSinglePeople:function(){//批示人弹窗
+      $(".singleBox").addClass("showBtn");
+      $(".mask2").addClass("showBtn");
+      $(".mask1").removeClass("showBtn");
+    },
     addPs:function(){ //新增批示 分发 反馈方法
       var formData = new FormData();
       var that=this;
@@ -297,24 +340,31 @@
       // }
       var delta =this.quill.getText();
       formData.append("content",delta);
-      formData.append("userId",this.userId);
+
+      // formData.append("userId",this.userId);//或许还有用吧
+
       if(this.value=='0'){//批示
+        formData.append("userId",this.psId);
         formData.append("type",'0');
         formData.append("articleId",this.articleId);
         if(delta.length==1){
-          alert("请输入批示内容！");
+          // alert("请输入批示内容！");
+          this.open("请输入批示内容！",'warning');
         }
         else{
           $.when(addInstruction(formData)).done(function(data){
             if(data.state=='0'){
-              alert("新增批示成功！");
+              // alert("新增批示成功！");
+              that.open("新增批示成功！",'success');
               $(".mask1,.psBox").removeClass("showBtn");
               $(".psBox").removeClass("alertStyle_");
-              $(".el-row").removeClass("show_row");
+              // $(".el-row").removeClass("show_row");
               $(that.$refs.linkBot).text("");
               that.fileFlag=false;
               that.quill.setText('');
-              window.location.reload();
+              that.$store.dispatch('changeSingleObj',{singleObj:{value:'',id:''}}).then(function(resp){});
+              that.$store.dispatch('changepsFlag',true).then(function(resp){});
+              // window.location.reload();
             }
             else if(data.state=='9000'){
               // alert("用户未登录！")
@@ -330,6 +380,7 @@
         }
       }
       else if(this.value=='1'){//分发
+        formData.append("userId",this.userId);
         formData.append("type",'1');
         formData.append("psPeople",this.psObj[1]);
         formData.append("instructionId",this.instructionId);
@@ -337,15 +388,17 @@
         if(this.selectArr.id&&this.selectArr.id.length>0){
           formData.append("clPeople",this.selectArr.id);
           if(delta.length==1){
-            alert("请输入分发内容！");
+            // alert("请输入分发内容！");
+            this.open("请输入分发内容！",'warning');
           }
           else{
             $.when(addFeedback(formData)).done(function(data){
               if(data.state=='0'){
-                alert("新增分发成功！");
+                // alert("新增分发成功！");
+                that.open("新增分发成功！",'success');
                 $(".mask1,.psBox").removeClass("showBtn");
                 $(".psBox").removeClass("alertStyle_");
-                $(".el-row").removeClass("show_row");
+                // $(".el-row").removeClass("show_row");
                 that.fileFlag=false;
                 that.quill.setText('');
                 $(that.$refs.linkBot).text("");
@@ -353,7 +406,8 @@
                 // that.quill.setText('');
                 // $(that.$refs.linkBot).text("");
                 that.$store.dispatch('changeSelArr',{selectArr:{name:[],id:[]}}).then(function(resp){});
-                window.location.reload();
+                that.$store.dispatch('changepsDetailFlag',true).then(function(resp){});
+                // window.location.reload();
               }
               else if(data.state=='9000'){
                 // alert("用户未登录！")
@@ -369,29 +423,34 @@
           }
         }
         else{
-          alert("还未选择处理人");
+          this.open("还未选择处理人",'warning');
+          // alert("还未选择处理人");
         }
       }
       else if(this.value=='2'){// 反馈
+        formData.append("userId",this.userId);
         formData.append("type",'2');
         formData.append("psPeople",this.psObj[1]);
         formData.append("instructionId",this.instructionId);
         formData.append("clPeople",this.userId);
         if(delta.length==1){
-          alert("请输入反馈内容！");
+          // alert("请输入反馈内容！");
+          this.open("请输入反馈内容！",'warning');
         }
         else{
           $.when(addFeedback(formData)).done(function(data){
             if(data.state=='0'){
-              alert("新增反馈成功！");
+              // alert("新增反馈成功！");
+              that.open("新增反馈成功！",'success');
               $(".mask1,.psBox").removeClass("showBtn");
               $(".psBox").removeClass("alertStyle_");
-              $(".el-row").removeClass("show_row");
+              // $(".el-row").removeClass("show_row");
               that.fileFlag=false;
               that.quill.setText('');
               $(that.$refs.linkBot).text("");
               that.$store.dispatch('changeSelArr',{selectArr:{name:[],id:[]}}).then(function(resp){});
-              window.location.reload();
+              that.$store.dispatch('changepsDetailFlag',true).then(function(resp){});
+              // window.location.reload();
             }
             else if(data.state=='9000'){
               // alert("用户未登录！")

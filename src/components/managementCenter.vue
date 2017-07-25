@@ -59,6 +59,7 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
 import {scrollFun,matchMenu} from '../../static/js/public.js'
 export default {
   name: 'test',
@@ -103,6 +104,22 @@ export default {
         level:'',
         topTips:'',
     }
+  },
+  computed: {
+    ...mapGetters({
+      psFlag:'psFlag',
+    })
+  },
+  watch:{
+    psFlag:{
+      handler: function (val, oldVal) {//取消所有选择
+        if(val){
+          this.getInitList();
+        }
+      },
+      deep:true,
+      immediate: true,
+    },
   },
   methods:{
     showPSBox:function(){
@@ -301,6 +318,22 @@ export default {
         })
       // }
     },
+    getInitList(){
+      var that=this;
+      $.when(getInstructionsList(that.userid,1)).done(function(data){
+        if(data.state=='0'){
+          that.articlesAarry.splice(0);
+          that.insertData(data);
+          that.$store.dispatch('changepsFlag',false).then(function(resp){});
+        }
+        else if(data.state=='9000'){
+          that.$router.push({path:'/login',query: {}});
+        }
+        else{
+          alert(data.data);
+        }
+      })
+    },
   },
   created(){
     // this.articlesAarry=this.articles;
@@ -327,45 +360,7 @@ export default {
     this.$nextTick(function(){
       matchMenu();
     });
-    $.when(getInstructionsList(that.userid,that.pageNo)).done(function(data){
-      if(data.state=='0'){
-        // var res=data.data
-        that.insertData(data);;
-        // that.totalNum=res.totalNum;
-        // that.todayNum=res.todayNum;
-        // that.articles=res.results.map(function(value,index){
-        //   var btn_con;
-        //   if(value.rowState=='0'){
-        //     btn_con="流程已结束";
-        //   }
-        //   else if(value.rowState=='1'){
-        //     btn_con="新反馈"
-        //   }
-        //   else if(value.rowState=='2'){
-        //     btn_con="新批示"
-        //   }
-        //   else if(value.rowState=='3'){
-        //     btn_con="新分发"
-        //   }
-        //   else{}
-        //   return {
-        //     "title":value.title,
-        //     "date":value.date,
-        //     "rowState":value.rowState,
-        //     "btn_con":btn_con,
-        //     "instructionsId":value.instructionsId,
-        //   }
-        // })
-        // that.articlesAarry=that.articles;
-      }
-      else if(data.state=='9000'){
-        // alert("用户未登录！")
-        that.$router.push({path:'/login',query: {}});
-      }
-      else{
-        alert(data.data);
-      }
-    })
+    this.getInitList();
   }
 }
 </script>

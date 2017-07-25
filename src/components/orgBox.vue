@@ -5,19 +5,21 @@
         <el-form ref="form" :model="form" label-width="100px">
           <el-row :gutter="20">
             <el-form-item label="组织名称：">
-            <el-input v-model="form.org"></el-input>
-          </el-form-item>
-          <el-form-item label="上级单位：">
-          <el-input
-              placeholder="请选择"
-              icon="menu"
-              v-model="form.unit"
-              @click="solvePeople();showCommonBox()"
-              @focus="solvePeople();showCommonBox()"
-              >
-            </el-input>
-          </el-form-item>
-        </el-row>
+              <el-input v-model="form.org"></el-input>
+            </el-form-item>
+          <!-- </el-row>
+	      <el-row> -->
+	        <el-form-item label="上级单位：">
+	          <el-input
+	              placeholder="请选择"
+	              icon="menu"
+	              v-model="form.unit"
+	              @click="solvePeople();showCommonBox()"
+	              @focus="solvePeople();showCommonBox()"
+	              >
+	          </el-input>
+	        </el-form-item>
+	      </el-row>
           <!-- 这应该是编辑的时候才有的字段 -->
         </el-form>
       </div>
@@ -90,83 +92,94 @@
 	      }
 	    },
 		methods:{
-		  operateUser(){
-		  	var that=this;
-		  	if(this.form.org==""){
-	          alert("组织名称不能为空！");
-	        }
-	        else{
-		        if(this.orgid==""){//新增组织
-		          $.when(addOrg(this.form.org,this.pid)).done(function(data){
-		            if(data.state=="0"){
-		              var res=data.data;
-		              alert("新增组织成功！");
-		              window.location.reload();
-		            }
-		            else if(data.state=='9000'){
+			open(str) {
+		        this.$message({
+		          message: str,
+		          type: 'success'
+		        });
+		      },
+		  	operateUser(){
+			  	var that=this;
+			  	if(this.form.org==""){
+		          alert("组织名称不能为空！");
+		        }
+		        else{
+			        if(this.orgid==""){//新增组织
+			          $.when(addOrg(this.form.org,this.pid)).done(function(data){
+			            if(data.state=="0"){
+			              var res=data.data;
+			              // alert("新增组织成功！");
+			              // window.location.reload();
+			              that.open("新增组织成功！");
+			              that.$store.dispatch('changeOrgFlag',true).then(function(resp){});
+			            }
+			            else if(data.state=='9000'){
+				            // alert("用户未登录！")
+				            that.$router.push({path:'/login',query: {}});
+				          }
+				          else{
+				            alert(data.data);
+				          }
+			          })
+			        }
+			        else{//编辑组织
+			          $.when(editOrg(this.orgid,this.form.org,this.pid)).done(function(data){
+			            if(data.state=="0"){
+			              var res=data.data;
+			              // alert("编辑组织成功！");
+			              // window.location.reload();
+			              that.open("编辑组织成功！");
+			              that.$store.dispatch('changeOrgFlag',true).then(function(resp){});
+			            }
+			            else if(data.state=='9000'){
+				            // alert("用户未登录！")
+				            that.$router.push({path:'/login',query: {}});
+				          }
+				          else{
+				            alert(data.data);
+				          }
+			          })
+			        }
+			    }
+		      },
+	      	deleteUser(){
+		      	var that=this;
+		      	if(confirm("确认删除该组织？")){
+		      	  $.when(deleteOrg(this.orgid)).done(function(data){
+			        if(data.state=="0"){
+			        	// alert("删除成功！");
+			        	// window.location.reload();
+			        	that.open("删除成功！");
+			        	that.$store.dispatch('changeOrgFlag',true).then(function(resp){});
+			        }
+			        else if(data.state=='9000'){
 			            // alert("用户未登录！")
 			            that.$router.push({path:'/login',query: {}});
 			          }
 			          else{
 			            alert(data.data);
 			          }
-		          })
-		        }
-		        else{//编辑组织
-		          $.when(editOrg(this.orgid,this.form.org,this.pid)).done(function(data){
-		            if(data.state=="0"){
-		              var res=data.data;
-		              alert("编辑组织成功！");
-		              window.location.reload();
-		            }
-		            else if(data.state=='9000'){
-			            // alert("用户未登录！")
-			            that.$router.push({path:'/login',query: {}});
-			          }
-			          else{
-			            alert(data.data);
-			          }
-		          })
-		        }
-		    }
-	      },
-	      deleteUser(){
-	      	var that=this;
-	      	if(confirm("确认删除该组织？")){
-	      	  $.when(deleteOrg(this.orgid)).done(function(data){
-		        if(data.state=="0"){
-		        	alert("删除成功！");
-		        	window.location.reload();
-		        }
-		        else if(data.state=='9000'){
-		            // alert("用户未登录！")
-		            that.$router.push({path:'/login',query: {}});
-		          }
-		          else{
-		            alert(data.data);
-		          }
-		      })
-	      	}
-	      },
-		  hideUserBox:function(){
-		    $(".mask1,.orgBox").removeClass("showBtn");
-		  },
-		  showCommonBox:function(){
-		    this.state2='';
-		    $(".mask2").addClass("showBtn");
-		    $(".mask1").removeClass("showBtn");
-		    // $(".articleBox").addClass("showBtn");
-		  },
-		  solvePeople:function(){
-		    $(".unitBox").addClass("showBtn");
-		  },
-		  optionChangeHandler(val){
+			      })
+		      	}
+	      	},
+		  	hideUserBox:function(){
+		    	$(".mask1,.orgBox").removeClass("showBtn");
+		  	},
+		  	showCommonBox:function(){
+		    	this.state2='';
+		    	$(".mask2").addClass("showBtn");
+		    	$(".mask1").removeClass("showBtn");
+		    	// $(".articleBox").addClass("showBtn");
+		  	},
+		  	solvePeople:function(){
+		    	$(".unitBox").addClass("showBtn");
+		  	},
+		  	optionChangeHandler(val){
 
-		  },
+		  	},
 		},
 		mounted() {
 		},
-
 
 	}
 </script>

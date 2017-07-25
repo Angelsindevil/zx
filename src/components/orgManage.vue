@@ -59,11 +59,28 @@ i<template>
   </div>
 </template>
 <script>
+import {mapGetters} from 'vuex'
 import {scrollFun,matchMenu} from '../../static/js/public.js'
 export default {
   name: 'report',
   components: {
    app
+  },
+  computed: {
+    ...mapGetters({
+      orgFlag:'orgFlag',
+    })
+  },
+  watch:{
+    orgFlag:{
+      handler: function (val, oldVal) {//取消所有选择
+        if(val){
+          this.getUsers();
+        }
+      },
+      deep:true,
+      immediate: true,
+    },
   },
   // props:['isActive'],
   data () {
@@ -167,46 +184,51 @@ export default {
         this.filterData.push(this.tableData[i]);
       }
     },
+    getOrg(){
+      var that=this;
+      $.when(getOrgList()).done(function(data){
+        if(data.state==0){
+          // var res=data.data.results;
+          var res=data.data;
+          that.totalItem=res.length;
+          that.filterData.splice(0);
+          that.tableData=res.map(function(value,index){
+            return {
+              "index":index+1,
+              "org": value.organization,//组织名称
+              "name": value.parentOrgName,//上级单位名称
+              "level":value.level,
+              "id":value.id,
+              "pid":value.parentOrgId,
+            }
+          })
+        }
+        else if(data.state=='9000'){
+          // alert("用户未登录！")
+          that.$router.push({path:'/login',query: {}});
+        }
+        else{
+          alert(data.data);
+        }
+        that.propsArr=that.tableData.map(function(value){
+          return JSON.stringify(value);
+        })
+        that.filterData=that.tableData.slice(0,that.pageSize);
+        that.$store.dispatch('changeOrgFlag',false).then(function(resp){});
+      })
+    },
   },
   created: function () {
     this.$nextTick(function(){
       matchMenu();
     })
-    var that=this;
 
     // this.filterData=this.copyArr(this.tableData).slice(0,this.pageSize);
     // this.propsArr=this.tableData.map(function(value){
     //   return JSON.stringify(value);
     // })//测试 
 
-    $.when(getOrgList()).done(function(data){
-      if(data.state==0){
-        // var res=data.data.results;
-        var res=data.data;
-        that.totalItem=res.length;
-        that.tableData=res.map(function(value,index){
-          return {
-            "index":index+1,
-            "org": value.organization,//组织名称
-            "name": value.parentOrgName,//上级单位名称
-            "level":value.level,
-            "id":value.id,
-            "pid":value.parentOrgId,
-          }
-        })
-      }
-      else if(data.state=='9000'){
-        // alert("用户未登录！")
-        that.$router.push({path:'/login',query: {}});
-      }
-      else{
-        alert(data.data);
-      }
-      that.propsArr=that.tableData.map(function(value){
-        return JSON.stringify(value);
-      })
-      that.filterData=that.tableData.slice(0,that.pageSize);
-    })
+    this.getOrg();
   }
 }
 </script>

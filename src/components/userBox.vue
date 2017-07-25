@@ -174,6 +174,12 @@
       }
     },
 		methods:{
+      open(str) {
+        this.$message({
+          message: str,
+          type: 'success'
+        });
+      },
       changepw(){
         if(confirm('确认重置密码吗？')){
           // this.flag='1';
@@ -232,9 +238,12 @@
             $.when(addUsers(this.orgid,this.form.account,this.form.name,this.form.level,pw)).done(function(data){
               if(data.state=="0"){
                 var res=data.data;
-                alert("新增用户成功！");
+                // alert("新增用户成功！");
+                that.open("新增用户成功！");
+                that.$store.dispatch('changeUserFlag',true).then(function(resp){});
+                that.hideUserBox();
                 // $(".mask1,.userBox").removeClass("showBtn userBoxAdd");
-                window.location.reload();
+                // window.location.reload();
               }
               else if(data.state=='9000'){
                 // alert("用户未登录！")
@@ -251,8 +260,11 @@
             $.when(editUsers(this.userid,this.orgid,this.form.account,this.form.name,this.form.level,pw_1)).done(function(data){
               if(data.state=="0"){
                 var res=data.data;
-                alert("修改用户成功！");
-                window.location.reload();
+                that.open("修改用户成功！");
+                // alert("修改用户成功！");
+                // window.location.reload();
+                that.$store.dispatch('changeUserFlag',true).then(function(resp){});
+                that.hideUserBox();
               }
               else if(data.state=='9000'){
                 // alert("用户未登录！")
@@ -272,8 +284,11 @@
             $.when(cancelUsers(this.userid)).done(function(data){
               if(data.state=="0"){
                 var res=data.data;
-                alert("用户注销成功！");
-                window.location.reload();
+                that.open("用户注销成功！");
+                // alert("用户注销成功！");
+                // window.location.reload();
+                that.$store.dispatch('changeUserFlag',true).then(function(resp){});
+                that.hideUserBox();
               }
               else if(data.state=='9000'){
                 // alert("用户未登录！")
@@ -291,9 +306,12 @@
             $.when(excancelUsers(this.userid)).done(function(data){
               if(data.state=="0"){
                 var res=data.data;
-                alert("用户反注销成功！");
+                that.open("用户反注销成功！");
+                // alert("用户反注销成功！");
+                that.$store.dispatch('changeUserFlag',true).then(function(resp){});
+                that.hideUserBox();
                 // this.alreadyCancel=false;//是否有这个需求，反注销后 不退出编辑
-                window.location.reload();
+                // window.location.reload();
               }
               else if(data.state=='9000'){
                 // alert("用户未登录！")
@@ -312,8 +330,11 @@
           $.when(deleteUsers(this.userid)).done(function(data){
             if(data.state=="0"){
               var res=data.data;
-              alert("用户删除成功！");
-              window.location.reload();
+              // alert("用户删除成功！");
+              that.open("用户删除成功！");
+              that.$store.dispatch('changeUserFlag',true).then(function(resp){});
+              that.hideUserBox();
+              // window.location.reload();
             }
             else if(data.state=='9000'){
               // alert("用户未登录！")

@@ -4,6 +4,8 @@ export const peopleObj=state=>state.peopleObj//已选中批示人员
 
 export const articleObj=state=>state.articleObj//已选中文章
 
+export const singleObj=state=>state.singleObj//已选中批示人
+
 export const userState=state=>state.userState//已选中文章
 
 export const psBox=state=>state.psBox//弹窗类型
@@ -31,3 +33,11 @@ export const mesObj=state=>state.mesObj//弹窗类型
 export const mesCount=state=>state.mesCount//弹窗类型
 
 export const releaseObj=state=>state.releaseObj//弹窗类型
+
+export const userFlag=state=>state.userFlag//弹窗类型
+
+export const orgFlag=state=>state.orgFlag//弹窗类型
+
+export const psFlag=state=>state.psFlag//弹窗类型
+
+export const psDetailFlag=state=>state.psDetailFlag//弹窗类型

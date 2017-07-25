@@ -70,11 +70,28 @@ i<template>
   </div>
 </template>
 <script>
+import {mapGetters} from 'vuex'
 import {scrollFun,matchMenu} from '../../static/js/public.js'
 export default {
   name: 'report',
   components: {
    app
+  },
+  computed: {
+    ...mapGetters({
+      userFlag:'userFlag',
+    })
+  },
+  watch:{
+    userFlag:{
+      handler: function (val, oldVal) {//取消所有选择
+        if(val){
+          this.getUsers();
+        }
+      },
+      deep:true,
+      immediate: true,
+    },
   },
   // props:['isActive'],
   data () {
@@ -171,6 +188,7 @@ export default {
       propsArr:[],
       currentPage:1,
       pageSize:20,
+      filterData:[],
       }
   },
   methods: {
@@ -258,23 +276,12 @@ export default {
         this.filterData.push(this.tableData[i]);
       }
     },
-  },
-   created: function () {
+    getUsers(){
       var that=this;
-      this.$nextTick(function(){
-        matchMenu();
-      })
-
-      // this.totalItem=this.tableData.length;
-      // this.propsArr=this.tableData.map(function(value){
-      //   return JSON.stringify(value);
-      // })//测试
-      // this.filterData=this.copyArr(this.tableData).slice(0,this.pageSize);
-
-
       $.when(getAllUsers()).done(function(data){
         if(data.state==0){
           var res=data.data;
+          that.filterData.splice(0);
           that.totalItem=res.length;
           that.tableData=res.map(function(value,index){
             var val=that.levelJudge(value.level);
@@ -308,7 +315,20 @@ export default {
           return JSON.stringify(value);
         })
         that.filterData=that.tableData.slice(0,that.pageSize);
+        that.$store.dispatch('changeUserFlag',false).then(function(resp){});
       })
+    }
+  },
+   created: function () {
+      this.$nextTick(function(){
+        matchMenu();
+      })
+      this.getUsers();
+      // this.totalItem=this.tableData.length;
+      // this.propsArr=this.tableData.map(function(value){
+      //   return JSON.stringify(value);
+      // })//测试
+      // this.filterData=this.copyArr(this.tableData).slice(0,this.pageSize);
    }
 }
 </script>

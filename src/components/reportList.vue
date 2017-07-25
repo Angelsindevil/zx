@@ -163,14 +163,21 @@ export default {
     }
   },
   methods:{
+    open(str) {
+      this.$message({
+        message: str,
+        type: 'success'
+      });
+    },
     delete_:function(id){
       var that=this;
       // $(e.target).closest(".rightContent").remove();
       if(confirm("你确认删除该报告？")){
         $.when(deleteReporter(id)).done(function(data){
           if(data.state=="0"){
-            alert("删除成功！");
-            that.getInitReporter();
+            // alert("删除成功！");
+            that.open("删除成功！");
+            that.getInitReporter(that.type);
             // window.location.reload();
           }
           else if(data.state=='9000'){
@@ -274,8 +281,10 @@ export default {
         if(confirm("你确认要上传报告  "+this.linkName)){
           $.when(uploadReporter(formData)).done(function(data){
             if(data.state=="0"){
-              alert("报告上传成功！");
-              window.location.reload();
+              // alert("报告上传成功！");
+              // window.location.reload();
+              that.open("报告上传成功！");
+              that.getInitReporter(that.type);
             }
             else if(data.state=='9000'){
               // alert("用户未登录！")
@@ -409,24 +418,9 @@ export default {
         }
       }
     },
-    getInitReporter(){
-      if(this.level=='0'||this.level=='2'||this.level=='3'){
-        this.type='1';
-        this.$nextTick(function(){
-          $(".el-tabs__header").hide();
-          // $(".el-tabs__header").find(".el-tabs__item").eq(0).hide();
-          // $(".el-tabs__header").find(".el-tabs__item").eq(1).addClass("is-active");
-          // $(".el-tabs__header").find(".el-tabs__item").css("border-bottom","3px solid #20a0ff");
-          $(".el-tabs__content").find(".tab1").hide();
-          $(".el-tabs__content").find(".tab2").show();
-          $(".btnUpload").hide();
-          $(".delete").hide();
-        })
-      }
-      else{
-        this.type='0';
-      }
-      $.when(getReporter(that.userid,that.type,1)).done(function(data){
+    getInitReporter(type){
+      var that=this;
+      $.when(getReporter(this.userid,type,1)).done(function(data){
         if(data.state=="0"){
           // var res=data.data;
           // that.totalNum=res.totalNum;
@@ -456,7 +450,23 @@ export default {
   },
   mounted(){
     var that=this;
-    this.getInitReporter();
+   if(this.level=='0'||this.level=='2'||this.level=='3'){
+      this.type='1';
+      this.$nextTick(function(){
+        $(".el-tabs__header").hide();
+        // $(".el-tabs__header").find(".el-tabs__item").eq(0).hide();
+        // $(".el-tabs__header").find(".el-tabs__item").eq(1).addClass("is-active");
+        // $(".el-tabs__header").find(".el-tabs__item").css("border-bottom","3px solid #20a0ff");
+        $(".el-tabs__content").find(".tab1").hide();
+        $(".el-tabs__content").find(".tab2").show();
+        $(".btnUpload").hide();
+        $(".delete").hide();
+      })
+    }
+    else{
+      this.type='0';
+    }
+    this.getInitReporter(this.type);
   },
 }
 </script>

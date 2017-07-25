@@ -85,6 +85,7 @@
     <mesDetailBox></mesDetailBox>
     <wordBox></wordBox>
     <typeBox></typeBox>
+    <singleBox></singleBox>
     <div class="mask mask1"></div>
     <div class="mask mask2"></div>
   </div>
@@ -126,13 +127,14 @@ const initpwBox = resolve => require(['../components/initpwBox.vue'], resolve)
 const mesDetailBox = resolve => require(['../components/mesDetailBox.vue'], resolve)
 const wordBox = resolve => require(['../components/word.vue'], resolve)
 const typeBox = resolve => require(['../components/typeChoose.vue'], resolve)
+const singleBox = resolve => require(['../components/singleBox.vue'], resolve)
 
 
 
 export default {
   name: 'homePage',
   components: {
-    Hello,reportBox,psBox,articleBox,multiBox,userBox,peopleBox,mesBox,orgBox,unitBox,loginBox,initpwBox,pwBox,mesDetailBox,wordBox,typeBox},
+    Hello,reportBox,psBox,articleBox,multiBox,userBox,peopleBox,mesBox,orgBox,unitBox,loginBox,initpwBox,pwBox,mesDetailBox,wordBox,typeBox,singleBox},
   data () {
     return {
       keyword:'',

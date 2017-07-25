@@ -1,24 +1,30 @@
-export const changeSelArr= (state,payload) => {//将参数mes赋值给state的变量subjectid 
+export const changeSelArr= (state,payload) => {
 	state.selectArr.name=payload.selectArr.name;
 	state.selectArr.id=payload.selectArr.id;
 }
-export const changePleObj= (state,payload) => {//将参数mes赋值给state的变量subjectid 
+export const changePleObj= (state,payload) => {
 	state.peopleObj.value=payload.peopleObj.value;
 	state.peopleObj.i=payload.peopleObj.i;
 }
-export const changeArtObj= (state,payload) => {//将参数mes赋值给state的变量subjectid 
+export const changeArtObj= (state,payload) => {
 	state.articleObj.value=payload.articleObj.value;
 	// state.articleObj.radio=payload.articleObj.radio;
 	state.articleObj.id=payload.articleObj.id;
 	// state.articleObj.flag=payload.articleObj.flag;
 }
-export const changeOrgState= (state,payload) => {//将参数mes赋值给state的变量subjectid 
+export const changeSingleObj= (state,payload) => {
+	state.singleObj.value=payload.singleObj.value;
+	// state.singleObj.radio=payload.singleObj.radio;
+	state.singleObj.id=payload.singleObj.id;
+	// state.singleObj.flag=payload.singleObj.flag;
+}
+export const changeOrgState= (state,payload) => {
 	state.orgState=payload.orgState;
 }
-export const changeUserState= (state,payload) => {//将参数mes赋值给state的变量subjectid 
+export const changeUserState= (state,payload) => {
 	state.userState=payload.userState;
 }
-export const changeAlertBox= (state,payload) => {//将参数mes赋值给state的变量subjectid 
+export const changeAlertBox= (state,payload) => {
 	// state.type=payload.type;
 	// state.psObj=payload.psObj;
 	state.psBox.title=payload.title;
@@ -26,51 +32,63 @@ export const changeAlertBox= (state,payload) => {//将参数mes赋值给state的
 	state.psBox.psObj=payload.psObj
 	state.psBox.instructionId=payload.instructionId;
 }
-export const changeClrObj= (state,payload) => {//将参数mes赋值给state的变量subjectid 
+export const changeClrObj= (state,payload) => {
 	state.clrId=payload.clrId;
 }
-export const changeNewArticle= (state,payload) => {//将参数mes赋值给state的变量subjectid 
+export const changeNewArticle= (state,payload) => {
 	state.newArcticle=payload.newArcticle;
 }
-export const changePsShow= (state,payload) => {//将参数mes赋值给state的变量subjectid 
+export const changePsShow= (state,payload) => {
 	state.psShow.value=payload.psShow.value;
 	state.psShow.id=payload.psShow.id;
 }
-export const changeUnitVal= (state,payload) => {//将参数mes赋值给state的变量subjectid 
+export const changeUnitVal= (state,payload) => {
 	state.unitVal=payload.unitVal;
 }
-export const changeClearAll= (state,payload) => {//将参数mes赋值给state的变量subjectid 
+export const changeClearAll= (state,payload) => {
 	state.clearAll=payload.clearAll;
 }
-export const changeUserSource= (state,payload) => {//将参数mes赋值给state的变量subjectid 
+export const changeUserSource= (state,payload) => {
 	state.userSource=payload.userSource;
 }
-export const changeMesId= (state,payload) => {//将参数mes赋值给state的变量subjectid 
+export const changeMesId= (state,payload) => {
 	state.mesState.id=payload.mesId;
 	state.mesState.method=payload.method;
 }
-export const changeReporter= (state,payload) => {//将参数mes赋值给state的变量subjectid 
+export const changeReporter= (state,payload) => {
 	state.reportObj=payload.reportObj;
 }
-export const changeWord= (state,payload) => {//将参数mes赋值给state的变量subjectid 
+export const changeWord= (state,payload) => {
 	state.wordObj=payload.wordObj;
 }
-export const changeMesInfo= (state,payload) => {//将参数mes赋值给state的变量subjectid 
+export const changeMesInfo= (state,payload) => {
 	state.mesObj.title=payload.title;
 	state.mesObj.area=payload.area;
 	state.mesObj.accept=payload.accept;
 	state.mesObj.send=payload.send;
 }
-export const clearMesInfo= (state,payload) => {//将参数mes赋值给state的变量subjectid 
+export const clearMesInfo= (state,payload) => {
 	state.mesObj.title='';
 	state.mesObj.area='';
 	state.mesObj.accept='';
 	state.mesObj.send='';
 }
-export const changeMesCount= (state,payload) => {//将参数mes赋值给state的变量subjectid 
+export const changeMesCount= (state,payload) => {
 	state.mesCount=payload.mesCount;
 }
-export const changeRelease= (state,payload) => {//将参数mes赋值给state的变量subjectid 
+export const changeRelease= (state,payload) => {
 	state.releaseObj.id=payload.id;
 	state.releaseObj.type=payload.type;
+}
+export const changeUserFlag= (state,payload) => {//用户刷新标识
+	state.userFlag=payload;
+}
+export const changeOrgFlag= (state,payload) => {//组织刷新标识
+	state.orgFlag=payload;
+}
+export const changepsFlag= (state,payload) => {//批示列表刷新标识
+	state.psFlag=payload;
+}
+export const changepsDetailFlag= (state,payload) => {//批示详情刷新标识
+	state.psDetailFlag=payload;
 }

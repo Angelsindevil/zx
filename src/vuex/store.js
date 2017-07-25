@@ -20,6 +20,12 @@ const state = {
 		id:'',
 		// flag:'',
 	},
+	singleObj:{
+		value:'',
+		// radio:0,
+		id:'',
+		// flag:'',
+	},
 	psShow:{
 		value:'',
 		id:'',
@@ -60,6 +66,10 @@ const state = {
 		type:'',
 	},
 	mesCount:'',
+	userFlag:false,
+	orgFlag:false,
+	psFlag:false,
+	psDetailFlag:false,
 }
 const store = new Vuex.Store({
   state,

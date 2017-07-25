@@ -12,7 +12,7 @@
           <div class="rightContent"> -->
             <div class="title_bar">
               <p><img src="../../static/img/edit_reporter.png" alt="">
-              {{item.type=='0'?'我的批示流程':(item.type=='1'?'数据与信息中心分发':(item.type=='2'?'发展规划处'+item.fkPeople+'反馈':''))}}
+              {{item.type=='0'?item.org+'-'+item.name+'的批示流程':(item.type=='1'?item.org+'-'+item.name+'的分发':(item.type=='2'?item.org+'-'+item.name+'的反馈':''))}}
               <span class="time">
               {{item.type=='0'?'批示时间':(item.type=='1'?'分发时间':(item.type=='2'?'反馈时间':''))}}
               ：<span>{{item.date}}</span></span></p>
@@ -94,6 +94,7 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
 export default {
   name: 'instructionsDetail',
   data () {
@@ -133,10 +134,30 @@ export default {
       fwLink:'192.168.2.108:9000',
     }
   },
+  computed: {
+    ...mapGetters({
+      psDetailFlag:'psDetailFlag',
+    })
+  },
+  watch:{
+    psDetailFlag:{
+      handler: function (val, oldVal) {//取消所有选择
+        if(val){
+          this.getFlow();
+        }
+      },
+      deep:true,
+      immediate: true,
+    },
+  },
   methods:{
+    open(str) {
+      this.$message({
+        message: str,
+        type: 'success'
+      });
+    },
     showSelect:function(command){
-      console.log("instructionId");
-      console.log(this.instructionId);
       var that=this;
       if(command!='gb'){
         $(".mask1").addClass("showBtn");
@@ -146,7 +167,6 @@ export default {
         $(".psBox").addClass("alertStyle_");
         $(".psBox").find(".article_btn").attr("disabled",true).addClass("is-disabled");
       }
-      console.log(command);
       if(command=="ff"){
         this.$store.dispatch('changeAlertBox',{"type":'1',"psObj":this.psObj,'title':this.articleName,'instructionId':this.instructionId}).then(function(resp){});
       }
@@ -157,7 +177,8 @@ export default {
         if(confirm("关闭批示流程后，无法对该批示进行分发、反馈操作，是否确定关闭流程？")){
           $.when(closeInstructions(this.instructionId)).done(function(data){
             if(data.state=='0'){
-              alert("流程已关闭");
+              // alert("流程已关闭");
+              that.open("流程关闭成功！");
               that.$router.push('/homePage/managementCenter');
             }
             else if(data.state=='9000'){
@@ -185,80 +206,78 @@ export default {
         }
       })
     },
+    getFlow(){
+      var that=this;
+      $.when(getInstructionFlow(this.instructionId)).done(function(data){
+        if(data.state=='0'){
+          var res=data.data;
+          if(res.isEnd=="0"){
+            that.dropDownState=true;
+            that.bottomTips='流程已结束'
+          }
+          else if(res.hasPassed){
+            that.dropDownState=false;
+            that.bottomTips='距离接收到领导批示'+res.hasPassed+'个小时，流程还未结束'
+          }
+          else{}
+          that.articleName=res.results[0].title;
+          that.articlesFilter=res.results;
+          that.psObj=res.psPeople;
+          // for (var i=0;i<res.results.length;i++) {
+          //   if(res.results[i].type=='0'){
+          //     var insertItem=$('<div class="rightContent">'+
+          //               '<div class="title_bar">'+
+          //                 '<p>'+
+          //                 '<img src="../../static/img/edit_reporter.png" alt="">我的批示流程<span class="time">批示时间：<span>'+res.results[i].date+'</span></span></p>'+
+          //                 '<p class="grey_font">'+
+          //                 '<span>批示文章：<span>'+res.results[i].title+'</span> - <span>'+res.results[i].art_date+'</span></span>'+
+          //                 '<router-link to="{ path: \"articleDetail\", query: {id:'+res.list[i].articleId+'}}">'+
+          //                 '<el-button type="primary" size="small" class="btn-pos">查看原文</el-button>'+
+          //                 '</router-link>'+
+          //                 '</p>'+
+          //                 '<p class="blue_font">'+
+          //                   '<span>批示内容：<span>'+res.results[i].content+'</span></span>'+
+          //                 '</p>'+
+          //               '</div>'+
+          //             '</div>');
+          //     var linkItem;
+          //     if(res.results[i].link){
+          //       linkItem=$('<a href='+res.results[i].link+'><el-button type="text" size="small" class="btn-pos btn-pos-1">查看附件</el-button></a>');
+          //     }
+          //     else{
+          //       linkItem=$('<el-button type="text" :disabled="true" class="btn-pos btn-pos-1" size="small">无附件</el-button>');
+          //     }
+          //     insertItem.find(".blue_font").append(linkItem);
+          //   }
+          //   else if(res.results[i].type=='1'){
+              
+
+          //   }
+          //   else if(res.results[i].type=='2'){
+              
+          //   }
+          // }
+          that.$store.dispatch('changepsDetailFlag',false).then(function(resp){});
+        }
+        else if(data.state=='9000'){
+          // alert("用户未登录！")
+          that.$router.push({path:'/login',query: {}});
+        }
+        else{
+          alert(data.data);
+        }
+      })
+    }
   },
   mounted() {
     // this.instructionId = this.$route.query.id;
-    // console.log(this.instructionId);
   },
   created: function() {
     this.fwLink=window.location.host;//有用
-    console.log(this.fwLink);
     this.instructionId = this.$route.query.id;
-    console.log(this.instructionId);
-    var that=this;
-    $.when(getInstructionFlow(this.instructionId)).done(function(data){
-      if(data.state=='0'){
-        var res=data.data;
-        if(res.isEnd=="0"){
-          that.dropDownState=true;
-          that.bottomTips='流程已结束'
-        }
-        else if(res.hasPassed){
-          that.dropDownState=false;
-          that.bottomTips='距离接收到领导批示'+res.hasPassed+'个小时，流程还未结束'
-        }
-        else{}
-        that.articleName=res.results[0].title;
-        that.articlesFilter=res.results;
-        that.psObj=res.psPeople;
-        // for (var i=0;i<res.results.length;i++) {
-        //   if(res.results[i].type=='0'){
-        //     var insertItem=$('<div class="rightContent">'+
-        //               '<div class="title_bar">'+
-        //                 '<p>'+
-        //                 '<img src="../../static/img/edit_reporter.png" alt="">我的批示流程<span class="time">批示时间：<span>'+res.results[i].date+'</span></span></p>'+
-        //                 '<p class="grey_font">'+
-        //                 '<span>批示文章：<span>'+res.results[i].title+'</span> - <span>'+res.results[i].art_date+'</span></span>'+
-        //                 '<router-link to="{ path: \"articleDetail\", query: {id:'+res.list[i].articleId+'}}">'+
-        //                 '<el-button type="primary" size="small" class="btn-pos">查看原文</el-button>'+
-        //                 '</router-link>'+
-        //                 '</p>'+
-        //                 '<p class="blue_font">'+
-        //                   '<span>批示内容：<span>'+res.results[i].content+'</span></span>'+
-        //                 '</p>'+
-        //               '</div>'+
-        //             '</div>');
-        //     var linkItem;
-        //     if(res.results[i].link){
-        //       linkItem=$('<a href='+res.results[i].link+'><el-button type="text" size="small" class="btn-pos btn-pos-1">查看附件</el-button></a>');
-        //     }
-        //     else{
-        //       linkItem=$('<el-button type="text" :disabled="true" class="btn-pos btn-pos-1" size="small">无附件</el-button>');
-        //     }
-        //     insertItem.find(".blue_font").append(linkItem);
-        //   }
-        //   else if(res.results[i].type=='1'){
-            
-
-        //   }
-        //   else if(res.results[i].type=='2'){
-            
-        //   }
-        // }
-      }
-      else if(data.state=='9000'){
-        // alert("用户未登录！")
-        that.$router.push({path:'/login',query: {}});
-      }
-      else{
-        alert(data.data);
-      }
-    })
     this.userSource=JSON.parse(localStorage.getItem("userSource"));
     this.level=this.userSource?this.userSource.level:'';
-    console.log(this.level);
     if(this.level==2){
-      // console.log("222");
       // $(this.$refs.feedback).text("新批示");
       this.feedback="新批示";
     }
@@ -278,6 +297,7 @@ export default {
         $(".psDown").children("li").eq(2).removeClass("showBtn");
       })
     }
+    this.getFlow();
   }
 }
 </script>
