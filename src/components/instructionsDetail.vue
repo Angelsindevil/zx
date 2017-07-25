@@ -154,19 +154,21 @@ export default {
         this.$store.dispatch('changeAlertBox',{"type":'2',"psObj":this.psObj,'title':this.articleName,'instructionId':this.instructionId}).then(function(resp){});
       }
       else if(command=="gb"){
-        $.when(closeInstructions(this.instructionId)).done(function(data){
-          if(data.state=='0'){
-            alert("流程已关闭");
-            that.$router.push('/homePage/managementCenter');
-          }
-          else if(data.state=='9000'){
-            // alert("用户未登录！")
-            that.$router.push({path:'/login',query: {}});
-          }
-          else{
-            alert(data.data);
-          }
-        })
+        if(confirm("关闭批示流程后，无法对该批示进行分发、反馈操作，是否确定关闭流程？")){
+          $.when(closeInstructions(this.instructionId)).done(function(data){
+            if(data.state=='0'){
+              alert("流程已关闭");
+              that.$router.push('/homePage/managementCenter');
+            }
+            else if(data.state=='9000'){
+              // alert("用户未登录！")
+              that.$router.push({path:'/login',query: {}});
+            }
+            else{
+              alert(data.data);
+            }
+          })
+        }
       }
     },
     download(name){

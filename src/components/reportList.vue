@@ -170,7 +170,8 @@ export default {
         $.when(deleteReporter(id)).done(function(data){
           if(data.state=="0"){
             alert("删除成功！");
-            window.location.reload();
+            that.getInitReporter();
+            // window.location.reload();
           }
           else if(data.state=='9000'){
             // alert("用户未登录！")
@@ -408,6 +409,39 @@ export default {
         }
       }
     },
+    getInitReporter(){
+      if(this.level=='0'||this.level=='2'||this.level=='3'){
+        this.type='1';
+        this.$nextTick(function(){
+          $(".el-tabs__header").hide();
+          // $(".el-tabs__header").find(".el-tabs__item").eq(0).hide();
+          // $(".el-tabs__header").find(".el-tabs__item").eq(1).addClass("is-active");
+          // $(".el-tabs__header").find(".el-tabs__item").css("border-bottom","3px solid #20a0ff");
+          $(".el-tabs__content").find(".tab1").hide();
+          $(".el-tabs__content").find(".tab2").show();
+          $(".btnUpload").hide();
+          $(".delete").hide();
+        })
+      }
+      else{
+        this.type='0';
+      }
+      $.when(getReporter(that.userid,that.type,1)).done(function(data){
+        if(data.state=="0"){
+          // var res=data.data;
+          // that.totalNum=res.totalNum;
+          // that.listFilter_1=res.list;
+          that.insertData(data,that.type);
+        }
+        else if(data.state=='9000'){
+          // alert("用户未登录！")
+          that.$router.push({path:'/login',query: {}});
+        }
+        else{
+          alert(data.data);
+        }
+      })
+    }
   },
   created(){
     // var that=this;
@@ -419,38 +453,10 @@ export default {
     this.$nextTick(function(){
       matchMenu();
     })
-    if(this.level=='0'||this.level=='2'||this.level=='3'){
-      this.type='1';
-      this.$nextTick(function(){
-        $(".el-tabs__header").hide();
-        // $(".el-tabs__header").find(".el-tabs__item").eq(0).hide();
-        // $(".el-tabs__header").find(".el-tabs__item").eq(1).addClass("is-active");
-        // $(".el-tabs__header").find(".el-tabs__item").css("border-bottom","3px solid #20a0ff");
-        $(".el-tabs__content").find(".tab1").hide();
-        $(".el-tabs__content").find(".tab2").show();
-        $(".btnUpload").hide();
-        $(".delete").hide();
-      })
-    }
-    else{}
   },
   mounted(){
     var that=this;
-    $.when(getReporter(that.userid,that.type,that.pageCount_1)).done(function(data){
-      if(data.state=="0"){
-        // var res=data.data;
-        // that.totalNum=res.totalNum;
-        // that.listFilter_1=res.list;
-        that.insertData(data,that.type);
-      }
-      else if(data.state=='9000'){
-        // alert("用户未登录！")
-        that.$router.push({path:'/login',query: {}});
-      }
-      else{
-        alert(data.data);
-      }
-    })
+    this.getInitReporter();
   },
 }
 </script>
