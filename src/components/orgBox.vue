@@ -28,7 +28,7 @@
 	        <span class="user-dele" @click="deleteUser"><img src="../../static/img/alert-delete.png">删除</span> 
 	      </span>
 	      <span class="rightBot">
-	        <span class="bg_green" @click="hideUserBox(),operateUser()">确定</span> 
+	        <span class="bg_green" @click="operateUser">确定</span> 
         	<span @click="hideUserBox" class="bg_cancle">取消</span> 
 	      </span>
       </div>
@@ -92,12 +92,18 @@
 	      }
 	    },
 		methods:{
-			open(str) {
-		        this.$message({
-		          message: str,
-		          type: 'success'
-		        });
-		      },
+			// open(str) {
+		 //        this.$message({
+		 //          message: str,
+		 //          type: 'success'
+		 //        });
+		 //      },
+		 	open(str) {
+		      this.$message({
+		        message: str,
+		        iconClass:'el-icon-check',
+		      });
+		    },
 		  	operateUser(){
 			  	var that=this;
 			  	if(this.form.org==""){
@@ -112,6 +118,7 @@
 			              // window.location.reload();
 			              that.open("新增组织成功！");
 			              that.$store.dispatch('changeOrgFlag',true).then(function(resp){});
+			              that.hideUserBox();
 			            }
 			            else if(data.state=='9000'){
 				            // alert("用户未登录！")
@@ -130,6 +137,7 @@
 			              // window.location.reload();
 			              that.open("编辑组织成功！");
 			              that.$store.dispatch('changeOrgFlag',true).then(function(resp){});
+			              that.hideUserBox();
 			            }
 			            else if(data.state=='9000'){
 				            // alert("用户未登录！")
@@ -151,6 +159,7 @@
 			        	// window.location.reload();
 			        	that.open("删除成功！");
 			        	that.$store.dispatch('changeOrgFlag',true).then(function(resp){});
+			        	that.hideUserBox();
 			        }
 			        else if(data.state=='9000'){
 			            // alert("用户未登录！")

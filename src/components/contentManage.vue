@@ -10,41 +10,47 @@
         class="input_position" :on-icon-click="handleInputClick" @keyup.native.enter='handleInputClick'>
       </el-input>
     </div>
-
-    <div class="rightContent_" v-for="(item,index) in articlesAarry">
-      <span class="includeBtn" @click="releaseBtn(item.id,index,$event,item.type)"><span>发布</span></span>
-      <router-link target="_blank" :to="{ path: '/homePage/articleDetail', query: { id:item.id,edit:'1'}}">
-        <div class="rightContent">
-          <!-- <p class="title_bar">
-            <span>{{item.title}}<span>
-          </p>  -->     
-          <p class="title_bar" style="padding-right: 160px;">
-            <span class="ellipsis" style="display:block">{{item.title}}</span>
-          </p>   
-          <p class="title_bottom">
-            <span>
-              <span class="bottom_item">来源：<span>{{item.source}}</span></span>
-             <!--  <span class="bottomLink ellipsis">（<span @click="goSomewhere">{{item.link}}</span>）</span>
-              </span></span> -->
-              <span class="bottom_item" @click="goSomewhere($event,item.link)">来源链接</span>
-              <span class="bottom_item">类别：<span>{{item.type}}</span></span>
-              <!-- <span class="bottom_item">时间：<span>{{item.isAdded==1?(item.time.toISOString().slice(0,10)):item.time}}</span></span> -->
-              <span class="bottom_item">时间：<span>{{item.time}}</span></span>
-              <span class="bottom_item grey" @click="clickDel($event,item.id)" @mouseover="overDel" @mouseout="outDel"><img src="../../static/img/alert-delete.png" alt=""><span class="dele-tips">删除</span></span>
-            </span>
-          </p>
-        </div>
-      </router-link>
-    </div>
-    <div class="rightBottom" ref="rightBottom" @click="loadMore">
-      <p>
-      点击加载更多内容
-      </p>
+    <div  v-show="isShowData?true:false">
+      <div class="rightContent_" v-for="(item,index) in articlesAarry">
+        <span class="includeBtn" @click="releaseBtn(item.id,index,$event,item.type)"><span>发布</span></span>
+        <router-link target="_blank" :to="{ path: '/homePage/articleDetail', query: { id:item.id,edit:'1'}}">
+          <div class="rightContent">
+            <!-- <p class="title_bar">
+              <span>{{item.title}}<span>
+            </p>  -->     
+            <p class="title_bar" style="padding-right: 160px;">
+              <span class="ellipsis" style="display:block">{{item.title}}</span>
+            </p>   
+            <p class="title_bottom">
+              <span>
+                <span class="bottom_item">来源：<span>{{item.source}}</span></span>
+               <!--  <span class="bottomLink ellipsis">（<span @click="goSomewhere">{{item.link}}</span>）</span>
+                </span></span> -->
+                <span class="bottom_item" @click="goSomewhere($event,item.link)">来源链接</span>
+                <span class="bottom_item">类别：<span>{{item.type}}</span></span>
+                <!-- <span class="bottom_item">时间：<span>{{item.isAdded==1?(item.time.toISOString().slice(0,10)):item.time}}</span></span> -->
+                <span class="bottom_item">时间：<span>{{item.time}}</span></span>
+                <span class="bottom_item grey" @click="clickDel($event,item.id)" @mouseover="overDel" @mouseout="outDel"><img src="../../static/img/alert-delete.png" alt=""><span class="dele-tips">删除</span></span>
+              </span>
+            </p>
+          </div>
+        </router-link>
+      </div>
+      <div class="rightBottom" ref="rightBottom" @click="loadMore">
+        <p>
+        点击加载更多内容
+        </p>
+      </div>
+    </div>  
+    <div v-show="!isShowData?true:false" class="showLoadState">
+      <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+      <div>正在加载...</div>
     </div>
   </div>
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
 import {matchMenu} from '../../static/js/public.js'
 export default {
   name: 'test',
@@ -135,7 +141,24 @@ export default {
       },
       userSource:{},
       userid:'',
+      isShowData:false,
     }
+  },
+  computed: {
+    ...mapGetters({
+      artFlag:'artFlag',
+    })
+  },
+  watch:{
+    artFlag:{
+      handler: function (val, oldVal) {//取消所有选择
+        if(val){
+          this.getInitData();
+        }
+      },
+      deep:true,
+      immediate: true,
+    },
   },
   methods:{
     doThis:function(){
@@ -291,6 +314,25 @@ export default {
         })
       }
     },
+    getInitData(){
+      var that=this;
+      that.isShowData=false;
+      that.articlesAarry=[];
+      $.when(getContentList(this.userid,1,'0')).done(function(data){
+        if(data.state=="0"){
+          that.insertData(data.data);
+          that.isShowData=true;
+          that.$store.dispatch('changeArtFlag',false).then(function(resp){});
+        }
+        else if(data.state=='9000'){
+          // alert("用户未登录！")
+          that.$router.push({path:'/login',query: {}});
+        }
+        else{
+          alert(data.data);
+        }
+      })
+    },
   },
   created:function(){
     var that=this;
@@ -303,18 +345,8 @@ export default {
     this.userSource=JSON.parse(localStorage.getItem("userSource"));
     // this.level=this.userSource?this.userSource.level:'';
     this.userid=this.userSource?this.userSource.id:'';
-    $.when(getContentList(this.userid,that.pageNo,'0')).done(function(data){
-      if(data.state=="0"){
-        that.insertData(data.data);
-      }
-      else if(data.state=='9000'){
-        // alert("用户未登录！")
-        that.$router.push({path:'/login',query: {}});
-      }
-      else{
-        alert(data.data);
-      }
-    })
+    this.getInitData();
+    
   }
 }
 </script>
@@ -345,6 +377,23 @@ export default {
           // font-size: 18px;
           // font-size: 16px;
         }
+      }
+    }
+    .showLoadState{
+      line-height: 800px;
+      text-align: center;
+      color: #999;
+      position: relative;
+      div{
+        overflow:visible;;
+        // position: relative;
+        // display: inline-block;
+        color: #aaa;
+        font-size: 14px;
+        position: absolute;
+        top: 54%;
+        left: 51%;
+        transform: translate(-51%,-50%);
       }
     }
     .includeBtn{

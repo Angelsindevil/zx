@@ -2,7 +2,7 @@
   <div class="report reportStyle">
     <div class="rightBar">
       <p>报告中心-收录管理：
-        <!-- <span>今日收录<span>{{totalNum}}</span>篇，选入报告<span>{{todayNum}}</span>篇</span> -->
+        <span>今日收录<span>{{totalNum}}</span>篇，选入报告<span>{{todayNum}}</span>篇</span>
       </p>
       <!-- <div>
         <input type="" name="" placeholder="搜索已收录的内容">
@@ -149,16 +149,20 @@ export default {
     }
   },
   methods: {
+    openWarn(str) {
+      this.$message({
+        message: str,
+        type:'warning',
+        // iconClass:'el-icon-check',
+      });
+    },
     showSomething:function(){
       this.article_id=[];
-      console.log(this.checkedList);
-      console.log(this.articlesAarry);
       var that=this;
 
       var storeObj=[];//test
 
       this.checkedList.map(function(value,index){
-        console.log(value);
         var id=that.articlesAarry[index].id;
         if(value){
           that.article_id.push(id);
@@ -168,13 +172,13 @@ export default {
         }
       },that);
       if(this.article_id.length==0){
-        alert("还未选择收录的文章！");
+        // alert("还未选择收录的文章！");
+        this.openWarn("还未选择收录的文章！");
       }
       else{
         $(".mask1").addClass("showBtn");
         $(".alertBox").addClass("showBtn");
 
-        // console.log(storeObj);
         this.$store.dispatch('changeReporter',{reportObj:storeObj}).then(function(resp){});//test
 
         // $.when(buildReporter(that.userid,that.article_id)).done(function(data){
@@ -243,11 +247,11 @@ export default {
       var li_item=$(el).closest("li");
       var class_=$(el).hasClass('red');
       var id=$(el).attr("data-id");
-      console.log(id);
       if(class_){
         //执行取消
         if(item==1){//已生成报告 不允许取消
-          alert("已生成报告，不可取消收录！");
+          // alert("已生成报告，不可取消收录！");
+          this.openWarn("已生成报告，不可取消收录！");
         }
         else{
           $.when(canceled(id,this.userid)).done(function(data){

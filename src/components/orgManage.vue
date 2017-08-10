@@ -75,7 +75,7 @@ export default {
     orgFlag:{
       handler: function (val, oldVal) {//取消所有选择
         if(val){
-          this.getUsers();
+          this.getOrg();
         }
       },
       deep:true,

@@ -3,7 +3,7 @@
   <div class="report">
     <div class="rightBar">
       <p>报告中心-报告列表：
-        <!-- <span>共计生成<span>{{totalNum}}</span>篇报告</span> -->
+        <span>共计生成<span>{{totalNum}}</span>篇报告</span>
       </p>
       <el-button class="btn_position btnUpload">
         <input type="file" name="" class="file_" @change="linkChange">上传报告
@@ -163,10 +163,16 @@ export default {
     }
   },
   methods:{
+    // open(str) {
+    //   this.$message({
+    //     message: str,
+    //     type: 'success'
+    //   });
+    // },
     open(str) {
       this.$message({
         message: str,
-        type: 'success'
+        iconClass:'el-icon-check',
       });
     },
     delete_:function(id){

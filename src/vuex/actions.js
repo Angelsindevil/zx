@@ -113,6 +113,12 @@ export const changeMesCount=(store,payload)=>{
         resolve("ok");
     })
 }
+export const changepsCount=(store,payload)=>{
+    return new Promise(function(resolve, reject) {
+        store.commit('changepsCount',{'psCount':payload.psCount});
+        resolve("ok");
+    })
+}
 export const changeRelease=(store,payload)=>{
     return new Promise(function(resolve, reject) {
         store.commit('changeRelease',{'id':payload.id,'type':payload.type});
@@ -125,9 +131,21 @@ export const changeUserFlag=(store,flag)=>{//用户管理刷新标识
         resolve("ok");
     })
 }
+export const changeMesFlag=(store,flag)=>{//消息管理刷新标识
+    return new Promise(function(resolve, reject) {
+        store.commit('changeMesFlag',flag);
+        resolve("ok");
+    })
+}
 export const changeOrgFlag=(store,flag)=>{//用户管理刷新标识
     return new Promise(function(resolve, reject) {
         store.commit('changeOrgFlag',flag);
+        resolve("ok");
+    })
+}
+export const changeArtFlag=(store,flag)=>{//用户管理刷新标识
+    return new Promise(function(resolve, reject) {
+        store.commit('changeArtFlag',flag);
         resolve("ok");
     })
 }

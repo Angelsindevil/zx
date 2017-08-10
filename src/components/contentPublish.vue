@@ -2,7 +2,7 @@
   <div class="contentPublish">
      <div class="rightBar">
       <p>内容管理-已发布内容：
-        <!-- <span>总共发布<span>{{totalNum}}</span>篇,今日发布<span>{{todayNum}}</span>篇</span> -->
+        <span>总共发布<span>{{totalNum}}</span>篇,今日发布<span>{{todayNum}}</span>篇</span>
       </p>
       <el-input
         placeholder="搜索内容"
@@ -11,38 +11,43 @@
         class="input_position" :on-icon-click="handleInputClick" @keyup.native.enter='handleInputClick'>
       </el-input>
     </div>
-
-    <div class="rightContent_" v-for="(item,index) in articlesAarry">
-      <span class="includeBtn" @click="clickBtn($event,item.id)" @mouseover="overBtn" @mouseout="outBtn"><span>已发布</span></span>
-      <router-link target="_blank" :to="{ path: '/homePage/articleDetail', query: { id:item.id,edit:'2'}}">
-        <div class="rightContent">
-          <!-- <p class="title_bar">
-            <span>{{item.title}}<span>
-          </p>  -->
-          <p class="title_bar" style="padding-right: 160px;">
-            <span class="ellipsis" style="display:block">{{item.title}}</span>
-          </p>        
-          <p class="title_bottom">
-            <span>
-              <!-- <span class="bottom_item">来源：<span>{{item.source}}
-              <span class="bottomLink ellipsis">（<span @click="goSomewhere">{{item.link}}</span>）</span>
-              </span></span> -->
-              <span class="bottom_item">来源：<span>{{item.source}}</span></span>
-             <!--  <span class="bottomLink ellipsis">（<span @click="goSomewhere">{{item.link}}</span>）</span>
-              </span></span> -->
-              <span class="bottom_item" @click="goSomewhere($event,item.link)">来源链接</span>
-              <span class="bottom_item">类别：<span>{{item.type}}</span></span>
-              <!-- <span class="bottom_item">时间：<span>{{item.time}}</span></span> -->
-              <span class="bottom_item">时间：<span>{{item.time}}</span></span>
-            </span>
-          </p>
-        </div>
-      </router-link>
+    <div v-show="isShowData?true:false">
+      <div class="rightContent_" v-for="(item,index) in articlesAarry">
+        <span class="includeBtn" @click="clickBtn($event,item.id)" @mouseover="overBtn" @mouseout="outBtn"><span>已发布</span></span>
+        <router-link target="_blank" :to="{ path: '/homePage/articleDetail', query: { id:item.id,edit:'2'}}">
+          <div class="rightContent">
+            <!-- <p class="title_bar">
+              <span>{{item.title}}<span>
+            </p>  -->
+            <p class="title_bar" style="padding-right: 160px;">
+              <span class="ellipsis" style="display:block">{{item.title}}</span>
+            </p>        
+            <p class="title_bottom">
+              <span>
+                <!-- <span class="bottom_item">来源：<span>{{item.source}}
+                <span class="bottomLink ellipsis">（<span @click="goSomewhere">{{item.link}}</span>）</span>
+                </span></span> -->
+                <span class="bottom_item">来源：<span>{{item.source}}</span></span>
+               <!--  <span class="bottomLink ellipsis">（<span @click="goSomewhere">{{item.link}}</span>）</span>
+                </span></span> -->
+                <span class="bottom_item" @click="goSomewhere($event,item.link)">来源链接</span>
+                <span class="bottom_item">类别：<span>{{item.type}}</span></span>
+                <!-- <span class="bottom_item">时间：<span>{{item.time}}</span></span> -->
+                <span class="bottom_item">时间：<span>{{item.time}}</span></span>
+              </span>
+            </p>
+          </div>
+        </router-link>
+      </div>
+      <div class="rightBottom" ref="rightBottom" @click="loadMore">
+        <p>
+        点击加载更多内容
+        </p>
+      </div>
     </div>
-    <div class="rightBottom" ref="rightBottom" @click="loadMore">
-      <p>
-      点击加载更多内容
-      </p>
+    <div v-show="!isShowData?true:false" class="showLoadState">
+      <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+      <div>正在加载...</div>
     </div>
   </div>
 </template>
@@ -92,9 +97,16 @@ export default {
       totalNum:'',
       userSource:{},
       userid:'',
+      isShowData:false,
     }
   },
   methods:{
+    open(str) {
+      this.$message({
+        message: str,
+        iconClass:'el-icon-check',
+      });
+    },
     outBtn:function(e){
       var el=$(e.target).closest(".includeBtn");
       var class_=el.hasClass('includeBtn_blue');
@@ -118,7 +130,9 @@ export default {
       e.preventDefault();
       $.when(cancelArticle(id)).done(function(data){
         if(data.state=="0"){
-          window.location.reload();
+          that.open("取消发布成功！");
+          that.getInitData();
+          // window.location.reload();
         }
         else if(data.state=='9000'){
           // alert("用户未登录！")
@@ -230,6 +244,23 @@ export default {
         })
       }
     },
+    getInitData(){
+      var that=this;
+      this.isShowData=false;
+      $.when(getContentList(this.userid,1,'1')).done(function(data){
+        if(data.state=="0"){
+          that.isShowData=true;
+          that.insertData(data.data);
+        }
+        else if(data.state=='9000'){
+          // alert("用户未登录！")
+          that.$router.push({path:'/login',query: {}});
+        }
+        else{
+          alert(data.data);
+        }
+      })
+    },
   },
   created:function(){
     var that=this;
@@ -241,18 +272,7 @@ export default {
     
     this.userSource=JSON.parse(localStorage.getItem("userSource"));
     this.userid=this.userSource?this.userSource.id:'';
-    $.when(getContentList(this.userid,that.pageNo,'1')).done(function(data){
-      if(data.state=="0"){
-        that.insertData(data.data);
-      }
-      else if(data.state=='9000'){
-        // alert("用户未登录！")
-        that.$router.push({path:'/login',query: {}});
-      }
-      else{
-        alert(data.data);
-      }
-    })
+    this.getInitData();
   }
 }
 </script>
@@ -283,6 +303,23 @@ export default {
           // font-size: 18px;
           // font-size: 16px;
         }
+      }
+    }
+    .showLoadState{
+      line-height: 800px;
+      text-align: center;
+      color: #999;
+      position: relative;
+      div{
+        overflow:visible;;
+        // position: relative;
+        // display: inline-block;
+        color: #aaa;
+        font-size: 14px;
+        position: absolute;
+        top: 54%;
+        left: 51%;
+        transform: translate(-51%,-50%);
       }
     }
     .includeBtn{

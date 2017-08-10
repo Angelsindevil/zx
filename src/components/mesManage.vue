@@ -4,7 +4,7 @@
       <p>
         消息中心-{{titleTop}}
         <!-- <span class="mesTop">共<span>{{totalNum}}</span>条消息，未读消息<span>{{todayNum}}</span>条</span> -->
-        <!-- <span class="mesTop">未读消息<span>{{todayNum}}</span>条</span> -->
+        <span class="mesTop">未读消息<span>{{todayNum}}</span>条</span>
       </p>
       <el-button class="btn_position" @click="showMesBox">发送新消息</el-button>
       <el-input
@@ -47,11 +47,17 @@
   </div>
 </template>
 <script>
+import {mapGetters} from 'vuex'
 import {scrollFun,matchMenu} from '../../static/js/public.js'
 export default {
   name: 'report',
   components: {
    app
+  },
+  computed: {
+    ...mapGetters({
+      mesFlag:'mesFlag',
+    })
   },
   // props:['isActive'],
   data () {
@@ -103,7 +109,16 @@ export default {
       }
   },
   watch: { 
-    '$route': 'searchThis'
+    '$route': 'searchThis',
+    mesFlag:{
+      handler: function (val, oldVal) {//取消所有选择
+        if(val){
+          this.searchThis();
+        }
+      },
+      deep:true,
+      immediate: true,
+    },
   },
   methods: {
     showSomething:function(){
@@ -115,6 +130,7 @@ export default {
       this.category=val;
       $.when(getMessageList(this.userId,this.type,this.pageNo,this.value)).done(function(data){
         if(data.state=="0"){
+          that.filterArray.splice(0);
           that.insertData(data.data);
           // that.filterArray=data.data.list;有用
         }
@@ -200,6 +216,7 @@ export default {
         if(data.state=="0"){
           that.insertData(data.data);
           that.filterArray=data.data.list;
+          that.$store.dispatch('changeMesFlag',false).then(function(resp){});
         }
         else if(data.state=='9000'){
           // alert("用户未登录！")
@@ -221,6 +238,7 @@ export default {
           $(that.$refs.rightBottom).children('p').text('暂无更多消息');
           if(that.pageNo==1){
             that.filterArray=[];
+            // that.filterArray.splice(0);
           }
           else{}
         }
@@ -235,6 +253,7 @@ export default {
         if(that.pageNo==1){//只一页
           $(that.$refs.rightBottom).children('p').text('暂无消息');
           that.filterArray=[];
+          // that.filterArray.splice(0);
         }
         else{//多余一页
           $(that.$refs.rightBottom).children('p').text('暂无更多消息');
@@ -283,6 +302,22 @@ export default {
         })
       }
     },
+    getInitData(){
+      $.when(getMessageList(this.userId,this.type,1,this.value)).done(function(data){
+        if(data.state=="0"){
+          that.insertData(data.data);
+          that.filterArray=data.data.list;
+          that.$store.dispatch('changeMesFlag',false).then(function(resp){});
+        }
+        else if(data.state=='9000'){
+          // alert("用户未登录！")
+          that.$router.push({path:'/login',query: {}});
+        }
+        else{
+          alert(data.data);
+        }
+      })
+    }
   },
   created: function () {
     this.$nextTick(function(){

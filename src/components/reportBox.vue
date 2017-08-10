@@ -54,7 +54,9 @@
         title:'',
         form:{
           name:'',
-        }
+        },
+        reportName:'',
+        time:'',
       }
     },
     computed: {
@@ -79,8 +81,28 @@
         deep:true,
         immediate: true,
       },
+      reportName:{
+        handler: function (val, oldVal) {
+          this.form.name=val;
+        },
+        deep:true,
+        immediate: true,
+      },
     },
     methods:{
+      open(str) {
+        this.$message({
+          message: str,
+          iconClass:'el-icon-check',
+        });
+      },
+      openWarn(str) {
+        this.$message({
+          message: str,
+          type:'warning',
+          // iconClass:'el-icon-check',
+        });
+      },
       hideBox:function(){
         $(".mask1,.alertBox").removeClass("showBtn");
       },
@@ -106,9 +128,11 @@
         // this.$store.dispatch('changeWord',{wordObj:testData}).then(function(resp){});//测试
         $.when(buildWord(that.userid,that.article_id,that.form.name)).done(function(data){
           if(data.state=="0"){
-            alert("生成报告成功！");
+            // alert("生成报告成功！");
+            that.open("生成报告成功！");
             $(".mask1,.alertBox").removeClass("showBtn");
             that.$router.push('/homePage/ReportList');
+            that.setReporterNum();
             // this.$store.dispatch('changeWord',{wordObj:data.data}).then(function(resp){});
           }
           else if(data.state=='9000'){
@@ -124,6 +148,24 @@
         $(".mask2,.wordBox").addClass("showBtn");
         $(".mask1").removeClass("showBtn");
       },
+      setReporterNum(){
+        var that=this;
+        $.when(getReportNum(this.userid)).done(function(data){
+          if(data.state=="0"){
+            var count=data.data<10?'0'+data.data:data.data;
+            console.log(count);
+            var str="高等教育信息动态-"+that.time+"-V"+count;
+            that.form.name=str;
+            that.reportName=str;
+          }
+          else if(data.state=='9000'){
+            that.$router.push({path:'/login',query: {}});
+          }
+          else{
+            alert(data.data);
+          }
+        })
+      }
     },
     mounted() {
     },
@@ -138,10 +180,8 @@
       var year=date.getFullYear();
       var month=date.getMonth()+1;
       var day=date.getDate();
-      var time=year+(month<10?('0'+month):month)+(day<10?('0'+day):day);
-      var str="高等教育信息动态-"+time+"-V01";
-      console.log(time);
-      this.form.name=str;
+      this.time=year+(month<10?('0'+month):month)+(day<10?('0'+day):day);
+      this.setReporterNum();
     }
   }
 </script>

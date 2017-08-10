@@ -1,5 +1,6 @@
 <template>
   <!-- 批示人选择弹窗 -->
+  <!-- 可弃用？ -->
   <div class="peopleBox alertStyle" style="z-index:5">
     <div class="alertTop">{{titleName}}<span @click="hideArtBox"><img src="../../static/img/cancel.png"></span></div>
     <div class="alertContent">

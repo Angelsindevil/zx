@@ -179,6 +179,19 @@ export default {
       deep:true,
       immediate: true,
     },
+    psCount:{
+      handler: function (val, oldVal) {
+        if(val!=0){
+          this.psNum=val;
+          $(this.$refs.redDot).children('span').show();
+        }
+        else{
+          $(this.$refs.redDot).children('span').hide();
+        }
+      },
+      deep:true,
+      immediate: true,
+    },
   },
   methods:{
     changeColor:function(e){
@@ -251,7 +264,7 @@ export default {
             alert(data.data);
           }
         }
-    });
+      });
     },
     getMesRed(){
       var that=this;

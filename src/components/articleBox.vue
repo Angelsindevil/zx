@@ -3,14 +3,20 @@
   <div class="articleBox alertStyle">
     <div class="alertTop"><span>{{titleName}}</span><span @click="hideArtBox"><img src="../../static/img/cancel.png"></span></div>
     <div class="alertContent">
-      <el-autocomplete
+      <!-- <el-autocomplete
         class="inline-input"
         v-model="state2"
         :fetch-suggestions="querySearch"
         :placeholder="phtext"
         :trigger-on-focus="false"
         @select="handleSelect"
-      ><el-button slot="append" icon="search"></el-button></el-autocomplete>
+      ><el-button slot="append" icon="search" @click="handleIconSelect"></el-button></el-autocomplete> -->
+      <el-input
+        placeholder="请输入文章标题"
+        icon="search"
+        v-model="input2"
+        class="input_position" :on-icon-click="handleInputClick" @keyup.native.enter='handleInputClick'>
+      </el-input>
       <el-table
         class="article_table"
         :data="commonData"
@@ -31,6 +37,16 @@
           width="80%">
         </el-table-column>
       </el-table>
+      <p class="btn_position"><span @click="loadMore" ref="rightBottom" class="loadMoreStyle">加载更多</span></p>
+      <!-- <div class="block">
+        <el-pagination
+          layout="prev, pager, next"
+          :total="totalItem"
+          :page-size="pageSize"
+          :current-page="currentPage"
+          @current-change="handleCurrentChange">
+        </el-pagination>
+      </div>   -->
     </div>
     <div class="alertBottom">
       <span class="rightBot">
@@ -79,6 +95,28 @@
             radio:4,
             id:'05',
           },
+          {
+            value: '国家“111计划”基地5年评估一次，运行良好可滚动支持',
+            radio:0,
+            id:'01',
+          }, {
+            value: '江苏省公布十三五期间重点学科名单，21所高校313个学科入选',
+            radio:1,
+            id:'02',
+          }, {
+            value: '山东大学实施学科高峰计划，未来五年50亿元投入学科建设',
+            radio:2,
+            id:'03',
+          }, {
+            value: '国家“双一流”实施方案正式出台，预计2017年上半年公布入围名单',
+            radio:3,
+            id:'04',
+          },
+          {
+            value: '测试文章1',
+            radio:4,
+            id:'05',
+          },
         ],
         tableData:[],
         articleObj:{
@@ -92,6 +130,7 @@
         type:'全部内容',
         userSource:{},
         userid:'',
+        input2:'',
       }
     },
     computed: {
@@ -117,6 +156,22 @@
       },
     },
     methods:{
+      handleInputClick(){
+        var that=this;
+        $.when(searchArticle(that.input2,1,this.userid)).done(function(data){
+          if(data.state=="0"){
+            that.insertData(data); 
+            $(".articleBox").find(".alertContent .el-table__body-wrapper").scrollTop(0);
+          }
+          else if(data.state=='9000'){
+            // alert("用户未登录！")
+            that.$router.push({path:'/login',query: {}});
+          }
+          else{
+            alert(data.data);
+          }
+        })
+      },
       hideArtBox:function(){
         $(".mask2,.articleBox").removeClass("showBtn");
         $(".mask1").addClass("showBtn");
@@ -145,6 +200,19 @@
           }
         }
       },
+      handleIconSelect(){
+        for (var i=0;i<this.commonData.length;i++) {
+          if(this.commonData[i].value==this.state2){
+            // if(this.isSelect){
+            //   this.commonSelHandler('.multiBox',i,item);
+            // }
+            // else{
+            //   this.commonSelHandler('.articleBox',i,item);
+            // }
+            this.commonSelHandler('.articleBox',i,this.state2);
+          }
+        }
+      },
       commonSelHandler(selector,i,item){
         $(selector).find(".article_table tbody").children("tr").removeClass("current-row");
         $(selector).find(".article_table tbody").children("tr").eq(i).addClass("current-row");
@@ -158,7 +226,7 @@
           // this.radio2=this.radio;
         }
         var height=$(selector).find(".article_table tbody").children("tr").eq(i).position().top;
-        $(selector).find(".alertContent .el-table__body-wrapper").scrollTop(height)
+        $(selector).find(".alertContent .el-table__body-wrapper").scrollTop(height);
       },
       handleTableCurrentChange(val){//点击具体表格中的条目
         if(val){
@@ -194,8 +262,110 @@
       submit(){
         this.$store.dispatch('changeArtObj',{articleObj:this.articleObj}).then(function(resp){});
       },
+      insertData(data){
+        var that=this;
+        var res=data.data;
+        var list=res.list;
+        // that.commonData.splice(0);
+        if(res.list&&res.list.length!=0){
+          if(res.list.length<20){
+            that.$nextTick(function(){
+              // $(that.$refs.rightBottom).children('span').text('暂无更多');
+              // $(that.$refs.rightBottom).children('i').hide();
+              $(that.$refs.rightBottom).text("暂无更多");
+            })
+            if(that.pageNo==1){
+              that.commonData=[];
+            }
+            else{}
+          }
+          else{
+            that.$nextTick(function(){
+              $(that.$refs.rightBottom).text("加载更多");
+              // $(that.$refs.rightBottom).children('span').text('加载更多');
+              // $(that.$refs.rightBottom).children('i').show();
+            })
+          }
+          that.commonData=list.map(function(value,index){
+            return {
+              value:value.title,
+              radio:index,
+              id:value.id,
+            }
+          })
+          if(that.commonData.length>0){
+            that.currentRow=that.commonData[0].value;
+            that.articleObj.value=that.commonData[0].value;
+            that.articleObj.id=that.commonData[0].id;
+          }
+        }
+        else{
+          if(that.pageNo==1){//只一页
+            that.$nextTick(function(){
+              $(that.$refs.rightBottom).text("暂无文章");
+              // $(that.$refs.rightBottom).children('span').text('暂无文章');
+              // $(that.$refs.rightBottom).children('i').hide();
+            })
+            that.commonData=[];
+          }
+          else{//多余一页
+            that.$nextTick(function(){
+              $(that.$refs.rightBottom).text("暂无更多");
+              // $(that.$refs.rightBottom).children('span').text('暂无更多');
+              // $(that.$refs.rightBottom).children('i').hide();
+            })
+          }
+        }
+      },
+      loadMore(){
+        this.pageNo=this.pageNo+1;
+        var height;
+        this.$nextTick(function(){
+          // height=$(".rightContent_").last().offset().top;
+          height=$(".articleBox").find(".article_table tbody").children("tr").last().position().top;
+        })
+        var that=this;
+        // if(!this.flag){
+          if(this.input2!=''&&this.input2!=undefined){
+            $.when(searchArticle(that.input2,that.pageNo,this.userid)).done(function(data){
+              if(data.state=="0"){
+                that.insertData(data); 
+                that.$nextTick(function(){
+                  $(".articleBox").find(".alertContent .el-table__body-wrapper").scrollTop(height);
+                })
+              }
+              else if(data.state=='9000'){
+                // alert("用户未登录！")
+                that.$router.push({path:'/login',query: {}});
+              }
+              else{
+                alert(data.data);
+              }
+            })
+          }
+        // }
+        else{
+          $.when(getAllArticles(this.userid,this.method,this.type,this.pageNo)).done(function(data){
+            if(data.state=="0"){
+              that.insertData(data);
+              that.$nextTick(function(){
+                // $(document).scrollTop(height);
+                $(".articleBox").find(".alertContent .el-table__body-wrapper").scrollTop(height);
+              })
+              // that.articlesAarry=data.data.list;
+            }
+            else if(data.state=='9000'){
+              // alert("用户未登录！")
+              that.$router.push({path:'/login',query: {}});
+            }
+            else{
+              alert(data.data);
+            }
+          })
+        }
+      },
     },
-    mounted() {
+    created() {
 
       // this.commonData=this.handlePreData(this.alltableData);//测试
 
@@ -204,19 +374,7 @@
       this.userid=this.userSource?this.userSource.id:'';
       $.when(getAllArticles(this.userid,this.method,this.type,this.pageNo)).done(function(data){
         if(data.state=="0"){
-          var res=data.data;
-          var list=res.list;
-          that.commonData=list.map(function(value,index){
-            return {
-              value:value.title,
-              radio:index,
-              id:value.id,
-            }
-          })
-          console.log(that.commonData);
-          that.currentRow=that.commonData[0].value;
-          that.articleObj.value=that.commonData[0].value;
-          that.articleObj.id=that.commonData[0].id;
+          that.insertData(data);
         }
         else if(data.state=='9000'){
           // alert("用户未登录！")
@@ -230,3 +388,48 @@
 
   }
 </script>
+<style lang="less">
+  .articleBox{
+    .loadMoreStyle{
+      display: inline-block;
+      border: 1px solid #e4e4e4;
+      padding: 5px 10px;
+      border-radius: 3px;
+      margin-top: 10px;
+      font-size: 13px;
+    }
+    .input_position{
+      margin-bottom:20px;
+      .el-input__icon{
+        width: 46px;
+        height: 34px;
+        background-color: #fbfdff;
+        color: #97a8be;
+        border-right-top-radius: 4px;
+        border-bottom-right-radius: 4px;
+        border-top-right-radius: 4px;
+        border: 1px solid #bfcbd9;
+      }
+    }
+    .alertContent .el-table__body-wrapper{
+      height:auto;
+      max-height:260px;
+    }
+    .btn_position{
+      width: 100%;
+      text-align: center;
+      button{
+        padding:8px 10px;
+        margin-top: 15px;
+        border: 1px solid #dfe6ec;
+        color:#bbb;
+        font-weight:normal;
+        font-size: 13px;
+      }
+      .el-button:focus, .el-button:hover{
+        color: #20a0ff;
+        border-color: #20a0ff;
+      }
+    }
+  }
+</style>

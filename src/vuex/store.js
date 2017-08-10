@@ -66,10 +66,13 @@ const state = {
 		type:'',
 	},
 	mesCount:'',
+	psCount:'',
 	userFlag:false,
 	orgFlag:false,
 	psFlag:false,
 	psDetailFlag:false,
+	mesFlag:false,
+	artFlag:false,
 }
 const store = new Vuex.Store({
   state,

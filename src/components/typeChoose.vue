@@ -60,15 +60,30 @@
       },
     },
     methods:{
+      open(str) {
+        this.$message({
+          message: str,
+          iconClass:'el-icon-check',
+        });
+      },
+      openWarn(str) {
+        this.$message({
+          message: str,
+          type:'warning',
+          // iconClass:'el-icon-check',
+        });
+      },
       releaseBtn(e){
         var that=this;
         var el=$(e.target).closest(".rightContent_");
         console.log(this.id);
         $.when(releaseArticle(this.id)).done(function(data){
           if(data.state=="0"){
-            alert("文章发布成功！");
+            // alert("文章发布成功！");
+            that.open("文章发布成功！");
             that.hideUserBox();
-            window.location.reload();
+            that.$store.dispatch('changeArtFlag',true).then(function(resp){});
+            // window.location.reload();
           }
           else if(data.state=='9000'){
             // alert("用户未登录！")

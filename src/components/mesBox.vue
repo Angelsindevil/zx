@@ -47,6 +47,8 @@
         },
         userId:'',
         userSource:{},
+        // url:'http://192.168.2.129:9000',
+        url:'', 
       }
     },
     computed: {
@@ -83,6 +85,58 @@
       // },
     },
     methods:{
+      openWarn(str) {
+        this.$message({
+          message: str,
+          type:'warning',
+          // iconClass:'el-icon-check',
+        });
+      },
+      open(str) {
+        this.$message({
+          message: str,
+          iconClass:'el-icon-check',
+        });
+      },
+      getMesRed(){
+        var that=this;
+        $.ajax({
+          url: that.url+"/api/message/messageCount",
+          type: "get",
+          // contentType: "application/json;",
+          // data:JSON.stringify({
+          //     "userId":that.userid,
+          // }),
+          data:{
+            "userId":that.userId,
+          },
+          success:function(data){
+            if(data.state=="0"){
+              if(data.data==0){
+                // $(that.$refs.redMes).children('span').hide();
+              }
+              else{
+                console.log("11");
+                if(data.data>30){
+                  // that.xtNum='...';
+                }
+                else{
+                  // that.xtNum=data.data;
+                }
+                // that.xtNum=data.data;
+              }
+              that.$store.dispatch('changeMesCount',{"mesCount":data.data}).then(function(resp){});
+            }
+            else if(data.state=='9000'){
+              // alert("用户未登录！")
+              that.$router.push({path:'/login',query: {}});
+            }
+            else{
+              alert(data.data);
+            }
+          }
+        });
+      },
       hideMesBox:function(){
         $(".mask1,.mesBox").removeClass("showBtn");
       },
@@ -120,24 +174,32 @@
         else{
         }
         if(this.form.title==""){
-          alert("请输入消息标题！");
-        }
+          // alert("请输入消息标题！");
+          this.openWarn('请输入消息标题！');
+        } 
         else if(this.form.content==""){
-          alert("请输入消息内容！");
+          // alert("请输入消息内容！");
+          this.openWarn('请输入消息内容！');
         }
         else if(this.form.send==""){
-          alert("发送人不能为空！")
+          // alert("发送人不能为空！")
+          this.openWarn('发送人不能为空！');
         }
         else if(idArr.length==0){
-          alert("还未选择接受人！");
+          // alert("还未选择接受人！");
+          this.openWarn('还未选择接受人！');
         }
         else{
           $.when(addMes(this.userId,this.form.title,this.form.area,idArr,this.form.send)).done(function(data){
             if(data.state=='0'){
               $(".mask1,.mesBox").removeClass("showBtn");
-              alert("新增系统消息成功！");
-              window.location.reload();
+              // alert("新增系统消息成功！");
+              that.open('新增系统消息成功！');
+              that.$store.dispatch('changeMesFlag',true).then(function(resp){});
+
+              // window.location.reload();
               that.$store.dispatch('changeSelArr',{selectArr:{name:[],id:[]}}).then(function(resp){});
+              that.getMesRed();
               that.form.title="";
               that.form.area="";
               that.form.accept="";

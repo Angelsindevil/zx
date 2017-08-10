@@ -36,19 +36,34 @@
       }
     },
     methods:{
+      open(str) {
+        this.$message({
+          message: str,
+          iconClass:'el-icon-check',
+        });
+      },
+      openWarn(str) {
+        this.$message({
+          message: str,
+          type:'warning',
+          // iconClass:'el-icon-check',
+        });
+      },
       operateUser(){
         var pw1=md5(this.form.pwOld);
         var that=this;
         var pw2;
         if(this.form.pwNew1!=this.form.pwNew2){
-          alert("两次密码输入不一致！");
+          // alert("两次密码输入不一致！");
+          this.openWarn("两次密码输入不一致！");
         }
         else{
           pw2=md5(this.form.pwNew2);
           console.log(this.userId);
           $.when(changePassword(this.userId,pw1,pw2)).done(function(data){
             if(data.state==0){
-              alert('密码修改成功！');
+              // alert('密码修改成功！');
+              that.open('密码修改成功！');
               that.hideUserBox();
             }
             else{

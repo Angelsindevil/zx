@@ -211,6 +211,19 @@
       },
     },
     methods:{
+      open(str) {
+        this.$message({
+          message: str,
+          iconClass:'el-icon-check',
+        });
+      },
+      openWarn(str) {
+        this.$message({
+          message: str,
+          type:'warning',
+          // iconClass:'el-icon-check',
+        });
+      },
       hideArtBox:function(){
         $(".mask2,.unitBox").removeClass("showBtn");
         $(".mask1").addClass("showBtn");
@@ -229,7 +242,8 @@
         })[0]
 
         if (!node) {
-          alert('未找到相关数据');
+          // alert('未找到相关数据');
+          this.openWarn('未找到相关数据!');
           return false 
         }
         

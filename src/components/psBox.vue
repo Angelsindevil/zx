@@ -1,5 +1,5 @@
 <template>
-  <div class="psBox alertStyle alertStyle_">
+  <div class="psBox alertStyle <!-- alertStyle_ -->">
     <div class="alertTop">信息批示<span @click="hidePSBox"><img src="../../static/img/cancel.png"></span></div>
     <div class="alertContent">
       <el-button class="article_btn" @click="showAllArticle"><img src="../../static/img/report.png" alt="">批示文章：<span class="ellipsis titleEll">{{currentRow}}</span></el-button>
@@ -118,6 +118,8 @@
       userId:'',
       userName:'',//想一想 先存哪里去 登录的时候
       psId:'',
+      // url:'http://192.168.2.129:9000',
+      url:'',
     }
   },
   computed: {
@@ -263,16 +265,49 @@
     },
   },
   methods:{
-    open(str,type) {
+    getpsRed(){
+      var that=this;
+      $.ajax({
+        url: that.url+"/api/article/instructionChangeMark",
+        type: "post",
+        contentType: "application/json;",
+        data:JSON.stringify({
+            "userId":that.userid,
+        }),
+        success:function(data){
+          if(data.state=="0"){
+            if(data.data==0){
+            }
+            else{
+            }
+            that.$store.dispatch('changepsCount',{"psCount":data.data}).then(function(resp){});
+          }
+          else if(data.state=='9000'){
+            // alert("用户未登录！")
+            that.$router.push({path:'/login',query: {}});
+          }
+          else{
+            alert(data.data);
+          }
+        }
+      });
+    },
+    openWarn(str) {
       this.$message({
         message: str,
-        type: type
+        type: 'warning'
+      });
+    },
+    open(str) {
+      this.$message({
+        message: str,
+        iconClass:'el-icon-check',
       });
     },
     hidePSBox:function(){
       var that=this;
       $(".mask1,.psBox").removeClass("showBtn");
-      $(".psBox").removeClass("alertStyle_");
+      // $(".psBox").removeClass("alertStyle_");
       // $(".el-row").removeClass("show_row");
       that.fileFlag=false;
       that.quill.setText('');
@@ -349,15 +384,16 @@
         formData.append("articleId",this.articleId);
         if(delta.length==1){
           // alert("请输入批示内容！");
-          this.open("请输入批示内容！",'warning');
+          this.openWarn("请输入批示内容！",'warning');
         }
         else{
           $.when(addInstruction(formData)).done(function(data){
             if(data.state=='0'){
               // alert("新增批示成功！");
               that.open("新增批示成功！",'success');
+              that.getpsRed();
               $(".mask1,.psBox").removeClass("showBtn");
-              $(".psBox").removeClass("alertStyle_");
+              // $(".psBox").removeClass("alertStyle_");
               // $(".el-row").removeClass("show_row");
               $(that.$refs.linkBot).text("");
               that.fileFlag=false;
@@ -389,7 +425,7 @@
           formData.append("clPeople",this.selectArr.id);
           if(delta.length==1){
             // alert("请输入分发内容！");
-            this.open("请输入分发内容！",'warning');
+            this.openWarn("请输入分发内容！",'warning');
           }
           else{
             $.when(addFeedback(formData)).done(function(data){
@@ -397,7 +433,7 @@
                 // alert("新增分发成功！");
                 that.open("新增分发成功！",'success');
                 $(".mask1,.psBox").removeClass("showBtn");
-                $(".psBox").removeClass("alertStyle_");
+                // $(".psBox").removeClass("alertStyle_");
                 // $(".el-row").removeClass("show_row");
                 that.fileFlag=false;
                 that.quill.setText('');
@@ -423,7 +459,7 @@
           }
         }
         else{
-          this.open("还未选择处理人",'warning');
+          this.openWarn("还未选择处理人",'warning');
           // alert("还未选择处理人");
         }
       }
@@ -435,7 +471,7 @@
         formData.append("clPeople",this.userId);
         if(delta.length==1){
           // alert("请输入反馈内容！");
-          this.open("请输入反馈内容！",'warning');
+          this.openWarn("请输入反馈内容！",'warning');
         }
         else{
           $.when(addFeedback(formData)).done(function(data){
@@ -443,7 +479,7 @@
               // alert("新增反馈成功！");
               that.open("新增反馈成功！",'success');
               $(".mask1,.psBox").removeClass("showBtn");
-              $(".psBox").removeClass("alertStyle_");
+              // $(".psBox").removeClass("alertStyle_");
               // $(".el-row").removeClass("show_row");
               that.fileFlag=false;
               that.quill.setText('');
@@ -488,7 +524,7 @@
   created(){
     // this.instructionId = this.$route.query.id;
     // tinymce.remove('textarea'); 
-    // tinymce.init(obj);
+    // tinymce.init(obj);    
     this.userSource=JSON.parse(localStorage.getItem("userSource"));
     this.level=this.userSource?this.userSource.level:'';
     this.userId=this.userSource?this.userSource.id:'';

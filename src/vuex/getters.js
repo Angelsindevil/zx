@@ -32,12 +32,18 @@ export const mesObj=state=>state.mesObj//弹窗类型
 
 export const mesCount=state=>state.mesCount//弹窗类型
 
+export const psCount=state=>state.psCount//弹窗类型
+
 export const releaseObj=state=>state.releaseObj//弹窗类型
 
 export const userFlag=state=>state.userFlag//弹窗类型
 
+export const mesFlag=state=>state.mesFlag//弹窗类型
+
 export const orgFlag=state=>state.orgFlag//弹窗类型
 
 export const psFlag=state=>state.psFlag//弹窗类型
+
+export const artFlag=state=>state.artFlag//弹窗类型
 
 export const psDetailFlag=state=>state.psDetailFlag//弹窗类型

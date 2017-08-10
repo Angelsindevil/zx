@@ -34,11 +34,18 @@
       }
     },
     methods:{
+      open(str) {
+        this.$message({
+          message: str,
+          iconClass:'el-icon-check',
+        });
+      },
       operateUser(){
         var that=this; 
         $.when(changeDefaultpw(this.userId,this.form.password)).done(function(data){
           if(data.state==0){
-            alert('初始密码设置成功！');
+            // alert('初始密码设置成功！');
+            that.open('初始密码设置成功！');
             that.hideUserBox();
             localStorage.setItem("initPassword",that.form.password);
           }

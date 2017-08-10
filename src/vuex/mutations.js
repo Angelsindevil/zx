@@ -76,6 +76,9 @@ export const clearMesInfo= (state,payload) => {
 export const changeMesCount= (state,payload) => {
 	state.mesCount=payload.mesCount;
 }
+export const changepsCount= (state,payload) => {
+	state.psCount=payload.psCount;
+}
 export const changeRelease= (state,payload) => {
 	state.releaseObj.id=payload.id;
 	state.releaseObj.type=payload.type;
@@ -83,8 +86,14 @@ export const changeRelease= (state,payload) => {
 export const changeUserFlag= (state,payload) => {//用户刷新标识
 	state.userFlag=payload;
 }
+export const changeMesFlag= (state,payload) => {//用户刷新标识
+	state.mesFlag=payload;
+}
 export const changeOrgFlag= (state,payload) => {//组织刷新标识
 	state.orgFlag=payload;
+}
+export const changeArtFlag= (state,payload) => {//组织刷新标识
+	state.artFlag=payload;
 }
 export const changepsFlag= (state,payload) => {//批示列表刷新标识
 	state.psFlag=payload;

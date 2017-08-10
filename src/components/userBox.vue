@@ -174,10 +174,23 @@
       }
     },
 		methods:{
+      // open(str) {
+      //   this.$message({
+      //     message: str,
+      //     type: 'success'
+      //   });
+      // },
+      openWarn(str) {
+        this.$message({
+          message: str,
+          type:'warning',
+          // iconClass:'el-icon-check',
+        });
+      },
       open(str) {
         this.$message({
           message: str,
-          type: 'success'
+          iconClass:'el-icon-check',
         });
       },
       changepw(){
@@ -198,6 +211,9 @@
         }
         else if(value=='普通用户'){
           return "3";
+        }
+        else if(value=='超级管理员'){
+          return "4";
         }
         else{}
       },
@@ -221,13 +237,16 @@
         }
         else{}
         if(this.orgid==""){
-          alert("所属组织不能为空！");
+          // alert("所属组织不能为空！");
+          this.openWarn('所属组织不能为空！');
         }
         else if(this.form.account==""){
-          alert("用户账号不能为空！");
+          // alert("用户账号不能为空！");
+          this.openWarn('用户账号不能为空！');
         }
         else if(this.form.name==""){
-          alert("用户姓名不能为空！");
+          // alert("用户姓名不能为空！");
+          this.openWarn('用户姓名不能为空！');
         }
         else 
         {

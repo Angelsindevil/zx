@@ -608,6 +608,8 @@ function getIncludedSearch(userid,keyword,type,pageNo,pageSize){
   })
   return ajax;
 }
+
+//报告相关
 function buildReporter(userid,articleId){
   var ajax=$.ajax({
     url:url+'/api/bulletin/generateBulletin',
@@ -679,6 +681,19 @@ function deleteReporter(id){
   })
   return ajax;
 }
+function getReportNum(userId){
+  var ajax=$.ajax({
+    url:url+'/api/bulletin/getBulletinNumber',
+    type:'get',
+    data:{
+      "userId":userId,
+    },
+  })
+  return ajax;
+}
+
+
+
 function logOut(userId){
   var ajax=$.ajax({
     url:url+'/users/mylogout',

@@ -151,10 +151,16 @@ export default {
     },
   },
   methods:{
+    // open(str) {
+    //   this.$message({
+    //     message: str,
+    //     type: 'success'
+    //   });
+    // },
     open(str) {
       this.$message({
         message: str,
-        type: 'success'
+        iconClass:'el-icon-check',
       });
     },
     showSelect:function(command){

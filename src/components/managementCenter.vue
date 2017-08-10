@@ -41,7 +41,12 @@
       <div class="title_content">
         <ul>
           <li v-for="(item,index) in articlesAarry">
-            <span class="ellipsis" style="display:block;padding-right:250px">批示内容：<span>{{item.title}}</span>  - <span>{{item.date}}</span></span>
+            <span class="ellipsis" style="display:block;padding-right:250px">批示内容：
+              <span v-show="getStrLen(item.title+item.date)<90?true:false"><span>{{item.title}}</span>  - <span>{{item.date}}</span></span>
+              <el-tooltip v-show="getStrLen(item.title+item.date)>=90?true:false" class="item" effect="dark" :content="item.title+'-'+item.date" placement="bottom">
+                <span>{{item.title}}</span>  - <span>{{item.date}}</span>
+              </el-tooltip>
+            </span>
             <span class="includeBtn_" :class="(item.rowState!=0)?'orange':'grey'"><span>{{item.btn_con}}</span></span>
             <!-- <router-link to="/instructionsDetail"><span class="includeBtn"><span>查看</span><img src="../../static/img/arrow_blue.png" alt=""></span></router-link> -->
             <!-- <el-tag type="primary" class="label_style">有新反馈</el-tag> -->
@@ -87,13 +92,13 @@ export default {
         value: '5',
         input2: '',
         articles:[
-        // {title:'国家“双一流”实施方案正式出台，预计2017年上半年公布名单',date:"2016/12/10",rowState:'0',btn_con:'流程已结束',instructionsId:'01'},
-        // {title:'国家“111计划”基地5年评估一次，运行良好可滚动支持',date:"2016/12/10",rowState:'1',btn_con:'新反馈',instructionsId:'02'},
-        // {title:'江苏省公布十三五期间重点学科名单，21所高校313个学科入选',date:"2016/12/10",rowState:'2',btn_con:'新批示',instructionsId:'03'},
-        // {title:'江苏省公布十三五期间重点学科名单，21所高校313个学科入选',date:"2016/12/10",rowState:'3',btn_con:'新分发',instructionsId:'04'},
-        // {title:'测试文章1',date:"2016/12/10",rowState:'0',btn_con:'流程已结束',instructionsId:'05'},
-        // {title:'测试文章2',date:"2016/12/10",rowState:'0',btn_con:'流程已结束',instructionsId:'06'},
-        // {title:'测试文章3',date:"2016/12/10",rowState:'0',btn_con:'流程已结束',instructionsId:'07'},
+        {title:'国家“双一流”实施方案正式出台，预计2017年上半年公布名单预计2017年上半年公布名单预计2017年上半年公布名单',date:"2016/12/10",rowState:'0',btn_con:'流程已结束',instructionsId:'01'},
+        {title:'国家“111计划”基地5年评估一次，运行良好可滚动支持',date:"2016/12/10",rowState:'1',btn_con:'新反馈',instructionsId:'02'},
+        {title:'江苏省公布十三五期间重点学科名单，21所高校313个学科入选',date:"2016/12/10",rowState:'2',btn_con:'新批示',instructionsId:'03'},
+        {title:'江苏省公布十三五期间重点学科名单，21所高校313个学科入选',date:"2016/12/10",rowState:'3',btn_con:'新分发',instructionsId:'04'},
+        {title:'测试文章1',date:"2016/12/10",rowState:'0',btn_con:'流程已结束',instructionsId:'05'},
+        {title:'测试文章2',date:"2016/12/10",rowState:'0',btn_con:'流程已结束',instructionsId:'06'},
+        {title:'测试文章3',date:"2016/12/10",rowState:'0',btn_con:'流程已结束',instructionsId:'07'},
         ],
         articlesAarry:[],
         totalNum:'',
@@ -103,6 +108,7 @@ export default {
         userid:'',
         level:'',
         topTips:'',
+        strLen:0,
     }
   },
   computed: {
@@ -122,6 +128,31 @@ export default {
     },
   },
   methods:{
+    open(str) {
+      this.$message({
+        message: str,
+        iconClass:'el-icon-check',
+      });
+    },
+    openWarn(str) {
+      this.$message({
+        message: str,
+        type:'warning',
+        // duration:300000000,
+        // iconClass:'el-icon-check',
+      });
+    },
+    getStrLen(str){
+      var len = 0;    
+      for (var i=0; i<str.length; i++) {    
+          if (str.charCodeAt(i)>127 || str.charCodeAt(i)==94) {    
+               len += 2;    
+           } else {    
+               len ++;    
+           }    
+       }    
+      return len;    
+    },
     showPSBox:function(){
       $(".mask1").addClass("showBtn");
       $(".psBox").addClass("showBtn");
@@ -216,13 +247,14 @@ export default {
           if(that.pageNo==1){
             that.articlesAarry=[];
           }
+
           else{}
         }
         else{
           $(that.$refs.rightBottom).children('p').text('点击加载更多批示');
         }
         // $(that.$refs.rightBottom).children('p').text('点击加载更多批示');
-        if(res.results.length>0){
+        // if(res.results.length>0){
           // that.articles=res.results.map(function(value,index){
           //   var btn_con;
           //   if(value.rowState=='0'){
@@ -270,8 +302,10 @@ export default {
               "instructionsId":value.instructionsId,
             }
             that.articlesAarry.push(item);
+            // that.strLen=that.getStrLen(value.title);
           })
-        }
+          console.log(that.articlesAarry);
+        // }
       }
       else{   
         if(that.pageNo==1){//只一页
@@ -337,6 +371,8 @@ export default {
   },
   created(){
     // this.articlesAarry=this.articles;
+    // this.openWarn("谢谢谢谢🙏！");
+
     var that=this;
     this.userSource=JSON.parse(localStorage.getItem("userSource"));
     this.userid=this.userSource?this.userSource.id:'';
