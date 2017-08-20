@@ -40,12 +40,14 @@
       <!-- <div class="title_content" v-for="(item,index) in articlesAarry"> -->
       <div class="title_content">
         <ul>
-          <li v-for="(item,index) in articlesAarry">
-            <span class="ellipsis" style="display:block;padding-right:250px">批示内容：
-              <span v-show="getStrLen(item.title+item.date)<90?true:false"><span>{{item.title}}</span>  - <span>{{item.date}}</span></span>
-              <el-tooltip v-show="getStrLen(item.title+item.date)>=90?true:false" class="item" effect="dark" :content="item.title+'-'+item.date" placement="bottom">
+          <li v-for="(item,index) in articlesAarry" @mouseover="showElse(item.indexTooltips,index)" @mouseout="showElse(false,index)">
+            <span class="ellipsis titleLen" style="display:block;padding-right:250px">批示内容：
+              <!-- <span v-show="getStrLen(item.title+item.date)<90?true:false"><span>{{item.title}}</span>  - <span>{{item.date}}</span></span> -->
+              <!-- <el-tooltip v-show="getStrLen(item.title+item.date)>=90?true:false" class="item" effect="dark" :content="item.title+'-'+item.date" placement="bottom">
                 <span>{{item.title}}</span>  - <span>{{item.date}}</span>
-              </el-tooltip>
+              </el-tooltip> -->
+              <span>{{item.title}}</span>  - <span>{{item.date}}</span>
+              <span class="showElse" v-show="item.showFLagIndex">{{item.title+'-'+item.date}}</span>
             </span>
             <span class="includeBtn_" :class="(item.rowState!=0)?'orange':'grey'"><span>{{item.btn_con}}</span></span>
             <!-- <router-link to="/instructionsDetail"><span class="includeBtn"><span>查看</span><img src="../../static/img/arrow_blue.png" alt=""></span></router-link> -->
@@ -94,7 +96,7 @@ export default {
         articles:[
         {title:'国家“双一流”实施方案正式出台，预计2017年上半年公布名单预计2017年上半年公布名单预计2017年上半年公布名单',date:"2016/12/10",rowState:'0',btn_con:'流程已结束',instructionsId:'01'},
         {title:'国家“111计划”基地5年评估一次，运行良好可滚动支持',date:"2016/12/10",rowState:'1',btn_con:'新反馈',instructionsId:'02'},
-        {title:'江苏省公布十三五期间重点学科名单，21所高校313个学科入选',date:"2016/12/10",rowState:'2',btn_con:'新批示',instructionsId:'03'},
+        {title:'江苏省公布十三五期间重点学科名单，21所高校313个学科入选哈哈哈',date:"2016/12/10",rowState:'2',btn_con:'新批示',instructionsId:'03'},
         {title:'江苏省公布十三五期间重点学科名单，21所高校313个学科入选',date:"2016/12/10",rowState:'3',btn_con:'新分发',instructionsId:'04'},
         {title:'测试文章1',date:"2016/12/10",rowState:'0',btn_con:'流程已结束',instructionsId:'05'},
         {title:'测试文章2',date:"2016/12/10",rowState:'0',btn_con:'流程已结束',instructionsId:'06'},
@@ -109,6 +111,8 @@ export default {
         level:'',
         topTips:'',
         strLen:0,
+        IndexTooltips:false,
+        showFLagIndex:false,
     }
   },
   computed: {
@@ -128,6 +132,10 @@ export default {
     },
   },
   methods:{
+    showElse(val,index){
+      this.$set(this.articlesAarry[index],"showFLagIndex",val);
+      // this.articlesAarry[index]=val;
+    },
     open(str) {
       this.$message({
         message: str,
@@ -281,6 +289,7 @@ export default {
           // that.articlesAarry=that.articles;
           res.results.map(function(value,index){
             var btn_con;
+            var indexTooltips;
             if(value.rowState=='0'){
               btn_con="流程已结束";
             }
@@ -294,16 +303,24 @@ export default {
               btn_con="新分发"
             }
             else{}
+            if(that.getStrLen(value.title+value.date)>68){
+              indexTooltips=true;
+            }
+            else{
+              indexTooltips=false;
+            }
             var item={
               "title":value.title,
               "date":value.date,
               "rowState":value.rowState,
               "btn_con":btn_con,
               "instructionsId":value.instructionsId,
+              "indexTooltips":indexTooltips,
+              "showFLagIndex":false,
             }
             that.articlesAarry.push(item);
             // that.strLen=that.getStrLen(value.title);
-          })
+          },that)
           console.log(that.articlesAarry);
         // }
       }
@@ -370,6 +387,42 @@ export default {
     },
   },
   created(){
+    var that=this;
+    this.articlesAarry=this.articles.map(function(value,index){
+      var indexTooltips;
+      var btn_con;
+      console.log("111");
+      if(value.rowState=='0'){
+        btn_con="流程已结束";
+      }
+      else if(value.rowState=='1'){
+        btn_con="新反馈"
+      }
+      else if(value.rowState=='2'){
+        btn_con="新批示"
+      }
+      else if(value.rowState=='3'){
+        btn_con="新分发"
+      }
+      else{}
+      if(that.getStrLen(value.title+value.date)>70){
+        indexTooltips=true;
+      }
+      else{
+        indexTooltips=false;
+      }
+      return {
+        "title":value.title,
+        "date":value.date,
+        "rowState":value.rowState,
+        "btn_con":btn_con,
+        "instructionsId":value.instructionsId,
+        "indexTooltips":indexTooltips,
+        "showFLagIndex":false,
+      }
+      // that.strLen=that.getStrLen(value.title);
+    },that)
+    console.log(this.articlesAarry);
     // this.articlesAarry=this.articles;
     // this.openWarn("谢谢谢谢🙏！");
 
