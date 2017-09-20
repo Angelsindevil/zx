@@ -1,0 +1,31 @@
+body,
+td,
+pre {
+  font-size: 14px;
+}
+body {
+  line-height: 1.4;
+}
+p {
+  margin: 0;
+  -webkit-margin-before: 0em;
+  -webkit-margin-after: 0em;
+}
+.mce-panel {
+  border-width: 0!important;
+  border-bottom: 1px solid #ccc!important;
+  background-color: #fff!important;
+}
+.mce-btn {
+  background-color: #fff!important;
+}
+.mce-menu,
+.mce-tooltip {
+  position: fixed!important;
+}
+.mce-statusbar {
+  display: none!important;
+}
+.mce-edit-area {
+  border: none!important;
+}

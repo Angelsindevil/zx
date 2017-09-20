@@ -22,7 +22,7 @@
           <img src="../../static/img/user_full.png" alt="">
         </div> 
         <div class="input_style">
-          <el-input v-model="input2" placeholder="密码" type="password"></el-input>
+          <el-input v-model="input2" placeholder="密码" type="password" @keyup.native.enter='doLogin'></el-input>
           <img src="../../static/img/pw_full.png" alt="">
         </div> 
 				<div class="remember_me">

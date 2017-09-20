@@ -92,7 +92,7 @@
 </template>
 
 <script>
-import {scrollFun} from '../../static/js/public.js'
+import {scrollFun,matchMenu} from '../../static/js/public.js'
 import {mapGetters} from 'vuex'
 
 // import Hello from '../components/Hello.vue'
@@ -231,7 +231,10 @@ export default {
     }
     this.userId=this.userSource?this.userSource.id:'';
     this.username=this.userSource?this.userSource.username:'';
-    scrollFun();
+    this.$nextTick(function(){
+      matchMenu();
+      scrollFun();
+    })
   }
 }
 </script>

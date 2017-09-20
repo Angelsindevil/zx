@@ -286,12 +286,18 @@
               // $(that.$refs.rightBottom).children('i').show();
             })
           }
-          that.commonData=list.map(function(value,index){
-            return {
+          list.map(function(value,index){
+            var val_item={
               value:value.title,
-              radio:index,
+              radio:index+(that.pageNo-1)*20,
               id:value.id,
             }
+            that.commonData.push(val_item);
+            // return {
+            //   value:value.title,
+            //   radio:index,
+            //   id:value.id,
+            // }
           })
           if(that.commonData.length>0){
             that.currentRow=that.commonData[0].value;

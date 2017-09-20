@@ -17,8 +17,8 @@
               {{item.type=='0'?'批示时间':(item.type=='1'?'分发时间':(item.type=='2'?'反馈时间':''))}}
               ：<span>{{item.date}}</span></span></p>
               <p class="grey_font" v-show="(item.type=='0'?true:false)">
-                <span>批示文章：<span class="ellipsis titleEll">{{item.title}}</span> - <span class="dateSmall">{{item.art_date}}</span></span>
-                <router-link :to="{ path: '/homePage/articleDetail', query: { id:item.articleId,edit:'0'}}">
+                <span>批示文章：<span class="ellipsis titleEll">{{item.title}}</span> &nbsp;&nbsp; <span class="dateSmall">{{item.art_date}}</span></span>
+                <router-link target="_blank" :to="{ path: '/homePage/articleDetail', query: { id:item.articleId,edit:'0'}}">
                   <el-button type="primary" size="small" class="btn-pos">查看原文</el-button>
                 </router-link>
               </p>

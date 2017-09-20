@@ -5,7 +5,7 @@
         <span class="ellipsis" style="display:block;font-size: 18px;color: #222;padding-top:0">{{title}}</span>
         <span>
           <span>来源：<span class="ellipsis" style="display: inline-block;width: 65%;vertical-align: middle;">{{source}}</span></span>
-          <span class="linkStyle" @click="goSomewhere($event,link)" style="color: blue;text-decoration: underline;">来源链接</span>
+          <span class="linkStyle" @click="goSomewhere($event,link)" style="color: blue;text-decoration: underline;cursor:pointer">来源链接</span>
           <span>类别：<span>{{type}}</span></span>
           <span>时间：<span>{{date}}</span></span>
         </span> 
@@ -20,6 +20,7 @@
        style="width:80px;font-size:12px"
        v-show="(level!=3)?true:false"
        :class="isRelease=='1'?'grey':false"
+       @mouseover="overBtn" @mouseout="outBtn"
        >
         <span>{{isRelease=='1'?'已发布':'发布'}}</span>
        </span>
@@ -337,7 +338,7 @@ export default {
         $(".art_edit").removeClass("showBtn");
         $(".includeBtn").hide();
         $(".includeBtn_sl").show();
-        $(".linkStyle").hide();
+        // $(".linkStyle").hide();
       })
     }
     else if(this.edit=='1'&&this.level!=3){
@@ -346,7 +347,7 @@ export default {
         $(".art_edit").addClass("showBtn");
         $(".includeBtn").hide();
         $(".includeBtn_fb").show();
-        $(".linkStyle").show();
+        // $(".linkStyle").show();
       })
     }
     else if(this.level!=3){
@@ -355,7 +356,7 @@ export default {
         $(".includeBtn").hide();
         // $(".includeBtn_cfb").show();
         $(".includeBtn_fb").show();
-        $(".linkStyle").hide();
+        // $(".linkStyle").hide();
       })
     }
     else{}

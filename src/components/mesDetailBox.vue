@@ -4,7 +4,7 @@
     <div class="alertContent">
       <div class="contentTop">
         <p class="mesTitle">{{filterData.title}}</p>
-        <p><span>发送人：<span>{{filterData.sender}}</span></span><span>接收时间：<span>{{filterData.receiveTime}}</span></span></p>
+        <p><span>发送人：<span>{{filterData.sender}}</span></span><span>发送时间：<span>{{filterData.receiveTime}}</span></span></p>
       </div>
       <div class="contentBottom">
         {{filterData.content}}

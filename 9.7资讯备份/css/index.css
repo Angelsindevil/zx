@@ -1,0 +1,192 @@
+.like {
+  float: left;
+  padding-right: 10px;
+}
+.like .likefont {
+  font-size: 16px;
+  color: red;
+}
+.reply {
+  float: left;
+}
+.reply .editfont {
+  font-size: 16px;
+}
+.after:after {
+  display: block;
+  content: '';
+  clear: both;
+}
+.veryCenter {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+}
+.verticalCenter {
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+  -webkit-transform: translate(0, -50%);
+}
+.horizontalCenter {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+  -webkit-transform: translate(-50%, 0);
+}
+.ellipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+ul {
+  padding: 0;
+}
+li {
+  list-style: none;
+}
+a {
+  text-decoration: none;
+  color: #fff;
+}
+p {
+  margin: 0;
+}
+input {
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Lantinghei SC', 'Microsoft Yahei' !important;
+}
+.alertBox {
+  display: none;
+  background-color: #fff;
+  width: 720px;
+  max-height: 640px;
+  border: 1px solid #ccc;
+  z-index: 3;
+  border-radius: 10px;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+}
+.alertBox .alertTop {
+  height: 65px;
+  background-color: #0099ff;
+  line-height: 65px;
+  position: relative;
+  padding: 0 20px;
+  color: #fff;
+  width: 100%;
+  box-sizing: border-box;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  font-size: 18px;
+}
+.alertBox .alertTop img {
+  display: inline-block;
+  width: 35px;
+  height: 35px;
+  position: absolute;
+  right: 20px;
+  top: 15px;
+  cursor: pointer;
+}
+.alertBox .alertContent {
+  padding: 20px;
+}
+.alertBox .alertBottom {
+  height: 60px;
+  padding: 0 20px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+.alertBox .alertBottom:after {
+  display: block;
+  content: '';
+  clear: both;
+}
+.alertBox .alertBottom span {
+  vertical-align: middle;
+  display: inline-block;
+  margin: 0 10px;
+  height: 35px;
+  line-height: 35px;
+  width: 130px;
+  float: right;
+  font-size: 15px;
+  color: #fff;
+  text-align: center;
+  border-radius: 5px;
+}
+.alertBox .alertBottom span img {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  margin-right: 20px;
+}
+.alertBox .alertBottom span:nth-child(3) {
+  background-color: #ccc;
+}
+.alertBox .alertBottom span:nth-child(2) {
+  background-color: #FF6633;
+}
+.alertBox .alertBottom span:nth-child(1) {
+  background-color: #0099FF;
+  margin-right: 0;
+}
+.mask {
+  height: 100%;
+  width: 100%;
+  display: none;
+  background: rgba(255, 255, 255, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2;
+}
+.showBtn {
+  display: block!important;
+}
+.dragItem {
+  width: 100%;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  border-radius: 8px;
+  position: relative;
+  cursor: move;
+}
+.dragItem .title_bar {
+  font-size: 16px;
+  padding: 20px;
+  position: relative;
+  border-bottom: 1px solid #eee;
+}
+.dragItem img {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+.dragItem .removeItem {
+  position: absolute;
+  right: 20px;
+}
+.dragItem span {
+  vertical-align: middle;
+}
+.dragItem span:first-child {
+  font-size: 16px;
+  color: #333;
+}
+.dragItem span:last-child {
+  font-size: 14px;
+  color: #333;
+}

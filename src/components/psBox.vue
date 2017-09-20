@@ -1,6 +1,6 @@
 <template>
   <div class="psBox alertStyle <!-- alertStyle_ -->">
-    <div class="alertTop">信息批示<span @click="hidePSBox"><img src="../../static/img/cancel.png"></span></div>
+    <div class="alertTop">批示<span @click="hidePSBox"><img src="../../static/img/cancel.png"></span></div>
     <div class="alertContent">
       <el-button class="article_btn" @click="showAllArticle"><img src="../../static/img/report.png" alt="">批示文章：<span class="ellipsis titleEll">{{currentRow}}</span></el-button>
       <div class="editContainer">
@@ -59,7 +59,7 @@
           </el-input>
         </div></el-col>
         <el-col :span="6"><div class="grid-content bg-purple" @click="solvePeople">
-          <span class="typeLabel">处理人：</span>
+          <span class="typeLabel">{{peopleTips}}：</span>
           <el-input
             placeholder="请选择"
             icon="menu"
@@ -120,6 +120,7 @@
       psId:'',
       // url:'http://192.168.2.129:9000',
       url:'',
+      peopleTips:'处理人',
     }
   },
   computed: {
@@ -217,6 +218,7 @@
         this.value=val.type;
         // this.psDisabled=true;//判断不是系统管理员
         if(val.type=='0'){//批示弹窗
+          this.peopleTips='处理人';
           this.$nextTick(function(){
             $(".blueBot").show();
           })
@@ -233,6 +235,7 @@
           // tinymce.get('tinymce').setContent('<p style="line-height:2">请发展规划处等抓紧时间研究国家双一流方案的细则和教育部有关部门的解读<br><span style="color:#FF6600">（如批示是由纸质材料批示，则由数据与信息中心发起流程并人工输入）</span></p>');
         }
         else if(val.type=='1'){//分发弹窗
+          this.peopleTips='分发人';
           this.currentRow=val.title;
           if(this.level=='0'||this.level=='4'){//权限为管理员 分发处理人可选
             this.clDisabled=false;
@@ -246,6 +249,7 @@
           this.input2=this.psObj[0];//弹窗不可点击。 有用
         }
         else if(val.type=='2'){//反馈弹窗
+          this.peopleTips='反馈人';
           this.currentRow=val.title;
           // if(this.level=='0'||this.level=='4'){//权限为管理员 反馈处理人可选
             this.clDisabled=true;
@@ -272,7 +276,7 @@
         type: "post",
         contentType: "application/json;",
         data:JSON.stringify({
-            "userId":that.userid,
+            "userId":that.userId,
         }),
         success:function(data){
           if(data.state=="0"){

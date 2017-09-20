@@ -112,6 +112,8 @@
           },
           success:function(data){
             if(data.state=="0"){
+              console.log(data.data);
+              console.log(typeof(data.data))
               if(data.data==0){
                 // $(that.$refs.redMes).children('span').hide();
               }
@@ -187,7 +189,7 @@
         }
         else if(idArr.length==0){
           // alert("还未选择接受人！");
-          this.openWarn('还未选择接受人！');
+          this.openWarn('还未选择接收人！');
         }
         else{
           $.when(addMes(this.userId,this.form.title,this.form.area,idArr,this.form.send)).done(function(data){

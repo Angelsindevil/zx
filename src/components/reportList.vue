@@ -349,7 +349,7 @@ export default {
             // that.listFilter_2=res.list;
             that.insertData(data,that.type);
             that.$nextTick(function(){
-              $(document).scrollTop(height-350);
+              $(document).scrollTop(height-280);
             })
           }
           else if(data.state=='9000'){

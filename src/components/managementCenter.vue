@@ -140,13 +140,14 @@ export default {
       this.$message({
         message: str,
         iconClass:'el-icon-check',
+        duration:300000000,
       });
     },
     openWarn(str) {
       this.$message({
         message: str,
         type:'warning',
-        // duration:300000000,
+        duration:300000000,
         // iconClass:'el-icon-check',
       });
     },
@@ -422,9 +423,10 @@ export default {
       }
       // that.strLen=that.getStrLen(value.title);
     },that)
-    console.log(this.articlesAarry);
+    // console.log(this.articlesAarry);
     // this.articlesAarry=this.articles;
     // this.openWarn("谢谢谢谢🙏！");
+    // this.open("h哈哈哈哈");
 
     var that=this;
     this.userSource=JSON.parse(localStorage.getItem("userSource"));

@@ -130,6 +130,7 @@
 </template>
 <script>
 import {mapGetters} from 'vuex'
+import {scrollFun,matchMenu} from '../../static/js/public.js'
 export default {
   name: 'hello',
   data () {
@@ -163,11 +164,13 @@ export default {
   computed: {
     ...mapGetters({
       mesCount: 'mesCount',
+      psCount:'psCount',
     })
   },
   watch:{
     mesCount:{
       handler: function (val, oldVal) {
+        console.log(val);
         if(val!=0){
           this.xtNum=val;
           $(this.$refs.redMes).children('span').show();
@@ -309,6 +312,9 @@ export default {
     }
   },
   created(){
+    this.$nextTick(function(){
+      matchMenu();
+    })
     var that=this;
     this.userSource=JSON.parse(localStorage.getItem("userSource"));
     this.userid=this.userSource?this.userSource.id:'';

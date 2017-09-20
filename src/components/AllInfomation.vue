@@ -24,7 +24,7 @@
           </select>
       </div> -->
     </div>
-    <div v-show="isShowData?true:false">
+    <div v-show="isShowData">
       <div class="rightContent_" v-for="(item,index) in articlesAarry">
        <!--  <ul>
           <li v-for="(item,index) in articlesAarry">
@@ -159,7 +159,7 @@
         </p>
       </div>
     </div>
-    <div v-show="!isShowData?true:false" class="showLoadState">
+    <div v-show="!isShowData" class="showLoadState">
       <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
       <div>正在加载...</div>
     </div>
@@ -348,8 +348,10 @@ export default {
         var that=this;
         this.pageNo=1,
         this.articlesAarry=[];
+        this.isShowData=false;
         $.when(getAllArticles(this.userid,val,this.type,that.pageNo)).done(function(data){
           if(data.state=="0"){
+            that.isShowData=true;
             that.insertData(data);
           }
           else{
@@ -514,7 +516,7 @@ export default {
         res.list.map(function(value,index){
           value.summary=value.summary.replace(/<[^>]+>/g,"");
           // value.summary=value.summary.replace(/<[^>]+>/g,"");
-          that.articlesAarry.push(value);
+          that.articlesAarry.push(value); 
         })
         // that.articlesAarry.concat(that.copyArr(res.list));
       }

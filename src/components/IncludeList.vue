@@ -213,6 +213,10 @@ export default {
       if(this.checkedList[index]){
         $(this.$refs.red).show();
         this.num=this.num+1;
+        if(this.num==this.articlesAarry.length){
+          this.checked=true;
+        }
+        else{}
       }
       else{
         if(flag==-1){

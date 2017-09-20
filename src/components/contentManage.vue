@@ -202,11 +202,13 @@ export default {
       console.log(e);
       e.stopPropagation();
       e.preventDefault();
-      var el=$(e.target).closest(".rightContent_");
       if(confirm("确认删除该篇文章？")){
         $.when(deleteArticle(id)).done(function(data){
           if(data.state=="0"){
-            $(el).remove();
+            that.$nextTick(function(){
+              var el=$(e.target).closest(".rightContent_");
+              $(el).remove();
+            })
             // window.location.reload();
           }
           else if(data.state=='9000'){
@@ -225,6 +227,7 @@ export default {
       $.when(contentSearch(that.userid,that.input2,that.pageNo)).done(function(data){
         if(data.state=="0"){
           that.articlesAarry=[];
+          console.log(data.data);
           that.insertData(data.data);
         }
         else if(data.state=='9000'){
@@ -270,6 +273,7 @@ export default {
           $(that.$refs.rightBottom).children('p').text('暂无更多文章');
         }
       }
+      console.log(that.articlesAarry);
     },
     loadMore(){
       this.pageNo=this.pageNo+1;
@@ -341,11 +345,13 @@ export default {
     })
 
     // that.insertData(that.tableData);//localTest
-    
+    // that.isShowData=true;//localTest
+
     this.userSource=JSON.parse(localStorage.getItem("userSource"));
     // this.level=this.userSource?this.userSource.level:'';
     this.userid=this.userSource?this.userSource.id:'';
-    this.getInitData();
+
+    this.getInitData();//正式数据
     
   }
 }

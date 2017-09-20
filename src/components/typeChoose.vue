@@ -5,7 +5,7 @@
         <el-form ref="form" :model="form" label-width="100px">
           <el-row :gutter="20">
             <el-form-item  label="文章类别：">
-              <el-select v-model="form.type" placeholder="" @change="optionChangeHandler">
+              <el-select v-model="form.type" placeholder="" @change="optionChangeHandler" @visible-change="optionChangeHandler">
                 <el-option
                   v-for="item in options"
                   :label="item.label"
@@ -34,7 +34,16 @@
         form: {
           type:'',
         },
-        options:[],
+        options:[
+          {
+            'label':'社会动态',
+            'value':'1'
+          },
+          {
+            'label':'校内信息',
+            'value':'02'
+          },
+        ],
         userSource:'',
         userId:'',
         source:'',
@@ -51,8 +60,21 @@
         handler: function (val, oldVal) {//监听学校和指标数组，只要学科id没有变化，则不变化
           console.log(val);
           if(val.id!=undefined){
-            this.id=val.id;
-            this.form.type=val.type;
+            // this.id=val.id;
+            // this.form.type=val.type;
+            var value=this.options.find(function(element){
+              if(element.label==val.type){
+                return element;
+              }
+            },this);
+            if(value!=undefined){
+              this.id=val.id;
+              this.form.type=val.type;
+            }
+            else{
+              this.id=this.options[0].value;
+              this.form.type=this.options[0].label;
+            }
           }
         },
         deep:true,
@@ -108,7 +130,11 @@
       hideUserBox:function(){
         $(".mask1,.typeBox").removeClass("showBtn");
       },
-      optionChangeHandler(){},
+      optionChangeHandler(){
+        this.$nextTick(function(){
+          $(".el-select-dropdown").addClass('alert_fixed');
+        })
+      },
     },
     mounted(){
     },
@@ -163,5 +189,8 @@
     .el-input{
       width:100%;
     }
+  }
+  .alert_fixed{
+    position: fixed!important;
   }
 </style>

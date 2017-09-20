@@ -4,7 +4,7 @@
       <p>
         消息中心-{{titleTop}}
         <!-- <span class="mesTop">共<span>{{totalNum}}</span>条消息，未读消息<span>{{todayNum}}</span>条</span> -->
-        <span class="mesTop">未读消息<span>{{todayNum}}</span>条</span>
+        <span class="mesTop">消息条数<span>{{todayNum}}</span>条</span>
       </p>
       <el-button class="btn_position" @click="showMesBox">发送新消息</el-button>
       <el-input
