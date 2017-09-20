@@ -22,6 +22,7 @@
         :data="commonData"
         highlight-current-row
         @row-click="handleTableCurrentChange"
+        @click.native="jump($event)"
         style="width: 100%">
         <el-table-column
           label="选择"
@@ -97,24 +98,46 @@
           },
           {
             value: '国家“111计划”基地5年评估一次，运行良好可滚动支持',
-            radio:0,
+            radio:5,
             id:'01',
           }, {
             value: '江苏省公布十三五期间重点学科名单，21所高校313个学科入选',
-            radio:1,
+            radio:6,
             id:'02',
           }, {
             value: '山东大学实施学科高峰计划，未来五年50亿元投入学科建设',
-            radio:2,
+            radio:7,
             id:'03',
           }, {
             value: '国家“双一流”实施方案正式出台，预计2017年上半年公布入围名单',
-            radio:3,
+            radio:8,
             id:'04',
           },
           {
             value: '测试文章1',
-            radio:4,
+            radio:9,
+            id:'05',
+          },
+          {
+            value: '国家“111计划”基地5年评估一次，运行良好可滚动支持',
+            radio:10,
+            id:'01',
+          }, {
+            value: '江苏省公布十三五期间重点学科名单，21所高校313个学科入选',
+            radio:11,
+            id:'02',
+          }, {
+            value: '山东大学实施学科高峰计划，未来五年50亿元投入学科建设',
+            radio:12,
+            id:'03',
+          }, {
+            value: '国家“双一流”实施方案正式出台，预计2017年上半年公布入围名单',
+            radio:13,
+            id:'04',
+          },
+          {
+            value: '测试文章1',
+            radio:14,
             id:'05',
           },
         ],
@@ -131,6 +154,7 @@
         userSource:{},
         userid:'',
         input2:'',
+        scroll: '',
       }
     },
     computed: {
@@ -141,7 +165,6 @@
     watch:{
       newArcticle:{
         handler: function (val, oldVal) {//监听学校和指标数组，只要学科id没有变化，则不变化
-          console.log(val);
           this.radio=val.radio;
           this.$nextTick(function(){
             $(".articleBox").find(".article_table tbody").children("tr").eq(val.radio).find(".el-radio__input").addClass("is-checked");
@@ -255,9 +278,9 @@
         for (var i=0;i<val1.length;i++) {
           val1[i].i=i;
         }
-        // var val2=val1.slice(0,6);
-        // return val2;
-        return val1;
+        var val2=val1.slice(0,9);
+        return val2;
+        // return val1;
       },
       submit(){
         this.$store.dispatch('changeArtObj',{articleObj:this.articleObj}).then(function(resp){});
@@ -370,10 +393,24 @@
           })
         }
       },
+      jump () {
+        alert("....");
+        this.$nextTick(function(){
+          this.scroll = $(".el-table").scrollTop;
+          console.log(this.scroll)
+        })
+      },
+    },
+    mounted(){
+      document.getElementsByClassName("article_table")[0].addEventListener('scroll', this.jump)
+      // this.$nextTick(function(){
+      //   console.log(document.getElementsByClassName("el-table")[0]);
+      //   document.getElementsByClassName("el-table")[0].addEventListener('scroll', this.jump)
+      // })  
     },
     created() {
 
-      // this.commonData=this.handlePreData(this.alltableData);//测试
+      this.commonData=this.handlePreData(this.alltableData);//测试
 
       var that=this;
       this.userSource=JSON.parse(localStorage.getItem("userSource"));

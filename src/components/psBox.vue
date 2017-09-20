@@ -39,7 +39,7 @@
       <el-row type="flex" class="row-bg" justify="space-between">
         <el-col :span="6"><div class="grid-content bg-purple">
           <span class="typeLabel">类型：</span>
-          <el-select v-model="value" placeholder="请选择" class="typeChoose" disabled>
+          <el-select v-model="value" placeholder="请选择" class="typeChoose">
             <el-option
               v-for="item in typeOptions"
               :label="item.label"
@@ -91,13 +91,19 @@
     name: 'app',
     data () {
     return {
+      // typeOptions:[
+      // {value:'0',
+      // label:'批示'},
+      // {value:'1',
+      // label:'分发'},
+      // {value:'2',
+      // label:'反馈'},
+      // ],
       typeOptions:[
       {value:'0',
-      label:'批示'},
+      label:'它山之石'},
       {value:'1',
-      label:'分发'},
-      {value:'2',
-      label:'反馈'},
+      label:'网络舆情'},
       ],
       value:'0',
       input2:'',
@@ -207,7 +213,8 @@
       immediate: true,
     },
     psBox:{
-      handler: function (val, oldVal) {//监听学校和指标数组，只要学科id没有变化，则不变化
+      handler: function (val, oldVal) {//
+        console.log('psBox');
         if(val.psObj==undefined){
           this.psObj=["系统管理员","d733ed4b5afd11e79ea400269e28ab11"];
         }
@@ -215,7 +222,11 @@
           this.psObj=val.psObj;//先名字 后id 有用
         }
         this.instructionId=val.instructionId;
-        this.value=val.type;
+        // this.value=val.type;
+
+
+
+
         // this.psDisabled=true;//判断不是系统管理员
         if(val.type=='0'){//批示弹窗
           this.peopleTips='处理人';
