@@ -28,11 +28,12 @@
 				<div class="remember_me">
           <el-checkbox v-model="checked" @change="rememberMe">记住我</el-checkbox>
         </div>
-        <div class="forgetPw">
-          <el-tooltip class="item" effect="dark" content="请联系学校管理员" placement="right">
-            <el-button type='text'>忘记密码？
+        <div class="forgetPw" @mouseover="btnOver" @mouseout="btnOut">
+          <!-- <el-tooltip class="item" effect="dark" content="请联系学校管理员" placement="right"> -->
+          <el-button type='text' @click="btnOver">忘记密码？
           </el-button>
-        </el-tooltip>
+          <span class="showElse" v-show="showFLagIndex">请联系数据与信息中心管理员</span>
+        <!-- </el-tooltip> -->
         </div>
 
 				<el-button type="primary" @click="doLogin" class="loginBtn">登录</el-button>
@@ -51,9 +52,16 @@ export default {
      	input1:'',
      	input2:'',
      	checked:true,
+      showFLagIndex:false,
     }
   },
   methods:{
+    btnOver(){
+      this.showFLagIndex=true;
+    },
+    btnOut(){
+      this.showFLagIndex=false;
+    },
     doLogin(){
       var pw=md5(this.input2);
       var that=this;
@@ -61,7 +69,7 @@ export default {
       $.when(loginPage(this.input1,pw)).done(function(data){
         if(data.state==0){
           // that.$store.dispatch('changeUserSource',{userSource:data.data}).then(function(resp){});
-          that.$router.push({path:'/homePage/articleList',query: { index: 0 ,type:'全部内容'}});
+          that.$router.push({path:'/homePage/articleList',query: { type:'全部内容',index: 0 }});
           localStorage.setItem("userSource",JSON.stringify(data.data));
           localStorage.setItem("initPassword",data.data.password);
         }

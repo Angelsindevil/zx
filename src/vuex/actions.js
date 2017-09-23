@@ -36,7 +36,7 @@ export const changeOrgState=(store,payload)=>{
 }
 export const changeAlertBox=(store,payload)=>{
     return new Promise(function(resolve, reject) {
-        store.commit('changeAlertBox',{"type":payload.type,"psObj":payload.psObj,"title":payload.title,"instructionId":payload.instructionId});
+        store.commit('changeAlertBox',{"type":payload.type,"psObj":payload.psObj,"title":payload.title,"instructionId":payload.instructionId,'insType':payload.insType});
         resolve("ok");
     })
 }
@@ -78,7 +78,6 @@ export const changeUserSource=(store,payload)=>{
 }
 export const changeMesId=(store,payload)=>{
     return new Promise(function(resolve, reject) {
-        console.log(payload.mesId);
         store.commit('changeMesId',{"mesId":payload.mesId,"method":payload.method});
         resolve("ok");
     })
@@ -121,7 +120,13 @@ export const changepsCount=(store,payload)=>{
 }
 export const changeRelease=(store,payload)=>{
     return new Promise(function(resolve, reject) {
-        store.commit('changeRelease',{'id':payload.id,'type':payload.type});
+        store.commit('changeRelease',{'id':payload.id,'type':payload.type,'event':payload.event});
+        resolve("ok");
+    })
+}
+export const changeArtEvent=(store,payload)=>{
+    return new Promise(function(resolve, reject) {
+        store.commit('changeArtEvent',payload);
         resolve("ok");
     })
 }

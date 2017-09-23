@@ -140,25 +140,25 @@ export default {
         minHeight: "800px",
       },
       userSource:{},
-      options: [],
+      // options: [],
       psNum:'',
       xtNum:'',
       userid:'',
-      // url:'http://192.168.2.129:9000',
+      // url:'http://192.168.2.108:9000',
       url:'', 
-      // options: [
-      // {
-      //   value: '全部内容',
-      //   label: '全部内容'
-      // }, 
-      // {
-      //   value: '动态资讯',
-      //   label: '动态资讯'
-      // }, 
-      // {
-      //   value: '校内信息',
-      //   label: '校内信息'
-      // }],
+      options: [
+      {
+        value: '全部内容',
+        label: '全部内容'
+      }, 
+      {
+        value: '动态资讯',
+        label: '动态资讯'
+      }, 
+      {
+        value: '校内信息',
+        label: '校内信息'
+      }],
     }
   },
   computed: {

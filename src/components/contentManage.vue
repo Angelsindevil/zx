@@ -2,6 +2,7 @@
   <div class="contentManage contentManage_new">
     <div class="rightBar">
       <p>内容管理-内容筛选
+        <span>总共<span>{{totalNum}}</span>篇，今日更新<span>{{todayNum}}</span>篇</span>
       </p>
       <el-input
         placeholder="搜索内容"
@@ -142,18 +143,32 @@ export default {
       userSource:{},
       userid:'',
       isShowData:false,
+      totalNum:'',
+      todayNum:'',
     }
   },
   computed: {
     ...mapGetters({
       artFlag:'artFlag',
+      artEvent:'artEvent',
     })
   },
   watch:{
     artFlag:{
       handler: function (val, oldVal) {//取消所有选择
         if(val){
-          this.getInitData();
+          // this.getInitData();
+        }
+      },
+      deep:true,
+      immediate: true,
+    },
+    artEvent:{
+      handler: function (val, oldVal) {//取消所有选择
+        if(val!=undefined){
+          // this.getInitData();
+          var el=$(val.target).closest(".rightContent_");
+          $(el).remove();
         }
       },
       deep:true,
@@ -176,8 +191,9 @@ export default {
       //     alert(data.data);
       //   }
       // })
-      this.$store.dispatch('changeRelease',{id:id,type:type}).then(function(resp){});
+      this.$store.dispatch('changeRelease',{id:id,type:type,event:e}).then(function(resp){});
       $(".mask1,.typeBox").addClass("showBtn");
+      $("body").css("overflow","hidden");
     },
     outDel:function(e){
       var el=$(e.target).closest(".bottom_item");
@@ -199,16 +215,16 @@ export default {
     },
     clickDel(e,id){
       var that=this;
-      console.log(e);
+      var el=$(e.target).closest(".rightContent_");
       e.stopPropagation();
       e.preventDefault();
       if(confirm("确认删除该篇文章？")){
         $.when(deleteArticle(id)).done(function(data){
           if(data.state=="0"){
-            that.$nextTick(function(){
-              var el=$(e.target).closest(".rightContent_");
+            // that.$nextTick(function(){
+            //   var el=$(e.target).closest(".rightContent_");
               $(el).remove();
-            })
+            // })
             // window.location.reload();
           }
           else if(data.state=='9000'){
@@ -224,10 +240,9 @@ export default {
     handleInputClick:function(){
       var that=this;
       that.pageNo=1;
+      that.articlesAarry.splice(0);
       $.when(contentSearch(that.userid,that.input2,that.pageNo)).done(function(data){
         if(data.state=="0"){
-          that.articlesAarry=[];
-          console.log(data.data);
           that.insertData(data.data);
         }
         else if(data.state=='9000'){
@@ -248,6 +263,8 @@ export default {
       var that=this;
       var res=data;
       var len=that.articlesAarry.length;
+      that.totalNum=res.totalNum;
+      that.todayNum=res.todayNum; 
       if(res.list&&res.list.length!=0){
         if(res.list.length<20){
           $(that.$refs.rightBottom).children('p').text('暂无更多文章');
@@ -287,7 +304,6 @@ export default {
           if(data.state=="0"){
             that.insertData(data.data);
             that.$nextTick(function(){
-              console.log(height);
               $(document).scrollTop(height);
             })
           }

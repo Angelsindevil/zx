@@ -2,7 +2,7 @@
   <div class="report reportStyle">
     <div class="rightBar">
       <p>报告中心-收录管理：
-        <span>今日收录<span>{{totalNum}}</span>篇，选入报告<span>{{todayNum}}</span>篇</span>
+        <span>今日收录<span>{{totalNum}}</span>篇，今日收录<span>{{todayNum}}</span>篇</span>
       </p>
       <!-- <div>
         <input type="" name="" placeholder="搜索已收录的内容">
@@ -32,13 +32,21 @@
       </div>
       <div class="title_content">
         <ul>
-          <li v-for="(item,index) in articlesAarry">
+          <li v-for="(item,index) in articlesAarry" @mouseover="showElse(item.indexTooltips,index)" @mouseout="showElse(false,index)">
             <!-- <label for="selItem_1"> -->
               <!-- <input type="checkbox" class="checkItem" @click="checkItem" id="selItem_1"> -->
               <!-- <el-checkbox v-model="checked"></el-checkbox> -->
             <!-- </label> -->
-            <el-checkbox  @change="checkItem($event,index)" class="checkItem" v-model="checkedList[index]"></el-checkbox>
-            <span><span class="ellipsis titleEll">{{item.title}}</span> - <span class="dateStyle">{{item.date}}</span></span>
+            <el-checkbox  @change="checkItem($event,index)" class="checkItem" v-model="checkedList[index]" style="position:absolute"></el-checkbox>
+
+            <!-- <span><span class="ellipsis titleEll">{{item.title}}</span> - <span class="dateStyle">{{item.date}}</span></span> -->
+            
+            <span class="ellipsis titleLen" style="display:block;padding-right:230px;padding-left:30px;">
+              <span>{{item.title}}</span>  - <span class="dateStyle">{{item.date}}</span>
+              <span class="showElse" v-show="item.showFLagIndex">{{item.title+'-'+item.date}}</span>
+            </span>
+
+
             <span class="includeBtn_" :class="item.isGenerate==1?'grey':''" :data-id="item.id"><span>{{item.isGenerate==1?'已生成报告':'未生成报告'}}</span></span>
             <span class="includeBtn grey" @click="includeThis($event,item.isGenerate)" @mouseover="canceInclude" @mouseout="includeThis_" :data-id="item.id"><img src="../../static/img/plus_grey.png" alt="" style="margin-bottom: -7px;"><span>已收录</span></span>
           </li>
@@ -108,7 +116,7 @@ export default {
               'articleId':'001',
               'date':'2016-07-12',
               'isGenerate':'0',
-              'title':"高等教育信息动态1-20161208-V01",
+              'title':"等教育信息动态1等教育信息动态1等教高等教育信息动态1高等教育信息动态1-20161208-V01",
             },
             {
               'articleId':'002',
@@ -149,6 +157,20 @@ export default {
     }
   },
   methods: {
+    getStrLen(str){
+      var len = 0;    
+      for (var i=0; i<str.length; i++) {    
+          if (str.charCodeAt(i)>127 || str.charCodeAt(i)==94) {    
+               len += 2;    
+           } else {    
+               len ++;    
+           }    
+       }    
+      return len;    
+    },
+    showElse(val,index){
+      this.$set(this.articlesAarry[index],"showFLagIndex",val);
+    },
     openWarn(str) {
       this.$message({
         message: str,
@@ -329,15 +351,24 @@ export default {
           $(that.$refs.rightBottom).children('p').text('点击加载更多历史收录内容');
         }
         // $(that.$refs.rightBottom).children('p').text('点击加载更多批示');
-        that.articles=res.list.map(function(value,index){
+        that.articlesAarry=res.list.map(function(value,index){
+          var indexTooltips;
+          if(that.getStrLen(value.title+value.date)>68){
+            indexTooltips=true;
+          }
+          else{
+            indexTooltips=false;
+          }
           return {
             "id":value.articleId,
             "title":value.title,
             "date":value.createTime,
             "isGenerate":value.status,
+            "indexTooltips":indexTooltips,
+            "showFLagIndex":false,
           }
         })
-        that.articlesAarry=that.articles;
+        // that.articlesAarry=that.articles;
         that.checkedList=that.articlesAarry.map(function(value,index){
           return false;
         })
@@ -386,7 +417,21 @@ export default {
       matchMenu();
     })
 
-    this.articlesAarry=this.tableData.list;//test
+    // this.articlesAarry=this.tableData.list;//test
+    // this.articlesAarry=this.tableData.list.map(function(value,index){
+    //   var indexTooltips;
+    //   if(this.getStrLen(value.title+value.date)>68){
+    //     indexTooltips=true;
+    //   }
+    //   else{
+    //     indexTooltips=false;
+    //   }
+    //   var item=value;
+    //   this.$set(item,'indexTooltips', indexTooltips);
+    //   this.$set(item,'showFLagIndex', false);
+    //   return item;
+    // },this)
+    // console.log(this.articlesAarry);
 
     this.checkedList=this.articlesAarry.map(function(value,index){
       return false;

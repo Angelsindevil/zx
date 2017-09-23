@@ -12,6 +12,10 @@
                   :value="item.value">
                 </el-option>
               </el-select>
+              <!-- <select v-model="form.type" class="type_sel">
+                <option v-for="item in options"
+                  :value="item.value">{{item.label}}</option>
+              </select> -->
             </el-form-item>
         </el-row>
           <!-- 这应该是编辑的时候才有的字段 -->
@@ -48,6 +52,7 @@
         userId:'',
         source:'',
         id:'',
+        event_:'',
       }
     },
     computed: {
@@ -58,22 +63,30 @@
     watch:{
       releaseObj:{
         handler: function (val, oldVal) {//监听学校和指标数组，只要学科id没有变化，则不变化
-          console.log(val);
           if(val.id!=undefined){
-            // this.id=val.id;
-            // this.form.type=val.type;
-            var value=this.options.find(function(element){
-              if(element.label==val.type){
-                return element;
+            this.id=val.id;
+            this.form.type=val.type;
+            this.event_=val.event;
+            // var value=this.options.find(function(element){
+            //   if(element.label==val.type){
+            //     return element;
+            //   }
+            // },this);
+            var val_=false;
+            this.options.map(function(value,index){
+              if(value.label==val.type){
+                val_=true;
               }
-            },this);
-            if(value!=undefined){
+            },this)
+            if(val_){
               this.id=val.id;
               this.form.type=val.type;
+              this.event_=val.event;
             }
             else{
-              this.id=this.options[0].value;
+              this.id=val.id;
               this.form.type=this.options[0].label;
+              this.event_=val.event;
             }
           }
         },
@@ -93,18 +106,18 @@
           message: str,
           type:'warning',
           // iconClass:'el-icon-check',
-        });
+        }); 
       },
       releaseBtn(e){
         var that=this;
         var el=$(e.target).closest(".rightContent_");
-        console.log(this.id);
         $.when(releaseArticle(this.id)).done(function(data){
           if(data.state=="0"){
             // alert("文章发布成功！");
             that.open("文章发布成功！");
             that.hideUserBox();
             that.$store.dispatch('changeArtFlag',true).then(function(resp){});
+            that.$store.dispatch('changeArtEvent',that.event_).then(function(resp){});
             // window.location.reload();
           }
           else if(data.state=='9000'){
@@ -129,6 +142,7 @@
       },
       hideUserBox:function(){
         $(".mask1,.typeBox").removeClass("showBtn");
+        $("body").css("overflow","auto");
       },
       optionChangeHandler(){
         this.$nextTick(function(){
@@ -171,7 +185,7 @@
     }
   }
 </script>
-<style lang="less">
+<style lang="less" scoped>
   .typeBox{
     width:400px;
     height:200px;
@@ -189,8 +203,15 @@
     .el-input{
       width:100%;
     }
+    .type_sel{
+      width: 250px;
+      height: 30px;
+      background: #fff;
+      font-size: 14px;
+      color:#333;
+    }
   }
   .alert_fixed{
-    position: fixed!important;
+    // position: fixed!important;
   }
 </style>

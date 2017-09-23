@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import vuescroll from 'vue-scroll'
 // import VueRouter from 'vue-router'
 import VueCookie from 'vue-cookie'
 import draggable from 'vuedraggable'
@@ -27,7 +28,7 @@ import store from './vuex/store'
 // const VueCookie = resolve => require(['./vue-cookie'], resolve)
 // const ElementUI = resolve => require(['./element-ui'], resolve)
 // const store = resolve => require(['./vuex/store'], resolve)
-
+Vue.use(vuescroll)
 Vue.use(ElementUI);
 // Vue.use(VueRouter);
 // Vue.use(Button);

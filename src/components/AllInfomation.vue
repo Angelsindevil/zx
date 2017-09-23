@@ -54,8 +54,9 @@
               </span>
               <router-link target="_blank" :to="{ path: '/homePage/articleDetail', query: { id:item.id,index:index,edit:'0'}}">
                 <div class="rightContent">
-                  <p class="title_bar" style="padding-right: 160px;">
+                  <p class="title_bar" style="padding-right: 160px;" @mouseover="showElse(item.indexTooltips,index)" @mouseout="showElse(false,index)">
                     <span class="ellipsis" style="display:block">{{item.title}}</span>
+                    <span class="showElse" v-show="item.showFLagIndex">{{item.title}}</span>
                   </p>       
                   <p class="title_content" v-html="item.summary">
                     <!-- {{item.summary}} -->
@@ -285,6 +286,21 @@ export default {
     // showTop(){
     //   $(document).scrollTop(0);
     // },
+    getStrLen(str){
+      var len = 0;    
+      for (var i=0; i<str.length; i++) {    
+          if (str.charCodeAt(i)>127 || str.charCodeAt(i)==94) {    
+               len += 2;    
+           } else {    
+               len ++;    
+           }    
+       }    
+      return len;    
+    },
+    showElse(val,index){
+      this.$set(this.articlesAarry[index],"showFLagIndex",val);
+      // this.articlesAarry[index]=val;
+    },
     searchThis:function(){
       this.pageNo=1,
       this.flag=true;
@@ -515,9 +531,20 @@ export default {
         }
         res.list.map(function(value,index){
           value.summary=value.summary.replace(/<[^>]+>/g,"");
+          var indexTooltips;
+          if(that.getStrLen(value.title)>68){
+            indexTooltips=true;
+          }
+          else{
+            indexTooltips=false;
+          }
+          that.$set(value,'indexTooltips', indexTooltips)
+          that.$set(value,'showFLagIndex', false)
+
           // value.summary=value.summary.replace(/<[^>]+>/g,"");
           that.articlesAarry.push(value); 
         })
+        console.log(that.articlesAarry);
         // that.articlesAarry.concat(that.copyArr(res.list));
       }
       else{

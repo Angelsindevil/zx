@@ -11,10 +11,15 @@
         <li v-for="(item,index) in articlesFilter">
           <div class="rightContent"> -->
             <div class="title_bar">
-              <p><img src="../../static/img/edit_reporter.png" alt="">
-              {{item.type=='0'?item.org+'-'+item.name+'的批示流程':(item.type=='1'?item.org+'-'+item.name+'的分发':(item.type=='2'?item.org+'-'+item.name+'的反馈':''))}}
+              <p :class="item.type=='1'?'borderNone':''"><img src="../../static/img/edit_reporter.png" alt="">
+              {{item.type=='0'?item.org+'-'+item.name+'的批示流程':(item.type=='1'?'转办':(item.type=='2'?item.org+'-'+item.name+'的反馈':''))}}
+
+              <!-- <p :class="item.type=='1'?'borderNone':''"><img src="../../static/img/edit_reporter.png" alt="">
+              {{item.type=='0'?item.org+'-'+item.name+'的批示流程':(item.type=='1'?item.org+'-'+item.name+'的转办':(item.type=='2'?item.org+'-'+item.name+'的反馈':''))}} -->
+
+              <span v-show="item.type=='1'" class="zb_title"><span style="color:#5e5e5e;vertical-align: top;">：</span>{{item.content}}</span>
               <span class="time">
-              {{item.type=='0'?'批示时间':(item.type=='1'?'分发时间':(item.type=='2'?'反馈时间':''))}}
+              {{item.type=='0'?'批示时间':(item.type=='1'?'转办时间':(item.type=='2'?'反馈时间':''))}}
               ：<span>{{item.date}}</span></span></p>
               <p class="grey_font" v-show="(item.type=='0'?true:false)">
                 <span>批示文章：<span class="ellipsis titleEll">{{item.title}}</span> &nbsp;&nbsp; <span class="dateSmall">{{item.art_date}}</span></span>
@@ -22,12 +27,12 @@
                   <el-button type="primary" size="small" class="btn-pos">查看原文</el-button>
                 </router-link>
               </p>
-              <p class="blue_font">
-                <span>
-                {{item.type=='0'?'批示内容':(item.type=='1'?'分发内容':(item.type=='2'?'反馈内容':''))}}
+              <p class="blue_font" v-show="item.type!='1'">
+                <span v-show="item.type=='0'||item.type=='2'">
+                {{item.type=='0'?'批示内容':(item.type=='1'?'转办内容':(item.type=='2'?'反馈内容':''))}}
                 ：<span>{{item.content}}</span></span>
                 <!-- <span class="includeBtn grey"><span>无附件</span></span> -->
-                <a :href="'http://'+fwLink+'/api/article/downloadAttachment?attachmentId='+item.link" target="blank">
+                <a :href="'http://'+fwLink+'/api/article/downloadAttachment?attachmentId='+item.link" target="blank" >
                 <!-- <a @click="download(item.name)"> -->
                   <el-button type="text" :disabled="item.link?false:true" class="btn-pos btn-pos-1" size="small">{{item.link?'查看附件':'无附件'}}</el-button>
                 </a>
@@ -51,9 +56,9 @@
       </div>
       <div class="rightContent">
         <div class="title_bar">
-          <p><img src="../../static/img/edit_reporter.png" alt="">数据与信息中心分发<span class="time">分发时间：<span>2017-01-26 19:35</span></span></p>
+          <p><img src="../../static/img/edit_reporter.png" alt="">数据与信息中心转办<span class="time">转办时间：<span>2017-01-26 19:35</span></span></p>
           <p class="blue_font">
-            <span>分发内容：<span>已分发至发展规划处张三处长处理</span></span>
+            <span>转办内容：<span>已转办至发展规划处张三处长处理</span></span>
             <el-button type="text" :disabled="true" class="btn-pos btn-pos-1" size="small">无附件</el-button>
           </p>
         </div>
@@ -73,7 +78,7 @@
         批示处理<i class="el-icon-caret-bottom el-icon--right"></i>
       </el-button>
       <el-dropdown-menu slot="dropdown" class="psDown">
-        <el-dropdown-item command="ff" style="display:none;">分发</el-dropdown-item>
+        <el-dropdown-item command="ff" style="display:none;">转办</el-dropdown-item>
         <el-dropdown-item command="fk" ref="feedback">{{feedback}}</el-dropdown-item>
         <el-dropdown-item command="gb" style="display:none;">关闭</el-dropdown-item>
       </el-dropdown-menu>
@@ -116,7 +121,7 @@ export default {
       //     "link":'http://www.baidu.com',
       // },
       // {
-      //     "type":'1',//分发模块
+      //     "type":'1',//转办模块
       //     "date":' 2017/01/26',
       //     "content":"请发展规划处等抓紧时间研究国家双一流方案的细则，特别是教育部有关部门的解读。",
       //     "link":'http://www.baidu.com',
@@ -132,6 +137,7 @@ export default {
       level:'',
       // fwLink:'',
       fwLink:'192.168.2.108:9000',
+      insType:'',
     }
   },
   computed: {
@@ -174,13 +180,13 @@ export default {
         $(".psBox").find(".article_btn").attr("disabled",true).addClass("is-disabled");
       }
       if(command=="ff"){
-        this.$store.dispatch('changeAlertBox',{"type":'1',"psObj":this.psObj,'title':this.articleName,'instructionId':this.instructionId}).then(function(resp){});
+        this.$store.dispatch('changeAlertBox',{"type":'1',"psObj":this.psObj,'title':this.articleName,'instructionId':this.instructionId,'insType':this.insType}).then(function(resp){});
       }
       else if(command=="fk"){
-        this.$store.dispatch('changeAlertBox',{"type":'2',"psObj":this.psObj,'title':this.articleName,'instructionId':this.instructionId}).then(function(resp){});
+        this.$store.dispatch('changeAlertBox',{"type":'2',"psObj":this.psObj,'title':this.articleName,'instructionId':this.instructionId,'insType':this.insType}).then(function(resp){});
       }
       else if(command=="gb"){
-        if(confirm("关闭批示流程后，无法对该批示进行分发、反馈操作，是否确定关闭流程？")){
+        if(confirm("关闭批示流程后，无法对该批示进行转办、反馈操作，是否确定关闭流程？")){
           $.when(closeInstructions(this.instructionId)).done(function(data){
             if(data.state=='0'){
               // alert("流程已关闭");
@@ -228,6 +234,7 @@ export default {
           else{}
           that.articleName=res.results[0].title;
           that.articlesFilter=res.results;
+          that.insType=res.results[0].insType;
           that.psObj=res.psPeople;
           // for (var i=0;i<res.results.length;i++) {
           //   if(res.results[i].type=='0'){
@@ -557,5 +564,12 @@ export default {
       right:20px;
       top:12px;
     }
+  }
+  .zb_title{
+    font-size: 14px;
+    color: #09f;
+  }
+  .borderNone{
+    border-bottom:none!important;
   }
 </style>

@@ -370,10 +370,6 @@
           id:value.id,
         }
       })
-    },
-    created(){
-      var that=this;
-      this.commonData=this.data2;
       $.when(getOrgTree()).done(function(data){
         if(data.state=='0'){
           that.data2=data.data;
@@ -387,6 +383,25 @@
           alert(data.data);
         }
       })
+    },
+    created(){
+      var that=this;
+
+      // this.commonData=this.data2;
+
+      // $.when(getOrgTree()).done(function(data){
+      //   if(data.state=='0'){
+      //     that.data2=data.data;
+      //     that.initTree();
+      //   }
+      //   else if(data.state=='9000'){
+      //     // alert("用户未登录！")
+      //     that.$router.push({path:'/login',query: {}});
+      //   }
+      //   else{
+      //     alert(data.data);
+      //   }
+      // })
     }
   }
 </script>

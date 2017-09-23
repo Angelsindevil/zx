@@ -17,28 +17,29 @@
         v-model="input2"
         class="input_position" :on-icon-click="handleInputClick" @keyup.native.enter='handleInputClick'>
       </el-input>
-      <el-table
-        class="article_table"
-        :data="commonData"
-        highlight-current-row
-        @row-click="handleTableCurrentChange"
-        @click.native="jump($event)"
-        style="width: 100%">
-        <el-table-column
-          label="选择"
-          width="20%"
-          >
-          <template scope="scope">
-            <el-radio class="radio" v-model="radio" :label="scope.row.radio"  :data-id="scope.row.id"></el-radio>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="value"
-          :label="labeltext"
-          width="80%">
-        </el-table-column>
-      </el-table>
-      <p class="btn_position"><span @click="loadMore" ref="rightBottom" class="loadMoreStyle">加载更多</span></p>
+      <div v-scroll="onScroll" class="scrollContainer">
+        <el-table
+          class="article_table"
+          :data="commonData"
+          highlight-current-row
+          @row-click="handleTableCurrentChange"
+          style="width: 100%">
+          <el-table-column
+            label="选择"
+            width="20%"
+            >
+            <template scope="scope">
+              <el-radio class="radio" v-model="radio" :label="scope.row.radio"  :data-id="scope.row.id"></el-radio>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="value"
+            :label="labeltext"
+            width="80%">
+          </el-table-column>
+        </el-table>
+      </div>
+      <!-- <p class="btn_position"><span @click="loadMore" ref="rightBottom" class="loadMoreStyle">加载更多</span></p> -->
       <!-- <div class="block">
         <el-pagination
           layout="prev, pager, next"
@@ -155,6 +156,7 @@
         userid:'',
         input2:'',
         scroll: '',
+        position: {scrollTop: 0, scrollLeft: 0}
       }
     },
     computed: {
@@ -181,10 +183,14 @@
     methods:{
       handleInputClick(){
         var that=this;
+        this.commonData.splice(0);
+        this.$nextTick(function(){
+          $(".el-table__empty-block .el-table__empty-text").text("正在加载文章...");
+        })
         $.when(searchArticle(that.input2,1,this.userid)).done(function(data){
           if(data.state=="0"){
             that.insertData(data); 
-            $(".articleBox").find(".alertContent .el-table__body-wrapper").scrollTop(0);
+            $(".articleBox").find(".scrollContainer").scrollTop(0);
           }
           else if(data.state=='9000'){
             // alert("用户未登录！")
@@ -332,6 +338,7 @@
           if(that.pageNo==1){//只一页
             that.$nextTick(function(){
               $(that.$refs.rightBottom).text("暂无文章");
+              $(".el-table__empty-block .el-table__empty-text").text("暂无文章");
               // $(that.$refs.rightBottom).children('span').text('暂无文章');
               // $(that.$refs.rightBottom).children('i').hide();
             })
@@ -352,15 +359,17 @@
         this.$nextTick(function(){
           // height=$(".rightContent_").last().offset().top;
           height=$(".articleBox").find(".article_table tbody").children("tr").last().position().top;
+          console.log(height);
         })
+
         var that=this;
         // if(!this.flag){
           if(this.input2!=''&&this.input2!=undefined){
-            $.when(searchArticle(that.input2,that.pageNo,this.userid)).done(function(data){
+            $.when(searchArticle(that.input2,pageNo,this.userid)).done(function(data){
               if(data.state=="0"){
                 that.insertData(data); 
                 that.$nextTick(function(){
-                  $(".articleBox").find(".alertContent .el-table__body-wrapper").scrollTop(height);
+                  $(".articleBox").find(".scrollContainer").scrollTop(height-240);
                 })
               }
               else if(data.state=='9000'){
@@ -379,7 +388,7 @@
               that.insertData(data);
               that.$nextTick(function(){
                 // $(document).scrollTop(height);
-                $(".articleBox").find(".alertContent .el-table__body-wrapper").scrollTop(height);
+                $(".articleBox").find(".scrollContainer").scrollTop(height-240);
               })
               // that.articlesAarry=data.data.list;
             }
@@ -393,16 +402,34 @@
           })
         }
       },
-      jump () {
-        alert("....");
-        this.$nextTick(function(){
-          this.scroll = $(".el-table").scrollTop;
-          console.log(this.scroll)
-        })
+      // jump () {
+      //   alert("....");
+      //   this.$nextTick(function(){
+      //     this.scroll = $(".el-table").scrollTop;
+      //     console.log(this.scroll)
+      //   })
+      // },
+      onScroll(e,position){
+        this.position = position;
+        var scrollTop=position.scrollTop;
+        // console.log(scrollTop);
+        var m=Math.floor(scrollTop/40);
+        if(m==(14+20*(this.pageNo-1))){
+          console.log("1111");
+          this.loadMore();
+        }
+        // if(n==1){
+        //   this.loadMore(n+1);
+        // }
+        // this.loadMore(n+1);
+        // this.$nextTick(function(){
+        //   var wid=$(".el-table .el-table__body-wrapper").width();
+        //   console.log(wid);
+        // })
       },
     },
     mounted(){
-      document.getElementsByClassName("article_table")[0].addEventListener('scroll', this.jump)
+      // document.getElementsByClassName("article_table")[0].addEventListener('scroll', this.jump)
       // this.$nextTick(function(){
       //   console.log(document.getElementsByClassName("el-table")[0]);
       //   document.getElementsByClassName("el-table")[0].addEventListener('scroll', this.jump)
@@ -410,7 +437,7 @@
     },
     created() {
 
-      this.commonData=this.handlePreData(this.alltableData);//测试
+      // this.commonData=this.handlePreData(this.alltableData);//测试
 
       var that=this;
       this.userSource=JSON.parse(localStorage.getItem("userSource"));
@@ -433,6 +460,9 @@
 </script>
 <style lang="less">
   .articleBox{
+    .el-table__empty-block{
+      width:100%!important;
+    }
     .loadMoreStyle{
       display: inline-block;
       border: 1px solid #e4e4e4;
@@ -454,9 +484,30 @@
         border: 1px solid #bfcbd9;
       }
     }
+    .el-table{
+      border-bottom:none;
+    }
     .alertContent .el-table__body-wrapper{
       height:auto;
-      max-height:260px;
+      width: 680px;
+      margin-top: 40px;
+      tr:last-child{
+        td{
+          border-bottom:none;
+        }
+      }
+      // max-height:260px;
+    }
+    .alertContent .el-table__header-wrapper{
+      position: fixed;
+      z-index: 1;
+      width: 680px;
+      margin: -1px 0px;
+    }
+    .scrollContainer{
+      height: 280px;
+      overflow: auto;
+      border-bottom:1px solid #dfe6ec;
     }
     .btn_position{
       width: 100%;

@@ -5,9 +5,12 @@
       <p>报告中心-报告列表：
         <span>共计生成<span>{{totalNum}}</span>篇报告</span>
       </p>
-      <el-button class="btn_position btnUpload">
+      <!-- <el-button class="btn_position btnUpload">
         <input type="file" name="" class="file_" @change="linkChange">上传报告
-      </el-button>
+      </el-button> -->
+      <div class="btn_position btnUpload">
+        <input type="file" name="" class="file_" @change="linkChange">上传报告
+      </div>
       <el-input
         placeholder="搜索已生成的报告"
         icon="search"
@@ -58,9 +61,14 @@
           <div class="rightContent" v-for="(item,index) in listFilter_2">
             <div class="title_bar">
               <img src="../../static/img/multi-report.png" alt="">
-              <span class="title_new"><span class="ellipsis titleEll">{{item.title}}</span><span class="date_new">生成日期：<span>{{item.createTime}}</span></span></span>
+              <span class="title_new"><span class="ellipsis titleEll">{{item.title}}</span>
+              <span class="date_new">
+                <!-- 生成日期：<span>{{item.createTime}}</span> -->
+              </span>
+              </span>
               <img src="../../static/img/delete.png" alt="" class="delete" @click="delete_(item.id)" :data-id='item.id'>
-              <a :href="'http://'+fwLink+'/api/article/downloadAttachment?attachmentId='+item.bulletinUrl" target="blank" class="downloadBtn">
+              <!-- <a :href="'http://'+fwLink+'/api/article/downloadAttachment?attachmentId='+item.bulletinUrl" target="blank" class="downloadBtn"> -->
+              <a :href="item.bulletinUrl" target="blank" class="downloadBtn">
               <!-- <a :href="item.bulletinUrl" class="downloadBtn" target="blank"> -->
                 <!-- <span class="includeBtn"> -->
                   <img src="../../static/img/download.png" alt="">
@@ -445,7 +453,8 @@ export default {
   },
   created(){
     // var that=this;
-    this.fwLink=window.location.host;//有用
+    // this.fwLink=window.location.host;//有用
+
     this.userSource=JSON.parse(localStorage.getItem("userSource"));
     this.username=this.userSource?this.userSource.username:'';
     this.level=this.userSource?this.userSource.level:'';
@@ -497,11 +506,13 @@ export default {
     }
     .btn_position{
       font-size: 13px;
-      padding:10px 15px;
+      padding: 8px 10px;
       position: absolute;
-      right:265px;
-      top:13px;
-      color:#09f;
+      right: 265px;
+      top: 13px;
+      color: #09f;
+      background: #fff;
+      border-radius: 3px;
     }
     .rightContent{
       border:none;

@@ -1,6 +1,6 @@
 <template>
   <div class="psBox alertStyle <!-- alertStyle_ -->">
-    <div class="alertTop">批示<span @click="hidePSBox"><img src="../../static/img/cancel.png"></span></div>
+    <div class="alertTop">{{alertTips}}<span @click="hidePSBox"><img src="../../static/img/cancel.png"></span></div>
     <div class="alertContent">
       <el-button class="article_btn" @click="showAllArticle"><img src="../../static/img/report.png" alt="">批示文章：<span class="ellipsis titleEll">{{currentRow}}</span></el-button>
       <div class="editContainer">
@@ -39,7 +39,7 @@
       <el-row type="flex" class="row-bg" justify="space-between">
         <el-col :span="6"><div class="grid-content bg-purple">
           <span class="typeLabel">类型：</span>
-          <el-select v-model="value" placeholder="请选择" class="typeChoose">
+          <el-select v-model="value" placeholder="请选择" class="typeChoose" :disabled="disabled_tp">
             <el-option
               v-for="item in typeOptions"
               :label="item.label"
@@ -47,7 +47,7 @@
             </el-option>
           </el-select>
         </div></el-col>
-        <el-col :span="6"><div class="grid-content bg-purple-light" @click="solveSinglePeople">
+        <!-- <el-col :span="6"><div class="grid-content bg-purple-light" @click="solveSinglePeople">
           <span class="typeLabel">批示人：</span>
           <el-input
             placeholder="请选择"
@@ -68,6 +68,36 @@
             :disabled="clDisabled"
             >
           </el-input>
+        </div></el-col> -->
+        <el-col :span="6" v-if="alertType=='0'"><div class="grid-content bg-purple-light" @click="solveSinglePeople">
+          <span class="typeLabel">{{psPerson}}</span>
+          <el-input
+            placeholder="请选择"
+            icon="menu"
+            v-model="input2"
+            class="typeChoose_"
+            >
+          </el-input>
+        </div></el-col>
+        <el-col :span="6" v-else><div class="grid-content bg-purple" @click="solvePeople">
+          <span class="typeLabel">{{psPerson}}：</span>
+          <el-input
+            placeholder="请选择"
+            icon="menu"
+            v-model="input3"
+            class="typeChoose_"
+            >
+          </el-input>
+        </div></el-col>
+        <el-col :span="6"><div class="grid-content bg-purple-light">
+          <span class="typeLabel">{{psTime}}：</span>
+          <el-date-picker
+            v-model="date"
+            type="date"
+            placeholder="选择日期"
+            class="typeChoose_ dateChoose"
+           >
+          </el-date-picker>
         </div></el-col>
       </el-row>
     </div>
@@ -124,9 +154,16 @@
       userId:'',
       userName:'',//想一想 先存哪里去 登录的时候
       psId:'',
-      // url:'http://192.168.2.129:9000',
+      // url:'http://192.168.2.108:9000',
       url:'',
       peopleTips:'处理人',
+
+      alertTips:'批示',
+      psPerson:'批示人',
+      psTime:'批示时间',
+      date:'',
+      disabled_tp:false,
+      alertType:'',
     }
   },
   computed: {
@@ -185,7 +222,7 @@
     },
     articleObj:{
       handler: function (val, oldVal) {//文章选择后，相应的渲染
-        if(this.value=="0"){//分发和反馈的值应该是后台传过来的
+        if(this.alertType=="0"){//分发和反馈的值应该是后台传过来的
           if(val.flag=='0'){
 
           }
@@ -215,6 +252,7 @@
     psBox:{
       handler: function (val, oldVal) {//
         console.log('psBox');
+        this.date="";
         if(val.psObj==undefined){
           this.psObj=["系统管理员","d733ed4b5afd11e79ea400269e28ab11"];
         }
@@ -224,10 +262,8 @@
         this.instructionId=val.instructionId;
         // this.value=val.type;
 
-
-
-
         // this.psDisabled=true;//判断不是系统管理员
+        this.alertType=val.type;
         if(val.type=='0'){//批示弹窗
           this.peopleTips='处理人';
           this.$nextTick(function(){
@@ -242,10 +278,19 @@
           }
           // this.psDisabled=false;
           this.clDisabled=true;
-          this.input3=this.userName;
+
+          // this.input3=this.userName;
+
+          this.psPerson="批示人";
+          this.psTime="批示时间";
+          this.alertTips="批示";
+          this.disabled_tp=false;
           // tinymce.get('tinymce').setContent('<p style="line-height:2">请发展规划处等抓紧时间研究国家双一流方案的细则和教育部有关部门的解读<br><span style="color:#FF6600">（如批示是由纸质材料批示，则由数据与信息中心发起流程并人工输入）</span></p>');
         }
         else if(val.type=='1'){//分发弹窗
+          if(val.insType!=undefined){
+            this.value=val.insType;
+          }
           this.peopleTips='分发人';
           this.currentRow=val.title;
           if(this.level=='0'||this.level=='4'){//权限为管理员 分发处理人可选
@@ -258,19 +303,34 @@
           this.psDisabled=true;
           this.input3="";
           this.input2=this.psObj[0];//弹窗不可点击。 有用
+
+          this.psPerson="转办";
+          this.psTime="转办时间";
+          this.alertTips="转办";
+          this.disabled_tp=true;
         }
         else if(val.type=='2'){//反馈弹窗
+          if(val.insType!=undefined){
+            this.value=val.insType;
+          }
           this.peopleTips='反馈人';
           this.currentRow=val.title;
           // if(this.level=='0'||this.level=='4'){//权限为管理员 反馈处理人可选
             this.clDisabled=true;
             this.psDisabled=true;
-            this.input3=this.userName;
+
+            // this.input3=this.userName;
+
             this.input2=this.psObj[0];//弹窗不可点击。 有用
           // }
           this.$nextTick(function(){
             $(".blueBot").show();
           })
+
+          this.psPerson="反馈人";
+          this.psTime="反馈时间";
+          this.alertTips="反馈";
+          this.disabled_tp=true;
         }
         else{
         }
@@ -322,6 +382,7 @@
     hidePSBox:function(){
       var that=this;
       $(".mask1,.psBox").removeClass("showBtn");
+      $("body").css("overflow","auto");
       // $(".psBox").removeClass("alertStyle_");
       // $(".el-row").removeClass("show_row");
       that.fileFlag=false;
@@ -329,7 +390,7 @@
       $(that.$refs.linkBot).text("");
     },
     showAllArticle:function(){
-      if(this.value=='0'){
+      if(this.alertType=='0'){
         $(".articleBox").addClass("showBtn");
         $(".printPs").addClass("showBtn");
         $(".mask2").addClass("showBtn");
@@ -350,8 +411,10 @@
       }
     },
     solvePeople:function(){//处理人弹窗  反馈还是分发
+      console.log("111");
       if(this.level=="0"||this.level=='4'){//系统管理员无论反馈和分发 都弹窗 而且都默认选中自己
-        if(this.value=='1'){//分发
+        if(this.alertType=='1'||this.alertType=='2'){//分发
+          this.$store.dispatch('changeClearAll',{clearAll:[]}).then(function(resp){});
           $(".multiBox").addClass("showBtn");
           $(".printPs").removeClass("showBtn");
           $(".mask2").addClass("showBtn");
@@ -360,7 +423,9 @@
         // else if(this.value=='2'){//反馈
         // }
         else{}
-        this.$store.dispatch('changeClrObj',{clrId:this.psObj[1]}).then(function(resp){});
+
+        // this.$store.dispatch('changeClrObj',{clrId:this.psObj[1]}).then(function(resp){});
+
       }
       else{}
       // if(!this.clDisabled){
@@ -371,6 +436,7 @@
       // }
     },
     solveSinglePeople:function(){//批示人弹窗
+      console.log("222");
       $(".singleBox").addClass("showBtn");
       $(".mask2").addClass("showBtn");
       $(".mask1").removeClass("showBtn");
@@ -390,16 +456,21 @@
       // }
       var delta =this.quill.getText();
       formData.append("content",delta);
-
+      formData.append("time",this.date);
+      formData.append("insType",this.value);
       // formData.append("userId",this.userId);//或许还有用吧
 
-      if(this.value=='0'){//批示
+      if(this.alertType=='0'){//批示
+        // formData.append("insType",this.value);
         formData.append("userId",this.psId);
         formData.append("type",'0');
         formData.append("articleId",this.articleId);
         if(delta.length==1){
           // alert("请输入批示内容！");
           this.openWarn("请输入批示内容！",'warning');
+        }
+        else if(this.date==""){
+          this.openWarn("请选择批示时间！");
         }
         else{
           $.when(addInstruction(formData)).done(function(data){
@@ -408,6 +479,7 @@
               that.open("新增批示成功！",'success');
               that.getpsRed();
               $(".mask1,.psBox").removeClass("showBtn");
+              $("body").css("overflow","auto");
               // $(".psBox").removeClass("alertStyle_");
               // $(".el-row").removeClass("show_row");
               $(that.$refs.linkBot).text("");
@@ -430,7 +502,7 @@
           })
         }
       }
-      else if(this.value=='1'){//分发
+      else if(this.alertType=='1'){//分发
         formData.append("userId",this.userId);
         formData.append("type",'1');
         formData.append("psPeople",this.psObj[1]);
@@ -440,13 +512,16 @@
           formData.append("clPeople",this.selectArr.id);
           if(delta.length==1){
             // alert("请输入分发内容！");
-            this.openWarn("请输入分发内容！",'warning');
+            this.openWarn("请输入转办内容！",'warning');
+          }
+          else if(this.date==""){
+            this.openWarn("请选择转办时间！");
           }
           else{
             $.when(addFeedback(formData)).done(function(data){
               if(data.state=='0'){
                 // alert("新增分发成功！");
-                that.open("新增分发成功！",'success');
+                that.open("新增转办成功！",'success');
                 $(".mask1,.psBox").removeClass("showBtn");
                 // $(".psBox").removeClass("alertStyle_");
                 // $(".el-row").removeClass("show_row");
@@ -478,7 +553,7 @@
           // alert("还未选择处理人");
         }
       }
-      else if(this.value=='2'){// 反馈
+      else if(this.alertType=='2'){// 反馈
         formData.append("userId",this.userId);
         formData.append("type",'2');
         formData.append("psPeople",this.psObj[1]);
@@ -487,6 +562,9 @@
         if(delta.length==1){
           // alert("请输入反馈内容！");
           this.openWarn("请输入反馈内容！",'warning');
+        }
+        else if(this.date==""){
+          this.openWarn("请选择反馈时间！");
         }
         else{
           $.when(addFeedback(formData)).done(function(data){
@@ -602,6 +680,7 @@
   .titleEll{
     display: inline-block;
     width: 80%;
+    vertical-align: middle;
   }
   .file_{
     opacity: 0;
@@ -614,6 +693,9 @@
   }
   .ql-editor{
     height:250px!important;
+  }
+  .dateChoose{
+    padding-left:70px;
   }
 }
 

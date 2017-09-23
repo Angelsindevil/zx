@@ -233,7 +233,7 @@ function addInstruction(formData){//新增批示
     });
     return ajax;
 }
-function searchInstructionList(userId,keyword,type,pageNo){//搜索批示
+function searchInstructionList(userId,keyword,type,pageNo,insType){//搜索批示
     var ajax = $.ajax({
         url: url+"/api/article/searchInstruction",
         type: "post",
@@ -244,6 +244,7 @@ function searchInstructionList(userId,keyword,type,pageNo){//搜索批示
           "type":type,
           "pageNo":pageNo,
           "pageSize":10,
+          "insType":insType,
         })
     });
     return ajax;
@@ -266,6 +267,21 @@ function getInstructionFlow(instructionId){//获取批示流程
         data:JSON.stringify({
             "instructionId":instructionId,
         })
+
+    });
+    return ajax;
+}
+function deleteInstruction(id){//获取批示流程
+    var ajax = $.ajax({
+        url: url+"/api/article/deleteInstruction",
+        type: "get",
+        contentType: "application/json;",
+        // data:JSON.stringify({
+        //     "id":id,
+        // })
+        data:{
+          "id":id
+        }
 
     });
     return ajax;

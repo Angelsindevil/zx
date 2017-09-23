@@ -45,6 +45,7 @@ const state = {
 		psObj:[],
 		title:'',
 		instructionId:'',
+		insType:''
 	},
 	clrId:'',
 	unitVal:'',
@@ -73,6 +74,7 @@ const state = {
 	psDetailFlag:false,
 	mesFlag:false,
 	artFlag:false,
+	artEvent:'',
 }
 const store = new Vuex.Store({
   state,

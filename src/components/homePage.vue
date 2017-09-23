@@ -58,14 +58,14 @@
     <div class="bottomBar">
       <div class="bottomContent">
         <p>
-          <span>©&nbsp;2016&nbsp;青塔</span>
+          <span>©&nbsp;2017&nbsp;西安交通大学</span>
           <span>平台说明</span>
-          <span>联系我们</span>
-          <span>关于青塔</span>
+          <!-- <span>联系我们</span>
+          <span>关于青塔</span> -->
         </p>
         <p>
-          <span>浙ICP备15004817号-2</span>
-          <span>浙公网安备33010502000513号</span>
+          <!-- <span>浙ICP备15004817号-2</span>
+          <span>浙公网安备33010502000513号</span> -->
         </p>
       </div>
     </div>

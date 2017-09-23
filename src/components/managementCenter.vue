@@ -1,9 +1,11 @@
 <template>
   <!-- 批示管理中心 -->
-  <div class="test">
+  <div class="test psCenter">
     <div class="rightBar">
-      <p>平台管理-批示管理
+      <p>{{level=='2'?'消息中心-批示内容':'平台管理-批示管理'}}
         <span>共计<span>{{totalNum}}</span>份批示，今日收到批示和反馈<span>{{todayNum}}</span>份</span>
+      }
+      }
       </p>
       <!-- <div class="admin_ui_input">
         <input type="" name="" placeholder="搜索批示和反馈的内容">
@@ -28,6 +30,14 @@
               :value="item.value">
             </el-option>
           </el-select>
+
+          <el-select v-model="value1" placeholder="" @change="optionChangeHandler1">
+            <el-option
+              v-for="item in typeOptions"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
           <!-- <div class="admin_ui_select">
             <select id="themeBox">
               <option value="">全部内容</option>
@@ -40,8 +50,9 @@
       <!-- <div class="title_content" v-for="(item,index) in articlesAarry"> -->
       <div class="title_content">
         <ul>
-          <li v-for="(item,index) in articlesAarry" @mouseover="showElse(item.indexTooltips,index)" @mouseout="showElse(false,index)">
-            <span class="ellipsis titleLen" style="display:block;padding-right:250px">批示内容：
+          <li v-for="(item,index) in articlesAarry" @mouseover="showElse(item.indexTooltips,index)" @mouseout="showElse(false,index)" class="ps_item">
+            <span class="bottom_item grey" @click="clickDel($event,item.instructionsId)" @mouseover="overDel" @mouseout="outDel"><img src="../../static/img/alert-delete.png" alt="" v-show="item.rowState==0&&(level==0||level==4)"></span>
+            <span class="ellipsis titleLen" style="display:block;padding-right:250px;">批示内容：
               <!-- <span v-show="getStrLen(item.title+item.date)<90?true:false"><span>{{item.title}}</span>  - <span>{{item.date}}</span></span> -->
               <!-- <el-tooltip v-show="getStrLen(item.title+item.date)>=90?true:false" class="item" effect="dark" :content="item.title+'-'+item.date" placement="bottom">
                 <span>{{item.title}}</span>  - <span>{{item.date}}</span>
@@ -72,7 +83,15 @@ export default {
   name: 'test',
   data () {
     return {
-       options: [{
+      typeOptions:[
+        {value:'',
+        label:'全部内容'},
+        {value:'0',
+        label:'它山之石'},
+        {value:'1',
+        label:'网络舆情'},
+      ],
+      options: [{
           value: '5',
           label: '全部内容'
         }, {
@@ -113,6 +132,7 @@ export default {
         strLen:0,
         IndexTooltips:false,
         showFLagIndex:false,
+        value1:'',
     }
   },
   computed: {
@@ -132,6 +152,48 @@ export default {
     },
   },
   methods:{
+    outDel:function(e){
+      var el=$(e.target).closest(".bottom_item");
+      var class_=el.hasClass('blue');
+      if(class_){
+        el.removeClass("blue").addClass("grey").find(".dele-tips").css("display","none");
+        el.find("img").attr("src","./static/img/alert-delete.png");
+      }
+      else{
+      }
+    },
+    overDel:function(e){
+      var el=$(e.target).closest(".bottom_item");
+      var class_=el.hasClass('grey');
+      if(class_){
+        el.removeClass("grey").addClass("blue").find("span").css("display","inline-block");
+        el.find("img").attr("src","./static/img/dele-blue.png");
+      }
+    },
+    clickDel(e,id){
+      var that=this;
+      console.log(e);
+      e.stopPropagation();
+      e.preventDefault();
+      if(confirm("确认删除该批示流程？")){
+        $.when(deleteInstruction(id)).done(function(data){
+          if(data.state=="0"){
+            that.$nextTick(function(){
+              var el=$(e.target).closest("li");
+              $(el).remove();
+            })
+            // window.location.reload();
+          }
+          else if(data.state=='9000'){
+            // alert("用户未登录！")
+            that.$router.push({path:'/login',query: {}});
+          }
+          else{
+            alert(data.data);
+          }
+        })
+      }
+    },
     showElse(val,index){
       this.$set(this.articlesAarry[index],"showFLagIndex",val);
       // this.articlesAarry[index]=val;
@@ -140,14 +202,14 @@ export default {
       this.$message({
         message: str,
         iconClass:'el-icon-check',
-        duration:300000000,
+        // duration:300000000,
       });
     },
     openWarn(str) {
       this.$message({
         message: str,
         type:'warning',
-        duration:300000000,
+        // duration:300000000,
         // iconClass:'el-icon-check',
       });
     },
@@ -165,6 +227,7 @@ export default {
     showPSBox:function(){
       $(".mask1").addClass("showBtn");
       $(".psBox").addClass("showBtn");
+      $("body").css("overflow","hidden");
       $(".psBox").find(".article_btn").attr("disabled",false).removeClass("is-disabled");
       this.$store.dispatch('changeAlertBox',{"type":'0'}).then(function(resp){});
       this.$store.dispatch('changePsShow',{psShow:{}}).then(function(resp){});
@@ -173,7 +236,7 @@ export default {
       var that=this;
       that.pageNo=1;
       this.articlesAarry=[];
-      $.when(searchInstructionList(that.userid,that.input2,that.value,that.pageNo)).done(function(data){
+      $.when(searchInstructionList(that.userid,that.input2,that.value,that.pageNo,that.value1)).done(function(data){
         if(data.state=="0"){
           that.insertData(data);
         }
@@ -190,7 +253,7 @@ export default {
         var that=this;
         this.pageNo=1,
         this.articlesAarry=[];
-        $.when(searchInstructionList(that.userid,that.input2,val,that.pageNo)).done(function(data){
+        $.when(searchInstructionList(that.userid,that.input2,val,that.pageNo,that.value1)).done(function(data){
           if(data.state=="0"){
             that.insertData(data);
           }
@@ -218,6 +281,23 @@ export default {
         //   this.articlesAarry=this.articles.filter(this.filterCallback_5); 
         // }
 
+    },
+    optionChangeHandler1(val){
+        var that=this;
+        this.pageNo=1,
+        this.articlesAarry=[];
+        $.when(searchInstructionList(that.userid,that.input2,that.value,that.pageNo,val)).done(function(data){
+          if(data.state=="0"){
+            that.insertData(data);
+          }
+          else if(data.state=='9000'){
+            // alert("用户未登录！")
+            that.$router.push({path:'/login',query: {}});
+          }
+          else{
+            alert(data.data);
+          }
+        })
     },
     // filterCallback_1(item,index,array){
     //   if(item.rowState=='0'){
@@ -353,7 +433,7 @@ export default {
       //   })
       // }
       // else{
-        $.when(searchInstructionList(that.userid,that.input2,that.value,that.pageNo)).done(function(data){
+        $.when(searchInstructionList(that.userid,that.input2,that.value,that.pageNo,that.value1)).done(function(data){
           if(data.state=="0"){
             that.insertData(data);
             that.$nextTick(function(){
@@ -388,41 +468,41 @@ export default {
     },
   },
   created(){
-    var that=this;
-    this.articlesAarry=this.articles.map(function(value,index){
-      var indexTooltips;
-      var btn_con;
-      console.log("111");
-      if(value.rowState=='0'){
-        btn_con="流程已结束";
-      }
-      else if(value.rowState=='1'){
-        btn_con="新反馈"
-      }
-      else if(value.rowState=='2'){
-        btn_con="新批示"
-      }
-      else if(value.rowState=='3'){
-        btn_con="新分发"
-      }
-      else{}
-      if(that.getStrLen(value.title+value.date)>70){
-        indexTooltips=true;
-      }
-      else{
-        indexTooltips=false;
-      }
-      return {
-        "title":value.title,
-        "date":value.date,
-        "rowState":value.rowState,
-        "btn_con":btn_con,
-        "instructionsId":value.instructionsId,
-        "indexTooltips":indexTooltips,
-        "showFLagIndex":false,
-      }
-      // that.strLen=that.getStrLen(value.title);
-    },that)
+    // var that=this;
+    // this.articlesAarry=this.articles.map(function(value,index){
+    //   var indexTooltips;
+    //   var btn_con;
+    //   console.log("111");
+    //   if(value.rowState=='0'){
+    //     btn_con="流程已结束";
+    //   }
+    //   else if(value.rowState=='1'){
+    //     btn_con="新反馈"
+    //   }
+    //   else if(value.rowState=='2'){
+    //     btn_con="新批示"
+    //   }
+    //   else if(value.rowState=='3'){
+    //     btn_con="新分发"
+    //   }
+    //   else{}
+    //   if(that.getStrLen(value.title+value.date)>70){
+    //     indexTooltips=true;
+    //   }
+    //   else{
+    //     indexTooltips=false;
+    //   }
+    //   return {
+    //     "title":value.title,
+    //     "date":value.date,
+    //     "rowState":value.rowState,
+    //     "btn_con":btn_con,
+    //     "instructionsId":value.instructionsId,
+    //     "indexTooltips":indexTooltips,
+    //     "showFLagIndex":false,
+    //   }
+    //   // that.strLen=that.getStrLen(value.title);
+    // },that)
     // console.log(this.articlesAarry);
     // this.articlesAarry=this.articles;
     // this.openWarn("谢谢谢谢🙏！");
@@ -460,4 +540,24 @@ export default {
 <style lang="less" scoped>
   @import '../../static/less/init.less';
   @import '../../static/less/instructions.less';
+  .psCenter{
+    .ps_item{
+      position: relative;
+    }
+    .titleLen{
+      padding-left:30px;
+    }
+    .bottom_item{
+      cursor:pointer;
+      position: absolute;
+      left:0px;
+      .verticalCenter;
+      img{
+        display: inline-block;
+        width: 23px;
+        height: 23px;
+        vertical-align: middle;
+      }
+    }
+  }
 </style>

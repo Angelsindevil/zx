@@ -30,7 +30,9 @@ export const changeAlertBox= (state,payload) => {
 	state.psBox.title=payload.title;
 	state.psBox.type=payload.type;
 	state.psBox.psObj=payload.psObj
+	state.psBox.insType=payload.insType
 	state.psBox.instructionId=payload.instructionId;
+
 }
 export const changeClrObj= (state,payload) => {
 	state.clrId=payload.clrId;
@@ -82,6 +84,10 @@ export const changepsCount= (state,payload) => {
 export const changeRelease= (state,payload) => {
 	state.releaseObj.id=payload.id;
 	state.releaseObj.type=payload.type;
+	state.releaseObj.event=payload.event;
+}
+export const changeArtEvent= (state,payload) => {
+	state.artEvent=payload;
 }
 export const changeUserFlag= (state,payload) => {//用户刷新标识
 	state.userFlag=payload;

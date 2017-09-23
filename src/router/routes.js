@@ -17,6 +17,7 @@ import contentAdd from '../components/contentAdd'
 import orgManage from '../components/orgManage'
 import login from '../components/login'
 import homePage from '../components/homePage'
+import testNew from '../components/testNew'
 
 // const AllInfomation = resolve => require(['../components/AllInfomation.vue'], resolve)
 // const Article = resolve => require(['../components/Article.vue'], resolve)
@@ -43,10 +44,11 @@ const routes = [
   // { path: '/', component:login},
   {path: '/', redirect: '/login'},
   { path: '/homePage', component:homePage,children:[
+    // {path: 'testNew', component: testNew},
     {path: 'dynamicArticle', component: AllInfomation},
     {path: 'manualArticle', component: AllInfomation},
     {path: 'articleList', component: AllInfomation},
-    {path: 'login', component: login},
+    // {path: 'login', component: login},
     {path:'articleDetail',component:Article},
     {path:'IncludeList',component:IncludeList},
     {path:'ReportList',component:reportList},

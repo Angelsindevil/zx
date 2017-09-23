@@ -2,7 +2,7 @@
   <div class="article">
     <div class="title_bar">
       <p style="padding-right:110px">
-        <span class="ellipsis" style="display:block;font-size: 18px;color: #222;padding-top:0">{{title}}</span>
+        <span style="display:block;font-size: 18px;color: #222;padding-top:0">{{title}}</span>
         <span>
           <span>来源：<span class="ellipsis" style="display: inline-block;width: 65%;vertical-align: middle;">{{source}}</span></span>
           <span class="linkStyle" @click="goSomewhere($event,link)" style="color: blue;text-decoration: underline;cursor:pointer">来源链接</span>
@@ -20,7 +20,7 @@
        style="width:80px;font-size:12px"
        v-show="(level!=3)?true:false"
        :class="isRelease=='1'?'grey':false"
-       @mouseover="overBtn" @mouseout="outBtn"
+       @mouseover="overBtn($event,isRelease)" @mouseout="outBtn($event,isRelease)"
        >
         <span>{{isRelease=='1'?'已发布':'发布'}}</span>
        </span>
@@ -60,6 +60,7 @@
   </div>
 </template>
 <script>
+import {mapGetters} from 'vuex'
 export default {
   name: 'article',
   data () {
@@ -87,7 +88,35 @@ export default {
       userSource:{},
       level:'',
       userid:'',
+      isRelease:'',
     }
+  },
+  computed: {
+    ...mapGetters({
+      artFlag:'artFlag',
+      artEvent:'artEvent',
+    })
+  },
+  watch:{
+    artFlag:{
+      handler: function (val, oldVal) {//取消所有选择
+        if(val){
+          // window.location.reload();
+          this.isRelease='1';
+        }
+      },
+      deep:true,
+      immediate: true,
+    },
+    artEvent:{
+      handler: function (val, oldVal) {//取消所有选择
+        if(val!=undefined){
+          var el=$(val.target).closest(".includeBtn").addClass("grey").children("span").text("已发布");
+        }
+      },
+      deep:true,
+      immediate: true,
+    },
   },
   methods:{
     doThis:function(){
@@ -109,11 +138,16 @@ export default {
     },
     clickBtn:function(e,id){
       var that=this;
+      var el=$(e.target).closest(".includeBtn");
       e.stopPropagation();
       e.preventDefault();
       $.when(cancelArticle(id)).done(function(data){
         if(data.state=="0"){
-          window.location.reload();
+          // that.isRelease='0';
+          // window.location.reload();
+          $(el).removeClass("grey");
+          $(el).children("span").text("发布");
+          that.isRelease='0'
         }
         else if(data.state=='9000'){
           // alert("用户未登录！")
@@ -124,20 +158,24 @@ export default {
         }
       })
     },
-    outBtn:function(e){
-      var el=$(e.target).closest(".includeBtn");
-      var class_=el.hasClass('includeBtn_blue');
-      if(class_){
-        el.removeClass("includeBtn_blue").find("span").text("已发布");
-      }
-      else{
+    outBtn:function(e,isRelease){
+      if(isRelease=='1'){
+        var el=$(e.target).closest(".includeBtn");
+        var class_=el.hasClass('includeBtn_blue');
+        if(class_){
+          el.removeClass("includeBtn_blue").find("span").text("已发布");
+        }
+        else{
+        }
       }
     },
-    overBtn:function(e){
-      var el=$(e.target).closest(".includeBtn");
-      var class_=el.hasClass('includeBtn_blue');
-      if(!class_){
-        el.addClass("includeBtn_blue").find("span").text("取消发布");
+    overBtn:function(e,isRelease){
+      if(isRelease=='1'){
+        var el=$(e.target).closest(".includeBtn");
+        var class_=el.hasClass('includeBtn_blue');
+        if(!class_){
+          el.addClass("includeBtn_blue").find("span").text("取消发布");
+        }
       }
     },
     // releaseBtn(id){
@@ -153,8 +191,10 @@ export default {
     //   })
     // },
     releaseBtn(id,e,type){
-      this.$store.dispatch('changeRelease',{id:id,type:type}).then(function(resp){});
+      this.isRelease='0';
+      this.$store.dispatch('changeRelease',{id:id,type:type,event:e}).then(function(resp){});
       $(".mask1,.typeBox").addClass("showBtn");
+      $("body").css("overflow","hidden");
     },
     // includeThis_:function(e){
     //   var el=$(e.target).closest(".includeBtn");
