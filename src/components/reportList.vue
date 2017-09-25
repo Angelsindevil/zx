@@ -167,6 +167,7 @@ export default {
       username:'',
       level:'',
       fwLink:'',
+      file_val:'',
       // fwLink:'192.168.2.108:9000',
     }
   },
@@ -283,6 +284,7 @@ export default {
       })
     },
     linkChange:function(e){
+      console.log(this.file_val);
       var that=this;
       var file = e.target.files; //获取图片资源
       var formData = new FormData();
@@ -299,6 +301,7 @@ export default {
               // window.location.reload();
               that.open("报告上传成功！");
               that.getInitReporter(that.type);
+              $(e.target).val("");
             }
             else if(data.state=='9000'){
               // alert("用户未登录！")
@@ -434,6 +437,12 @@ export default {
     },
     getInitReporter(type){
       var that=this;
+      if(this.type=='1'){
+        this.listFilter_2.splice(0);
+      }
+      else{
+        this.listFilter_1.splice(0);
+      }
       $.when(getReporter(this.userid,type,1)).done(function(data){
         if(data.state=="0"){
           // var res=data.data;
@@ -453,7 +462,7 @@ export default {
   },
   created(){
     // var that=this;
-    // this.fwLink=window.location.host;//有用
+    this.fwLink=window.location.host;//有用
 
     this.userSource=JSON.parse(localStorage.getItem("userSource"));
     this.username=this.userSource?this.userSource.username:'';

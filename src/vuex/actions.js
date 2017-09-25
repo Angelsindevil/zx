@@ -38,7 +38,7 @@ export const changeAlertBox=(store,payload)=>{
     return new Promise(function(resolve, reject) {
         console.log("flag1");
         console.log(payload.flag);
-        store.commit('changeAlertBox',{"type":payload.type,"psObj":payload.psObj,"title":payload.title,"instructionId":payload.instructionId,'insType':payload.insType,'flag':payload.flag});
+        store.commit('changeAlertBox',{"type":payload.type,"psObj":payload.psObj,"title":payload.title,"instructionId":payload.instructionId,'insType':payload.insType,'flag':payload.flag,'psType':payload.psType});
         resolve("ok");
     })
 }

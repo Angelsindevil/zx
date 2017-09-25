@@ -35,6 +35,7 @@ export const changeAlertBox= (state,payload) => {
 	state.psBox.insType=payload.insType;
 	state.psBox.instructionId=payload.instructionId;
 	state.psBox.flag=payload.flag;
+	state.psBox.psType=payload.psType;
 
 }
 export const changeClrObj= (state,payload) => {

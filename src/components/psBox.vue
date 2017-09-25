@@ -250,7 +250,7 @@
       immediate: true,
     },
     singleObj:{
-      handler: function (val, oldVal) {//文章选择后，相应的渲染
+      handler: function (val, oldVal) {//批示人选择后 相应渲染
         console.log(val);
         if(val.value!=undefined){
           if(this.level=='0'||this.level=='4'){//权限为管理员 批示人可选
@@ -269,6 +269,11 @@
         console.log(val);
         if(val.flag){
           console.log('psBox1111');
+          if(val.psType=='0'){//批示管理新增
+            this.currentRow="";
+            this.articleId="";
+          }
+          else{}
           this.date="";
           if(val.psObj==undefined){
             this.psObj=["系统管理员","d733ed4b5afd11e79ea400269e28ab11"];

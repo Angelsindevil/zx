@@ -1,5 +1,6 @@
 <template>
   <!-- 批示人选择弹窗 -->
+  <!-- 弃用 -->
   <div class="peopleBox alertStyle" style="z-index:5">
     <div class="alertTop">{{titleName}}<span @click="hideArtBox"><img src="../../static/img/cancel.png"></span></div>
     <div class="alertContent">
@@ -82,7 +83,7 @@
       },
       multiBrush:{
         handler: function (val, oldVal) {//监听学校和指标数组，只要学科id没有变化，则不变化
-          if(val){
+          if(val.flag){
             this.getCurrentUser();
           }
         },
@@ -137,7 +138,7 @@
         $(selector).find(".alertContent .el-table__body-wrapper").scrollTop(height)
       },
       handleTableCurrentChange(val){//点击具体表格中的条目
-        console.log(val);
+        console.log('哈哈哈哈');
         if(val){
           if(this.commonData==this.alltableData){
             this.currentRow=val.value;

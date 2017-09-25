@@ -191,6 +191,7 @@
             })
             $.when(getAllArticles(this.userid,this.method,this.type,this.pageNo)).done(function(data){
               if(data.state=="0"){
+                that.radio=0;
                 that.insertData(data);
               }
               else if(data.state=='9000'){
@@ -360,6 +361,7 @@
             that.articleObj.value=that.commonData[0].value;
             that.articleObj.id=that.commonData[0].id;
           }
+          // that.radio=0;
         }
         else{
           if(that.pageNo==1){//只一页
@@ -372,6 +374,7 @@
             that.commonData=[];
           }
           else{//多余一页
+            // that.radio=0;
             that.$nextTick(function(){
               $(that.$refs.rightBottom).text("暂无更多");
               // $(that.$refs.rightBottom).children('span').text('暂无更多');

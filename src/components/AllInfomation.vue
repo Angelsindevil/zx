@@ -523,7 +523,7 @@ export default {
       $(".mask1").addClass("showBtn");
       $(".psBox").addClass("showBtn");
       $(".psBox").find(".article_btn").attr("disabled",false).removeClass("is-disabled");
-      this.$store.dispatch('changeAlertBox',{"type":'0','flag':true}).then(function(resp){});
+      this.$store.dispatch('changeAlertBox',{"type":'0','flag':true,'psType':'1'}).then(function(resp){});
     },
     insertData(data){
       var that=this;

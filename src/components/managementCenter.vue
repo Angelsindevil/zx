@@ -228,7 +228,7 @@ export default {
       $("body").css("overflow","hidden");
       $(".psBox").find(".article_btn").attr("disabled",false).removeClass("is-disabled");
       this.$store.dispatch('getNewUser',{'flag':true,'type':''}).then(function(resp){});
-      this.$store.dispatch('changeAlertBox',{"type":'0','flag':true}).then(function(resp){});
+      this.$store.dispatch('changeAlertBox',{"type":'0','flag':true,'psType':'0'}).then(function(resp){});
       this.$store.dispatch('changePsShow',{psShow:{'value':'','id':''}}).then(function(resp){});
     },
     handleInputClick() {

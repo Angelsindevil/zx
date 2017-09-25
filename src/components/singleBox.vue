@@ -1,5 +1,5 @@
 <template>
-  <!-- 文章选择弹窗 -->
+  <!-- 批示人选择弹窗 -->
   <div class="singleBox alertStyle">
     <div class="alertTop"><span>{{titleName}}</span><span @click="hideArtBox"><img src="../../static/img/cancel.png"></span></div>
     <div class="alertContent">
@@ -41,6 +41,7 @@
   </div>
 </template>
 <script>
+  import {mapGetters} from 'vuex'
   export default {
      name: 'app',
     data () {
@@ -93,10 +94,28 @@
         // userid:'',
       }
     },
+    computed: {
+      ...mapGetters({
+        multiBrush:'multiBrush',
+      })
+    },
+    watch:{
+      multiBrush:{
+        handler: function (val, oldVal) {//监听学校和指标数组，只要学科id没有变化，则不变化
+          if(val.flag){
+            this.getCurrentUser();
+          }
+        },
+        deep:true,
+        immediate: true,
+      },
+    },
     methods:{
       hideArtBox:function(){
         $(".mask2,.singleBox").removeClass("showBtn");
         $(".mask1").addClass("showBtn");
+        this.$store.dispatch('getNewUser',{'flag':false,'type':''}).then(function(resp){});
+        // this.$store.dispatch('getNewArt',false).then(function(resp){});
       },
       querySearch(queryString, cb) {
         var alltableData = this.commonData;
@@ -138,6 +157,7 @@
         $(selector).find(".alertContent .el-table__body-wrapper").scrollTop(height)
       },
       handleTableCurrentChange(val){//点击具体表格中的条目
+        console.log("哈哈哈哈哈");
         if(val){
           if(this.commonData==this.alltableData){
             this.currentRow=val.value;
@@ -168,37 +188,68 @@
       submit(){
         this.$store.dispatch('changeSingleObj',{singleObj:this.singleObj}).then(function(resp){});
       },
+      getCurrentUser(){
+        var that=this;
+        this.commonData.splice(0);
+        $.when(getAllUsers()).done(function(data){
+          if(data.state=="0"){
+            var res=data.data;
+            that.commonData=res.map(function(value,index){
+              return {
+                value:value.username,
+                radio:index,
+                id:value.id,
+              }
+            })
+            that.currentRow=that.commonData[0].value;
+            that.singleObj.value=that.commonData[0].value;
+            that.singleObj.id=that.commonData[0].id;
+            that.radio=0;
+            that.singleObj={
+              value:that.commonData[0].value,
+              // radio:val.i,
+              id:that.commonData[0].id,
+              // flag:'0',
+            }
+          }
+          else if(data.state=='9000'){
+            // alert("用户未登录！")
+            that.$router.push({path:'/login',query: {}});
+          }
+          else{
+            alert(data.data);
+          }
+        })
+      }
     },
     mounted() {
 
       // this.commonData=this.handlePreData(this.alltableData);//测试
 
-      var that=this;
-      // this.userSource=JSON.parse(localStorage.getItem("userSource"));
-      // this.userid=this.userSource?this.userSource.id:'';
-      $.when(getAllUsers()).done(function(data){
-        if(data.state=="0"){
-          var res=data.data;
-          that.commonData=res.map(function(value,index){
-            return {
-              value:value.username,
-              radio:index,
-              id:value.id,
-            }
-          })
-          that.currentRow=that.commonData[0].value;
-          that.singleObj.value=that.commonData[0].value;
-          that.singleObj.id=that.commonData[0].id;
-        }
-        else if(data.state=='9000'){
-          // alert("用户未登录！")
-          that.$router.push({path:'/login',query: {}});
-        }
-        else{
-          alert(data.data);
-        }
-      })
-      var that=this;
+      // var that=this;
+      // $.when(getAllUsers()).done(function(data){
+      //   if(data.state=="0"){
+      //     var res=data.data;
+      //     that.commonData=res.map(function(value,index){
+      //       return {
+      //         value:value.username,
+      //         radio:index,
+      //         id:value.id,
+      //       }
+      //     })
+      //     that.currentRow=that.commonData[0].value;
+      //     that.singleObj.value=that.commonData[0].value;
+      //     that.singleObj.id=that.commonData[0].id;
+      //   }
+      //   else if(data.state=='9000'){
+      //     // alert("用户未登录！")
+      //     that.$router.push({path:'/login',query: {}});
+      //   }
+      //   else{
+      //     alert(data.data);
+      //   }
+      // })
+      this.getCurrentUser();
     }
 
   }

@@ -4,6 +4,7 @@
       <p>消息反馈-我的批示：
         <span>批示流程详细信息</span>
       </p>
+      <span class="type_box">类别：{{detailType}}</span>
       <router-link to='/homePage/managementCenter'><el-button class="btn_position">返回</el-button></router-link>
     </div>
     <div class="rightContent" v-for="(item,index) in articlesFilter">
@@ -138,6 +139,7 @@ export default {
       // fwLink:'',
       fwLink:'192.168.2.108:9000',
       insType:'',
+      detailType:'它山之石',
     }
   },
   computed: {
@@ -236,6 +238,13 @@ export default {
           that.articleName=res.results[0].title;
           that.articlesFilter=res.results;
           that.insType=res.results[0].insType;
+          if(res.results[0].insType=='0'){
+            that.detailType="它山之石";
+          }
+          else if(res.results[0].insType=='1'){
+            that.detailType="网络舆情";
+          }
+          else{}
           that.psObj=res.psPeople;
           // for (var i=0;i<res.results.length;i++) {
           //   if(res.results[i].type=='0'){
@@ -572,5 +581,17 @@ export default {
   }
   .borderNone{
     border-bottom:none!important;
+  }
+  .type_box{
+    display: inline-block;
+    padding: 8px;
+    // background-color: #f8f8f8;
+    // border: 1px solid #e4e4e4;
+    position: absolute;
+    right: 100px;
+    top: 12px;
+    border-radius: 5px;
+    font-size: 13px;
+    color: #fff;
   }
 </style>

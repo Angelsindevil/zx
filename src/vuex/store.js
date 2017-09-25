@@ -47,6 +47,7 @@ const state = {
 		instructionId:'',
 		insType:'',
 		flag:false,
+		psType:'',
 	},
 	clrId:'',
 	unitVal:'',
