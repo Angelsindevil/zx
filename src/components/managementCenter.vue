@@ -4,8 +4,6 @@
     <div class="rightBar">
       <p>{{level=='2'?'消息中心-批示内容':'平台管理-批示管理'}}
         <span>共计<span>{{totalNum}}</span>份批示，今日收到批示和反馈<span>{{todayNum}}</span>份</span>
-      }
-      }
       </p>
       <!-- <div class="admin_ui_input">
         <input type="" name="" placeholder="搜索批示和反馈的内容">
@@ -229,8 +227,9 @@ export default {
       $(".psBox").addClass("showBtn");
       $("body").css("overflow","hidden");
       $(".psBox").find(".article_btn").attr("disabled",false).removeClass("is-disabled");
-      this.$store.dispatch('changeAlertBox',{"type":'0'}).then(function(resp){});
-      this.$store.dispatch('changePsShow',{psShow:{}}).then(function(resp){});
+      this.$store.dispatch('getNewUser',{'flag':true,'type':''}).then(function(resp){});
+      this.$store.dispatch('changeAlertBox',{"type":'0','flag':true}).then(function(resp){});
+      this.$store.dispatch('changePsShow',{psShow:{'value':'','id':''}}).then(function(resp){});
     },
     handleInputClick() {
       var that=this;

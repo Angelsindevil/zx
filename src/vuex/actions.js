@@ -36,7 +36,9 @@ export const changeOrgState=(store,payload)=>{
 }
 export const changeAlertBox=(store,payload)=>{
     return new Promise(function(resolve, reject) {
-        store.commit('changeAlertBox',{"type":payload.type,"psObj":payload.psObj,"title":payload.title,"instructionId":payload.instructionId,'insType':payload.insType});
+        console.log("flag1");
+        console.log(payload.flag);
+        store.commit('changeAlertBox',{"type":payload.type,"psObj":payload.psObj,"title":payload.title,"instructionId":payload.instructionId,'insType':payload.insType,'flag':payload.flag});
         resolve("ok");
     })
 }
@@ -163,6 +165,18 @@ export const changepsFlag=(store,flag)=>{//用户管理刷新标识
 export const changepsDetailFlag=(store,flag)=>{//用户管理刷新标识
     return new Promise(function(resolve, reject) {
         store.commit('changepsDetailFlag',flag);
+        resolve("ok");
+    })
+}
+export const getNewArt=(store,flag)=>{//用户管理刷新标识
+    return new Promise(function(resolve, reject) {
+        store.commit('getNewArt',flag);
+        resolve("ok");
+    })
+}
+export const getNewUser=(store,flag)=>{//用户管理刷新标识
+    return new Promise(function(resolve, reject) {
+        store.commit('getNewUser',flag);
         resolve("ok");
     })
 }

@@ -140,25 +140,25 @@ export default {
         minHeight: "800px",
       },
       userSource:{},
-      // options: [],
+      options: [],
       psNum:'',
       xtNum:'',
       userid:'',
       // url:'http://192.168.2.108:9000',
       url:'', 
-      options: [
-      {
-        value: '全部内容',
-        label: '全部内容'
-      }, 
-      {
-        value: '动态资讯',
-        label: '动态资讯'
-      }, 
-      {
-        value: '校内信息',
-        label: '校内信息'
-      }],
+      // options: [
+      // {
+      //   value: '全部内容',
+      //   label: '全部内容'
+      // }, 
+      // {
+      //   value: '动态资讯',
+      //   label: '动态资讯'
+      // }, 
+      // {
+      //   value: '校内信息',
+      //   label: '校内信息'
+      // }],
     }
   },
   computed: {
@@ -329,6 +329,9 @@ export default {
           }
         })
         that.options.splice(0,0,{value:"全部内容",label:"全部资讯"});
+        that.$nextTick(function(){
+          matchMenu();
+        })
       }
       else if(data.state=='9000'){
         // alert("用户未登录！")

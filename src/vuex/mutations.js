@@ -25,13 +25,16 @@ export const changeUserState= (state,payload) => {
 	state.userState=payload.userState;
 }
 export const changeAlertBox= (state,payload) => {
+	console.log("flag");
+	console.log(payload.flag);
 	// state.type=payload.type;
 	// state.psObj=payload.psObj;
 	state.psBox.title=payload.title;
 	state.psBox.type=payload.type;
-	state.psBox.psObj=payload.psObj
-	state.psBox.insType=payload.insType
+	state.psBox.psObj=payload.psObj;
+	state.psBox.insType=payload.insType;
 	state.psBox.instructionId=payload.instructionId;
+	state.psBox.flag=payload.flag;
 
 }
 export const changeClrObj= (state,payload) => {
@@ -106,4 +109,10 @@ export const changepsFlag= (state,payload) => {//批示列表刷新标识
 }
 export const changepsDetailFlag= (state,payload) => {//批示详情刷新标识
 	state.psDetailFlag=payload;
+}
+export const getNewArt= (state,payload) => {//批示详情刷新标识
+	state.artBrush=payload;
+}
+export const getNewUser= (state,payload) => {//批示详情刷新标识
+	state.multiBrush=payload;
 }

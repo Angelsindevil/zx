@@ -1,6 +1,5 @@
 <template>
   <!-- 批示人选择弹窗 -->
-  <!-- 可弃用？ -->
   <div class="peopleBox alertStyle" style="z-index:5">
     <div class="alertTop">{{titleName}}<span @click="hideArtBox"><img src="../../static/img/cancel.png"></span></div>
     <div class="alertContent">
@@ -70,12 +69,22 @@
     computed: {
       ...mapGetters({
         clrId: 'clrId',
+        multiBrush:'multiBrush',
       })
     },
     watch:{
       clrId:{
         handler: function (val, oldVal) {//监听学校和指标数组，只要学科id没有变化，则不变化
           console.log(val);
+        },
+        deep:true,
+        immediate: true,
+      },
+      multiBrush:{
+        handler: function (val, oldVal) {//监听学校和指标数组，只要学科id没有变化，则不变化
+          if(val){
+            this.getCurrentUser();
+          }
         },
         deep:true,
         immediate: true,
@@ -150,29 +159,33 @@
       submit(){
         this.$store.dispatch('changePleObj',{peopleObj:this.peopleObj}).then(function(resp){});
       },
+      getCurrentUser(){
+        var that=this;
+        this.commonData.splice();
+        $.when(getAllUsers()).done(function(data){
+          if(data.state==0){
+            var res=data.data;
+            that.commonData=res.map(function(value,index){
+              return{
+                value:value.name,
+                i:index,
+                id:value.id,
+              }
+            })
+          }
+          else if(data.state=='9000'){
+            // alert("用户未登录！")
+            that.$router.push({path:'/login',query: {}});
+          }
+          else{
+            alert(data.data);
+          }
+        })
+      }
     },
     mounted() {
-      // this.commonData=this.handlePreData(this.alltableData);
-      var that=this;
-      $.when(getAllUsers()).done(function(data){
-        if(data.state==0){
-          var res=data.data;
-          that.commonData=res.map(function(value,index){
-            return{
-              value:value.name,
-              i:index,
-              id:value.id,
-            }
-          })
-        }
-        else if(data.state=='9000'){
-          // alert("用户未登录！")
-          that.$router.push({path:'/login',query: {}});
-        }
-        else{
-          alert(data.data);
-        }
-      })
+      this.getCurrentUser();
+      // this.commonData=this.handlePreData(this.alltableData);    
     }
   }
 </script>

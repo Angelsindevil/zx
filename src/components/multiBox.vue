@@ -35,7 +35,7 @@
 		</div>
 	  	<div class="alertBottom">
 	  		<span class="rightBot">
-	    		<span class="bg_green" @click="hideMultiBox(),submit()">确定</span> 
+	    		<span class="bg_green" @click="submit">确定</span> 
 	    		<span @click="hideMultiBox" class="bg_cancle">取消</span>
 	    	</span>    
 	  	</div>
@@ -47,6 +47,7 @@
 		name: 'app',
 	 	data () {
 	    return {
+	      type:'',
 	      input2:'',
 	      input3:'',
 	      state2:'',
@@ -80,31 +81,53 @@
 	  },
 	  computed: {
 	    ...mapGetters({
-	      clearAll:'clearAll'
+	      clearAll:'clearAll',
+	      multiBrush:'multiBrush',
 	    })
 	  },
 	  watch:{
 	    clearAll:{
 	      handler: function (val, oldVal) {//取消所有选择
 	      	console.log("execute");
-	      	this.$nextTick(function () {
-	      		$(".multiBox .el-table__body-wrapper").find("tbody tr").each(function(index,element){
-                  $(element).children('td').find('.el-checkbox__input').removeClass("is-checked");
-                  // $(element).children('td').eq(0).children('div').addClass("ellipsis");
-              	})
-		    })	
+	      	this.getCurrentUser();
+	     //  	this.$nextTick(function () {
+	     //  		$(".multiBox .el-table__body-wrapper").find("tbody tr").each(function(index,element){
+      //             $(element).children('td').find('.el-checkbox__input').removeClass("is-checked");
+      //             // $(element).children('td').eq(0).children('div').addClass("ellipsis");
+      //         	})
+		    // })	
 	      },
 	      deep:true,
 	      immediate: true,
 	    },
+	    multiBrush:{
+	        handler: function (val, oldVal) {//监听学校和指标数组，只要学科id没有变化，则不变化
+	          console.log(val);
+	          if(val.flag){
+	            this.getCurrentUser();
+	          }
+	          this.type=val.type;
+	        },
+	        deep:true,
+	        immediate: true,
+	    },
 	  },
 	  methods:{
+	  	openWarn(str) {
+	      this.$message({
+	        message: str,
+	        type:'warning',
+	        // duration:300000000,
+	        // iconClass:'el-icon-check',
+	      });
+	    },
 	  	toggleSelection(rows) {
 	        this.$refs.multipleTable.clearSelection();
 	    },
 	    hideMultiBox:function(){
 	      $(".mask2,.multiBox").removeClass("showBtn");
 	      $(".mask1").addClass("showBtn");
+	      this.$store.dispatch('getNewUser',{'flag':false,'type':''}).then(function(resp){});
 	    },
 	    querySearch(queryString, cb) {
 	      var alltableData = this.commonData;
@@ -188,33 +211,49 @@
 	    },
 	    submit(){
 	    	console.log(this.selectArr);
-	    	this.$store.dispatch('changeSelArr',{selectArr:this.selectArr}).then(function(resp){});
+	    	if(this.type=='2'){
+		      	if(this.selectArr.id.length>1){
+		      		this.openWarn('反馈人数不能大于1');
+		      	}
+		      	else{
+		      		this.$store.dispatch('changeSelArr',{selectArr:this.selectArr}).then(function(resp){});
+		      		this.hideMultiBox();
+		      	}
+		    }
+		    else{
+		    	this.$store.dispatch('changeSelArr',{selectArr:this.selectArr}).then(function(resp){});
+		      	this.hideMultiBox();
+		    }
 	    },
+	    getCurrentUser(){
+	    	var that=this;
+	    	this.commonData.splice();
+		  	$.when(getAllUsers()).done(function(data){
+		        if(data.state==0){
+		          var res=data.data;
+		          that.commonData=res.map(function(value,index){
+		            return{
+		              value:value.username,
+		              i:index,
+		              id:value.id,
+		            }
+		          })
+		        }
+		        else if(data.state=='9000'){
+		            // alert("用户未登录！")
+		            that.$router.push({path:'/login',query: {}});
+		        }
+		        else{
+		          alert(data.data);
+		        }
+		    })
+	    }
 	  },
 	  // mounted() {
 	  //   this.commonData=this.handlePreData(this.alltableData);
 	  // },
 	  created(){
-	  	var that=this;
-	  	$.when(getAllUsers()).done(function(data){
-	        if(data.state==0){
-	          var res=data.data;
-	          that.commonData=res.map(function(value,index){
-	            return{
-	              value:value.username,
-	              i:index,
-	              id:value.id,
-	            }
-	          })
-	        }
-	        else if(data.state=='9000'){
-	            // alert("用户未登录！")
-	            that.$router.push({path:'/login',query: {}});
-	        }
-	        else{
-	          alert(data.data);
-	        }
-	    })
+	  	this.getCurrentUser();
 	  }
 	}
 </script>

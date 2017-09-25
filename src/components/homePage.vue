@@ -166,6 +166,12 @@ export default {
       },
     },
   methods:{
+    open(str) {
+      this.$message({
+        message: str,
+        iconClass:'el-icon-check',
+      });
+    },
     showTop(){
       $(document).scrollTop(0);
     },
@@ -183,7 +189,8 @@ export default {
         var that=this;
         $.when(logOut(this.userId)).done(function(data){
           if(data.state=="0"){
-            alert("退出登录成功！");
+            // alert("退出登录成功！");
+            that.open("退出登录成功！");
             that.$router.push({path:'/login',query: {}});
           }
           else if(data.state=='9000'){

@@ -201,74 +201,84 @@ export default {
       add:'',
       articlesAarry:[
       ],
-      // tableData:{
-      //   list:[
-      //     {
-      //         'id':'1',
-      //         "title":'湖南：每年遴选30名院士推荐名单，重点培养45岁以下人才！',
-      //         'source':'山东大学新闻网',
-      //         'link':'http://www.news.zju.edu.cn/',
-      //         'type':'国家动态',
-      //         'date':'2014-06-11',
-      //     },
-      //     {
-      //         'id':'2',
-      //         "title":'2016年度国家科学技术奖正式公布，128所高校获奖',
-      //         'source':'山东大学新闻网',
-      //         'link':'http://www.news.zju.edu.cn/',
-      //         'type':'国家动态',
-      //         'date':'2014-06-11',
-      //     },
-      //     {
-      //         'id':'1',
-      //         "title":'湖南：每年遴选30名院士推荐名单，重点培养45岁以下人才！',
-      //         'source':'山东大学新闻网',
-      //         'link':'http://www.news.zju.edu.cn/',
-      //         'type':'国家动态',
-      //         'date':'2014-06-11',
-      //     },
-      //     {
-      //         'id':'2',
-      //         "title":'2016年度国家科学技术奖正式公布，128所高校获奖',
-      //         'source':'山东大学新闻网',
-      //         'link':'http://www.news.zju.edu.cn/',
-      //         'type':'国家动态',
-      //         'date':'2014-06-11',
-      //     },
-      //     {
-      //         'id':'1',
-      //         "title":'湖南：每年遴选30名院士推荐名单，重点培养45岁以下人才！',
-      //         'source':'山东大学新闻网',
-      //         'link':'http://www.news.zju.edu.cn/',
-      //         'type':'国家动态',
-      //         'date':'2014-06-11',
-      //     },
-      //     {
-      //         'id':'2',
-      //         "title":'2016年度国家科学技术奖正式公布，128所高校获奖',
-      //         'source':'山东大学新闻网',
-      //         'link':'http://www.news.zju.edu.cn/',
-      //         'type':'国家动态',
-      //         'date':'2014-06-11',
-      //     },
-      //     {
-      //         'id':'1',
-      //         "title":'湖南：每年遴选30名院士推荐名单，重点培养45岁以下人才！',
-      //         'source':'山东大学新闻网',
-      //         'link':'http://www.news.zju.edu.cn/',
-      //         'type':'国家动态',
-      //         'date':'2014-06-11',
-      //     },
-      //     {
-      //         'id':'2',
-      //         "title":'2016年度国家科学技术奖正式公布，128所高校获奖',
-      //         'source':'山东大学新闻网',
-      //         'link':'http://www.news.zju.edu.cn/',
-      //         'type':'国家动态',
-      //         'date':'2014-06-11',
-      //     },
-      //   ],
-      // },
+      tableData:{
+        list:[
+          {
+              'id':'1',
+              "title":'湖南：每年遴选30名院士推荐名单，重点培养45岁以下人才！',
+              'source':'山东大学新闻网',
+              'link':'http://www.news.zju.edu.cn/',
+              'type':'国家动态',
+              'date':'2014-06-11',
+              'summary':'测试测试',
+          },
+          {
+              'id':'2',
+              "title":'2016年度国家科学技术奖正式公布，128所高校获奖',
+              'source':'山东大学新闻网',
+              'link':'http://www.news.zju.edu.cn/',
+              'type':'国家动态',
+              'date':'2014-06-11',
+              'summary':'测试测试',
+          },
+          {
+              'id':'1',
+              "title":'湖南：每年遴选30名院士推荐名单，重点培养45岁以下人才！',
+              'source':'山东大学新闻网',
+              'link':'http://www.news.zju.edu.cn/',
+              'type':'国家动态',
+              'date':'2014-06-11',
+              'summary':'测试测试',
+          },
+          {
+              'id':'2',
+              "title":'2016年度国家科学技术奖正式公布，128所高校获奖',
+              'source':'山东大学新闻网',
+              'link':'http://www.news.zju.edu.cn/',
+              'type':'国家动态',
+              'date':'2014-06-11',
+              'summary':'测试测试',
+          },
+          {
+              'id':'1',
+              "title":'湖南：每年遴选30名院士推荐名单，重点培养45岁以下人才！',
+              'source':'山东大学新闻网',
+              'link':'http://www.news.zju.edu.cn/',
+              'type':'国家动态',
+              'date':'2014-06-11',
+              'summary':'测试测试',
+          },
+          {
+              'id':'2',
+              "title":'2016年度国家科学技术奖正式公布，128所高校获奖',
+              'source':'山东大学新闻网',
+              'link':'http://www.news.zju.edu.cn/',
+              'type':'国家动态',
+              'date':'2014-06-11',
+              'summary':'测试测试',
+          },
+          {
+              'id':'1',
+              "title":'湖南：每年遴选30名院士推荐名单，重点培养45岁以下人才！',
+              'source':'山东大学新闻网',
+              'link':'http://www.news.zju.edu.cn/',
+              'type':'国家动态',
+              'date':'2014-06-11',
+              'summary':'测试测试',
+          },
+          {
+              'id':'2',
+              "title":'2016年度国家科学技术奖正式公布，128所高校获奖',
+              'source':'山东大学新闻网',
+              'link':'http://www.news.zju.edu.cn/',
+              'type':'国家动态',
+              'date':'2014-06-11',
+              'summary':'测试测试',
+          },
+        ],
+        updateNum:10,
+        includeNum:5
+      },
       flag:false,
       pageNo:1,
       userSource:{},
@@ -475,10 +485,14 @@ export default {
           "id":id,
         }
         if(state=="0"){//文章不在批示中，可新增批示
+          console.log("hhhhhh ");
           this.$store.dispatch('changeNewArticle',{newArcticle:articleObj}).then(function(resp){});
           this.$store.dispatch('changePsShow',{psShow:psObj}).then(function(resp){});
+          this.$store.dispatch('getNewUser',{'flag':true,'type':''}).then(function(resp){});
           // this.$store.dispatch('changeArtObj',{articleObj:this.articleObj}).then(function(resp){});
           this.showPSBox();
+          $(".psBox").addClass("alertStyle_");
+          $(".psBox").find(".article_btn").attr("disabled",true).addClass("is-disabled");
         }
         else{
           el.find("span").text("批示中");
@@ -509,7 +523,7 @@ export default {
       $(".mask1").addClass("showBtn");
       $(".psBox").addClass("showBtn");
       $(".psBox").find(".article_btn").attr("disabled",false).removeClass("is-disabled");
-      this.$store.dispatch('changeAlertBox',{"type":'0'}).then(function(resp){});
+      this.$store.dispatch('changeAlertBox',{"type":'0','flag':true}).then(function(resp){});
     },
     insertData(data){
       var that=this;

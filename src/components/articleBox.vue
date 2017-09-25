@@ -162,6 +162,7 @@
     computed: {
       ...mapGetters({
         newArcticle: 'newArcticle',
+        artBrush:'artBrush',
       })
     },
     watch:{
@@ -174,6 +175,31 @@
           this.articleObj={
             value:val.value,
             id:val.id,
+          }
+        },
+        deep:true,
+        immediate: true,
+      },
+      artBrush:{
+        handler: function (val, oldVal) {//监听学校和指标数组，只要学科id没有变化，则不变化
+          if(val){
+            this.pageNo=1;
+            var that=this;
+            this.commonData.splice(0);
+            this.$nextTick(function(){
+              $(".el-table__empty-block .el-table__empty-text").text("正在加载文章...");
+            })
+            $.when(getAllArticles(this.userid,this.method,this.type,this.pageNo)).done(function(data){
+              if(data.state=="0"){
+                that.insertData(data);
+              }
+              else if(data.state=='9000'){
+                that.$router.push({path:'/login',query: {}});
+              }
+              else{
+                alert(data.data);
+              }
+            })
           }
         },
         deep:true,
@@ -204,6 +230,7 @@
       hideArtBox:function(){
         $(".mask2,.articleBox").removeClass("showBtn");
         $(".mask1").addClass("showBtn");
+        this.$store.dispatch('getNewArt',false).then(function(resp){});
       },
       querySearch(queryString, cb) {
         var alltableData = this.commonData;
@@ -251,7 +278,7 @@
           // this.radio1=this.radio;
         }
         else if(!this.isSelect){
-          this.input2=item.value;
+          // this.input2=item.value;//有用吗？
           // this.radio2=this.radio;
         }
         var height=$(selector).find(".article_table tbody").children("tr").eq(i).position().top;
@@ -264,7 +291,7 @@
             // this.radio1=val.i;
           }
           else if(!this.isSelect){
-            this.input2=val.value;
+            // this.input2=val.value;//有用吗？
             // this.radio2=val.i;
           }
           console.log(val);

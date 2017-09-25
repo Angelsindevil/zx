@@ -49,3 +49,7 @@ export const artFlag=state=>state.artFlag//弹窗类型
 export const psDetailFlag=state=>state.psDetailFlag//弹窗类型
 
 export const artEvent=state=>state.artEvent//弹窗类型
+
+export const artBrush=state=>state.artBrush//弹窗类型
+
+export const multiBrush=state=>state.multiBrush//弹窗类型

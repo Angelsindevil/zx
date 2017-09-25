@@ -172,6 +172,7 @@ export default {
     showSelect:function(command){
       var that=this;
       if(command!='gb'){
+        this.$store.dispatch('getNewUser',{'flag':true,'type':''}).then(function(resp){});
         $(".mask1").addClass("showBtn");
         $(".psBox").addClass("showBtn");
         $(".printPs").removeClass("showBtn");
@@ -180,10 +181,10 @@ export default {
         $(".psBox").find(".article_btn").attr("disabled",true).addClass("is-disabled");
       }
       if(command=="ff"){
-        this.$store.dispatch('changeAlertBox',{"type":'1',"psObj":this.psObj,'title':this.articleName,'instructionId':this.instructionId,'insType':this.insType}).then(function(resp){});
+        this.$store.dispatch('changeAlertBox',{"type":'1',"psObj":this.psObj,'title':this.articleName,'instructionId':this.instructionId,'insType':this.insType,'flag':true}).then(function(resp){});
       }
       else if(command=="fk"){
-        this.$store.dispatch('changeAlertBox',{"type":'2',"psObj":this.psObj,'title':this.articleName,'instructionId':this.instructionId,'insType':this.insType}).then(function(resp){});
+        this.$store.dispatch('changeAlertBox',{"type":'2',"psObj":this.psObj,'title':this.articleName,'instructionId':this.instructionId,'insType':this.insType,'flag':true}).then(function(resp){});
       }
       else if(command=="gb"){
         if(confirm("关闭批示流程后，无法对该批示进行转办、反馈操作，是否确定关闭流程？")){

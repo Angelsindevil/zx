@@ -166,8 +166,8 @@ export default {
       userid:'',
       username:'',
       level:'',
-      // fwLink:'',
-      fwLink:'192.168.2.108:9000',
+      fwLink:'',
+      // fwLink:'192.168.2.108:9000',
     }
   },
   methods:{

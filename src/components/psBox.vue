@@ -1,10 +1,10 @@
 <template>
-  <div class="psBox alertStyle <!-- alertStyle_ -->">
+  <div class="psBox alertStyle  alertStyle_">
     <div class="alertTop">{{alertTips}}<span @click="hidePSBox"><img src="../../static/img/cancel.png"></span></div>
     <div class="alertContent">
       <el-button class="article_btn" @click="showAllArticle"><img src="../../static/img/report.png" alt="">批示文章：<span class="ellipsis titleEll">{{currentRow}}</span></el-button>
       <div class="editContainer">
-        <p class="ptitle">输入批示内容</p>
+        <p class="ptitle">{{ptitle}}</p>
         <div class="editBox">
           <!-- <textarea id="tinymce_new"></textarea>
           <input type="file" name="" class="file_" id="my_form" style="display:none;"> -->
@@ -76,6 +76,7 @@
             icon="menu"
             v-model="input2"
             class="typeChoose_"
+            :disabled="psDisabled"
             >
           </el-input>
         </div></el-col>
@@ -86,6 +87,7 @@
             icon="menu"
             v-model="input3"
             class="typeChoose_"
+            :disabled="clDisabled"
             >
           </el-input>
         </div></el-col>
@@ -164,6 +166,8 @@
       date:'',
       disabled_tp:false,
       alertType:'',
+      ptitle:'输入批示内容',
+      artChoose:true,
     }
   },
   computed: {
@@ -195,12 +199,14 @@
         else{
           this.input3=val.name[0]+'...';
         }
+        console.log(val);
       },
       deep:true,
       immediate: true,
     },
     peopleObj:{
       handler: function (val, oldVal) {//监听学校和指标数组，只要学科id没有变化，则不变化
+        console.log(val);
         if(val.value!=undefined){
           this.input2=val.value;
           this.psId=val.id;
@@ -211,10 +217,18 @@
     },
     psShow:{
       handler: function (val, oldVal) {//用于判断由文章列表或者文章详情点入的还是在批示那边新建批示流程
+        console.log("hahhahha ");
         // this.quill.setContents('');
         if(Object.keys(val).length!=0){//不为空对象，由文章列表或者文章详情点入
+          console.log("ehajkdshaj");
           this.currentRow=val.value;
           this.articleId=val.id;//需要有，当未点击打开文章的时候，需要有直接的id
+          this.artChoose=false;
+        }
+        else{
+          this.artChoose=true;
+          this.currentRow="";
+          this.articleId="";//需要有，当未点击打开文章的时候，需要有直接的id
         }
       },
       deep:true,
@@ -252,87 +266,115 @@
     psBox:{
       handler: function (val, oldVal) {//
         console.log('psBox');
-        this.date="";
-        if(val.psObj==undefined){
-          this.psObj=["系统管理员","d733ed4b5afd11e79ea400269e28ab11"];
-        }
-        else{
-          this.psObj=val.psObj;//先名字 后id 有用
-        }
-        this.instructionId=val.instructionId;
-        // this.value=val.type;
-
-        // this.psDisabled=true;//判断不是系统管理员
-        this.alertType=val.type;
-        if(val.type=='0'){//批示弹窗
-          this.peopleTips='处理人';
-          this.$nextTick(function(){
-            $(".blueBot").show();
-          })
-          if(this.level=='0'||this.level=='4'){//权限为管理员 分发处理人可选
-            this.psDisabled=false;
+        console.log(val);
+        if(val.flag){
+          console.log('psBox1111');
+          this.date="";
+          if(val.psObj==undefined){
+            this.psObj=["系统管理员","d733ed4b5afd11e79ea400269e28ab11"];
           }
           else{
-            this.psDisabled=true;
-            this.input2=this.userName;
+            this.psObj=val.psObj;//先名字 后id 有用
           }
-          // this.psDisabled=false;
-          this.clDisabled=true;
+          this.artChoose=true;
+          this.instructionId=val.instructionId;
+          // this.value=val.type;
 
-          // this.input3=this.userName;
-
-          this.psPerson="批示人";
-          this.psTime="批示时间";
-          this.alertTips="批示";
-          this.disabled_tp=false;
-          // tinymce.get('tinymce').setContent('<p style="line-height:2">请发展规划处等抓紧时间研究国家双一流方案的细则和教育部有关部门的解读<br><span style="color:#FF6600">（如批示是由纸质材料批示，则由数据与信息中心发起流程并人工输入）</span></p>');
-        }
-        else if(val.type=='1'){//分发弹窗
-          if(val.insType!=undefined){
-            this.value=val.insType;
-          }
-          this.peopleTips='分发人';
-          this.currentRow=val.title;
-          if(this.level=='0'||this.level=='4'){//权限为管理员 分发处理人可选
-            this.clDisabled=false;
-          }
-          else{}
-          this.$nextTick(function(){
-            $(".blueBot").hide();
-          })
-          this.psDisabled=true;
-          this.input3="";
-          this.input2=this.psObj[0];//弹窗不可点击。 有用
-
-          this.psPerson="转办";
-          this.psTime="转办时间";
-          this.alertTips="转办";
-          this.disabled_tp=true;
-        }
-        else if(val.type=='2'){//反馈弹窗
-          if(val.insType!=undefined){
-            this.value=val.insType;
-          }
-          this.peopleTips='反馈人';
-          this.currentRow=val.title;
-          // if(this.level=='0'||this.level=='4'){//权限为管理员 反馈处理人可选
-            this.clDisabled=true;
-            this.psDisabled=true;
+          // this.psDisabled=true;//判断不是系统管理员
+          this.alertType=val.type;
+          if(val.type=='0'){//批示弹窗
+            console.log("type");
+            this.peopleTips='处理人';
+            this.$nextTick(function(){
+              $(".blueBot").show();
+            })
+            if(this.level=='0'||this.level=='4'){//权限为管理员 分发处理人可选
+              this.psDisabled=false;
+              this.clDisabled=false;
+              this.input2="";
+              this.input3="";
+            }
+            else{
+              console.log(this.userName);
+              this.psDisabled=true;
+              this.clDisabled=true;
+              this.input2=this.userName;
+              this.input3=this.userName;
+            }
+            // this.psDisabled=false;
 
             // this.input3=this.userName;
 
-            this.input2=this.psObj[0];//弹窗不可点击。 有用
-          // }
-          this.$nextTick(function(){
-            $(".blueBot").show();
-          })
+            this.psPerson="批示人";
+            this.psTime="批示时间";
+            this.alertTips="批示";
+            this.disabled_tp=false;
+            this.ptitle="输入批示内容";
+            // tinymce.get('tinymce').setContent('<p style="line-height:2">请发展规划处等抓紧时间研究国家双一流方案的细则和教育部有关部门的解读<br><span style="color:#FF6600">（如批示是由纸质材料批示，则由数据与信息中心发起流程并人工输入）</span></p>');
+          }
+          else if(val.type=='1'){//分发弹窗
+            if(val.insType!=undefined){
+              this.value=val.insType;
+            }
+            this.peopleTips='分发人';
+            this.currentRow=val.title;
+            if(this.level=='0'||this.level=='4'){//权限为管理员 分发处理人可选
+              this.clDisabled=false;
+              // this.input3=this.psObj[0];//弹窗不可点击。 有用
+              this.input3="";
+            }
+            else{}
+            this.$nextTick(function(){
+              $(".blueBot").hide();
+            })
+            // this.psDisabled=true;
+            // this.input3="";
+            // this.input2=this.psObj[0];//弹窗不可点击。 有用
 
-          this.psPerson="反馈人";
-          this.psTime="反馈时间";
-          this.alertTips="反馈";
-          this.disabled_tp=true;
-        }
-        else{
+            this.psPerson="转办";
+            this.psTime="转办时间";
+            this.alertTips="转办";
+            this.disabled_tp=true;
+            this.ptitle="输入转办内容";
+          }
+          else if(val.type=='2'){//反馈弹窗
+            this.ptitle="输入反馈内容";
+            if(val.insType!=undefined){
+              this.value=val.insType;
+            }
+
+            if(this.level=='0'||this.level=='4'){//权限为管理员 分发处理人可选
+              this.clDisabled=false;
+              this.input3="";
+              // this.input3=this.psObj[0];//弹窗不可点击。 有用
+            }
+            else{
+              this.clDisabled=true;
+              this.input3=this.userName;
+            }
+
+            this.peopleTips='反馈人';
+            this.currentRow=val.title;
+            // if(this.level=='0'||this.level=='4'){//权限为管理员 反馈处理人可选
+              // this.clDisabled=true;
+              // this.psDisabled=true;
+
+              // this.input3=this.userName;
+
+              this.input2=this.psObj[0];//弹窗不可点击。 有用
+              // this.input3=this.userName;
+            // }
+            this.$nextTick(function(){
+              $(".blueBot").show();
+            })
+
+            this.psPerson="反馈人";
+            this.psTime="反馈时间";
+            this.alertTips="反馈";
+            this.disabled_tp=true;
+          }
+          else{
+          }
         }
       },
       deep:true,
@@ -388,13 +430,17 @@
       that.fileFlag=false;
       that.quill.setText('');
       $(that.$refs.linkBot).text("");
+      that.$store.dispatch('changeAlertBox',{'flag':false}).then(function(resp){});
     },
     showAllArticle:function(){
       if(this.alertType=='0'){
-        $(".articleBox").addClass("showBtn");
-        $(".printPs").addClass("showBtn");
-        $(".mask2").addClass("showBtn");
-        $(".mask1").removeClass("showBtn");
+        if(this.artChoose){
+          $(".articleBox").addClass("showBtn");
+          $(".printPs").addClass("showBtn");
+          $(".mask2").addClass("showBtn");
+          $(".mask1").removeClass("showBtn");
+          this.$store.dispatch('getNewArt',true).then(function(resp){});
+        }
       }
       else{}
     },
@@ -414,20 +460,25 @@
       console.log("111");
       if(this.level=="0"||this.level=='4'){//系统管理员无论反馈和分发 都弹窗 而且都默认选中自己
         if(this.alertType=='1'||this.alertType=='2'){//分发
-          this.$store.dispatch('changeClearAll',{clearAll:[]}).then(function(resp){});
+          this.$store.dispatch('getNewUser',{
+            'flag':false,
+            'type':this.alertType
+          }).then(function(resp){});
           $(".multiBox").addClass("showBtn");
           $(".printPs").removeClass("showBtn");
           $(".mask2").addClass("showBtn");
           $(".mask1").removeClass("showBtn");
         }
-        // else if(this.value=='2'){//反馈
-        // }
         else{}
-
-        // this.$store.dispatch('changeClrObj',{clrId:this.psObj[1]}).then(function(resp){});
-
       }
       else{}
+
+      // this.$store.dispatch('changeClearAll',{clearAll:[]}).then(function(resp){});
+      // $(".multiBox").addClass("showBtn");
+      // $(".printPs").removeClass("showBtn");
+      // $(".mask2").addClass("showBtn");
+      // $(".mask1").removeClass("showBtn");
+
       // if(!this.clDisabled){
       //   $(".multiBox").addClass("showBtn");
       //   $(".printPs").removeClass("showBtn");
@@ -462,9 +513,16 @@
 
       if(this.alertType=='0'){//批示
         // formData.append("insType",this.value);
-        formData.append("userId",this.psId);
+        
+        // formData.append("userId",this.userId);
         formData.append("type",'0');
         formData.append("articleId",this.articleId);
+        if(this.level=='0'||this.level=='4'){
+          formData.append("userId",this.psId);
+        }
+        else{
+          formData.append("userId",this.userId);
+        }        
         if(delta.length==1){
           // alert("请输入批示内容！");
           this.openWarn("请输入批示内容！",'warning');
@@ -485,6 +543,8 @@
               $(that.$refs.linkBot).text("");
               that.fileFlag=false;
               that.quill.setText('');
+              that.$store.dispatch('changeAlertBox',{'flag':false}).then(function(resp){});
+              that.$store.dispatch('changeClearAll',{clearAll:[]}).then(function(resp){});
               that.$store.dispatch('changeSingleObj',{singleObj:{value:'',id:''}}).then(function(resp){});
               that.$store.dispatch('changepsFlag',true).then(function(resp){});
               // window.location.reload();
@@ -495,9 +555,9 @@
             }
             else{
               alert(data.data);
-              that.fileFlag=false;
-              that.quill.setText('');
-              $(that.$refs.linkBot).text("");
+              // that.fileFlag=false;
+              // that.quill.setText('');
+              // $(that.$refs.linkBot).text("");
             }
           })
         }
@@ -531,6 +591,8 @@
                 // that.fileFlag=false;
                 // that.quill.setText('');
                 // $(that.$refs.linkBot).text("");
+                that.$store.dispatch('changeAlertBox',{'flag':false}).then(function(resp){});
+                that.$store.dispatch('changeClearAll',{clearAll:[]}).then(function(resp){});
                 that.$store.dispatch('changeSelArr',{selectArr:{name:[],id:[]}}).then(function(resp){});
                 that.$store.dispatch('changepsDetailFlag',true).then(function(resp){});
                 // window.location.reload();
@@ -541,9 +603,9 @@
               }
               else{
                 alert(data.data);
-                that.fileFlag=false;
-                that.quill.setText('');
-                $(that.$refs.linkBot).text("");
+                // that.fileFlag=false;
+                // that.quill.setText('');
+                // $(that.$refs.linkBot).text("");
               }
             })
           }
@@ -558,7 +620,17 @@
         formData.append("type",'2');
         formData.append("psPeople",this.psObj[1]);
         formData.append("instructionId",this.instructionId);
-        formData.append("clPeople",this.userId);
+        if(this.level=='0'||this.level=='4'){
+          if(this.selectArr.id&&this.selectArr.id.length>0){
+            formData.append("clPeople",this.selectArr.id);
+          }
+          else{
+            this.openWarn("还未选择反馈人",'warning');
+          }
+        }
+        else{
+          formData.append("clPeople",this.userId);
+        }        
         if(delta.length==1){
           // alert("请输入反馈内容！");
           this.openWarn("请输入反馈内容！",'warning');
@@ -577,6 +649,8 @@
               that.fileFlag=false;
               that.quill.setText('');
               $(that.$refs.linkBot).text("");
+              that.$store.dispatch('changeAlertBox',{'flag':false}).then(function(resp){});
+              that.$store.dispatch('changeClearAll',{clearAll:[]}).then(function(resp){});
               that.$store.dispatch('changeSelArr',{selectArr:{name:[],id:[]}}).then(function(resp){});
               that.$store.dispatch('changepsDetailFlag',true).then(function(resp){});
               // window.location.reload();

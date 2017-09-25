@@ -2,7 +2,7 @@
   <div class="report reportStyle">
     <div class="rightBar">
       <p>报告中心-收录管理：
-        <span>今日收录<span>{{totalNum}}</span>篇，今日收录<span>{{todayNum}}</span>篇</span>
+        <span>总共收录<span>{{totalNum}}</span>篇，今日收录<span>{{todayNum}}</span>篇</span>
       </p>
       <!-- <div>
         <input type="" name="" placeholder="搜索已收录的内容">

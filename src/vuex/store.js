@@ -45,7 +45,8 @@ const state = {
 		psObj:[],
 		title:'',
 		instructionId:'',
-		insType:''
+		insType:'',
+		flag:false,
 	},
 	clrId:'',
 	unitVal:'',
@@ -74,6 +75,11 @@ const state = {
 	psDetailFlag:false,
 	mesFlag:false,
 	artFlag:false,
+	artBrush:false,
+	multiBrush:{
+		'flag':false,
+		'type':'',
+	},
 	artEvent:'',
 }
 const store = new Vuex.Store({
