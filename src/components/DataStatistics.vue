@@ -12,15 +12,15 @@
           <p>累计生成报告总数</p>
         </div>
         <div>
-          <p><img src="../../static/img/data.png" alt=""><span>15</span></p>
+          <p><img src="../../static/img/data.png" alt=""><span>14484</span></p>
           <p>累计生成文章总数</p>
         </div>
         <div>
-          <p><img src="../../static/img/time.png" alt=""><span>15</span></p>
+          <p><img src="../../static/img/time.png" alt=""><span>20</span></p>
           <p>近一年收录文章数</p>
         </div>
         <div>
-          <p><img src="../../static/img/block.png" alt=""><span>15</span></p>
+          <p><img src="../../static/img/block.png" alt=""><span>13</span></p>
           <p>本月收录文章数</p>
         </div>
       </div>

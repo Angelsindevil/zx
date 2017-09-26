@@ -67,8 +67,8 @@
               </span>
               </span>
               <img src="../../static/img/delete.png" alt="" class="delete" @click="delete_(item.id)" :data-id='item.id'>
-              <!-- <a :href="'http://'+fwLink+'/api/article/downloadAttachment?attachmentId='+item.bulletinUrl" target="blank" class="downloadBtn"> -->
-              <a :href="item.bulletinUrl" target="blank" class="downloadBtn">
+              <a :href="'http://'+fwLink+'/api/article/downloadAttachment?attachmentId='+item.bulletinUrl" target="blank" class="downloadBtn">
+              <!-- <a :href="item.bulletinUrl" target="blank" class="downloadBtn"> -->
               <!-- <a :href="item.bulletinUrl" class="downloadBtn" target="blank"> -->
                 <!-- <span class="includeBtn"> -->
                   <img src="../../static/img/download.png" alt="">
