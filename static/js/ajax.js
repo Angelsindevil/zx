@@ -1,9 +1,9 @@
 // import router from '../../src/router'
 //以下用户管理
-var url="http://192.168.2.108:9000";//ct
+// var url="http://192.168.2.108:9000";//ct
 // var url="http://192.168.2.173:8888";
 // var url="http://192.168.2.144:8080";//ct
-// var url="http://192.168.2.129:9000";//bh
+var url="http://192.168.2.129:9000";//bh
 // var url="127.0.0.1:8080";
 // var url="";
 function getAllUsers(){
