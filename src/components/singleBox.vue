@@ -109,6 +109,28 @@
         deep:true,
         immediate: true,
       },
+      // state2:{
+      //   handler: function (val, oldVal) {//监听学校和指标数组，只要学科id没有变化，则不变化
+      //     if(val==""&&this.commonData.length>0){
+      //       $('.singleBox').find(".article_table tbody").children("tr").removeClass("current-row");
+      //       $('.singleBox').find(".article_table tbody").children("tr").eq(0).addClass("current-row");
+      //       $('.singleBox').find(".alertContent .el-table__body-wrapper").scrollTop(0)
+      //       var that=this;
+      //       that.currentRow=that.commonData[0].value;
+      //       that.singleObj.value=that.commonData[0].value;
+      //       that.singleObj.id=that.commonData[0].id;
+      //       that.radio=0;
+      //       that.singleObj={
+      //         value:that.commonData[0].value,
+      //         // radio:val.i,
+      //         id:that.commonData[0].id,
+      //         // flag:'0',
+      //       }
+      //     }
+      //   },
+      //   deep:true,
+      //   immediate: true,
+      // }
     },
     methods:{
       hideArtBox:function(){
@@ -120,6 +142,10 @@
       querySearch(queryString, cb) {
         var alltableData = this.commonData;
         var results = queryString ? alltableData.filter(this.createFilter(queryString)) : alltableData;
+        // var val=results.length>0?results[0]:'';
+        // if(val!=''){
+        //   this.handleSelect(val);
+        // }
         // 调用 callback 返回建议列表的数据
         cb(results);
       },
@@ -154,10 +180,13 @@
           // this.radio2=this.radio;
         }
         var height=$(selector).find(".article_table tbody").children("tr").eq(i).position().top;
-        $(selector).find(".alertContent .el-table__body-wrapper").scrollTop(height)
+        $(selector).find(".alertContent .el-table__body-wrapper").scrollTop(height);
+        this.singleObj={
+          value:item.value,
+          id:item.id,
+        }
       },
       handleTableCurrentChange(val){//点击具体表格中的条目
-        console.log("哈哈哈哈哈");
         if(val){
           if(this.commonData==this.alltableData){
             this.currentRow=val.value;
@@ -175,6 +204,7 @@
             id:val.id,
             // flag:'0',
           }
+          console.log(this.singleObj);
         }
       },
       handlePreData:function(val1){
@@ -211,10 +241,6 @@
               id:that.commonData[0].id,
               // flag:'0',
             }
-          }
-          else if(data.state=='9000'){
-            // alert("用户未登录！")
-            that.$router.push({path:'/login',query: {}});
           }
           else{
             alert(data.data);

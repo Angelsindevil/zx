@@ -62,7 +62,6 @@
 	            this.form.unit=val.name;//渲染上级单位名称
 	            this.pid=val.pid;//上级单位的id
 	            this.orgid=val.id;//当前编辑的组织id
-	            console.log(this.orgid);
 	          }
 	          else{//表示新增
 	            this.form={
@@ -120,10 +119,6 @@
 			              that.$store.dispatch('changeOrgFlag',true).then(function(resp){});
 			              that.hideUserBox();
 			            }
-			            else if(data.state=='9000'){
-				            // alert("用户未登录！")
-				            that.$router.push({path:'/login',query: {}});
-				          }
 				          else{
 				            alert(data.data);
 				          }
@@ -139,10 +134,6 @@
 			              that.$store.dispatch('changeOrgFlag',true).then(function(resp){});
 			              that.hideUserBox();
 			            }
-			            else if(data.state=='9000'){
-				            // alert("用户未登录！")
-				            that.$router.push({path:'/login',query: {}});
-				          }
 				          else{
 				            alert(data.data);
 				          }
@@ -161,10 +152,6 @@
 			        	that.$store.dispatch('changeOrgFlag',true).then(function(resp){});
 			        	that.hideUserBox();
 			        }
-			        else if(data.state=='9000'){
-			            // alert("用户未登录！")
-			            that.$router.push({path:'/login',query: {}});
-			          }
 			          else{
 			            alert(data.data);
 			          }

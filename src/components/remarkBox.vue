@@ -59,7 +59,6 @@
         }
         else{
           pw2=md5(this.form.pwNew2);
-          console.log(this.userId);
           $.when(changePassword(this.userId,pw1,pw2)).done(function(data){
             if(data.state==0){
               // alert('密码修改成功！');

@@ -83,7 +83,6 @@ export default {
       })
     },
     rememberMe(){
-      console.log(this.checked);
       // if($('#rememberMe:checked').length>0){//设置cookie  
       if(this.checked){
         // $.cookie('absms_crm2_userName', this.input1,{ expires: 7 });  
@@ -104,7 +103,6 @@ export default {
     }else{ 
       this.checked=false;
     }
-    console.log(this.$cookie.get('absms_crm2_userName'));     
     //读取cookie  
     if(this.checked){ 
       this.input1=this.$cookie.get('absms_crm2_userName'); 

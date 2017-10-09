@@ -227,10 +227,6 @@ export default {
             // })
             // window.location.reload();
           }
-          else if(data.state=='9000'){
-            // alert("用户未登录！")
-            that.$router.push({path:'/login',query: {}});
-          }
           else{
             alert(data.data);
           }
@@ -244,10 +240,6 @@ export default {
       $.when(contentSearch(that.userid,that.input2,that.pageNo)).done(function(data){
         if(data.state=="0"){
           that.insertData(data.data);
-        }
-        else if(data.state=='9000'){
-          // alert("用户未登录！")
-          that.$router.push({path:'/login',query: {}});
         }
         else{
           alert(data.data);
@@ -290,7 +282,6 @@ export default {
           $(that.$refs.rightBottom).children('p').text('暂无更多文章');
         }
       }
-      console.log(that.articlesAarry);
     },
     loadMore(){
       this.pageNo=this.pageNo+1;
@@ -307,10 +298,6 @@ export default {
               $(document).scrollTop(height);
             })
           }
-          else if(data.state=='9000'){
-            // alert("用户未登录！")
-            that.$router.push({path:'/login',query: {}});
-          }
           else{
             alert(data.data);
           }
@@ -323,10 +310,6 @@ export default {
             that.$nextTick(function(){
               $(document).scrollTop(height);
             })
-          }
-          else if(data.state=='9000'){
-            // alert("用户未登录！")
-            that.$router.push({path:'/login',query: {}});
           }
           else{
             alert(data.data);
@@ -343,10 +326,6 @@ export default {
           that.insertData(data.data);
           that.isShowData=true;
           that.$store.dispatch('changeArtFlag',false).then(function(resp){});
-        }
-        else if(data.state=='9000'){
-          // alert("用户未登录！")
-          that.$router.push({path:'/login',query: {}});
         }
         else{
           alert(data.data);

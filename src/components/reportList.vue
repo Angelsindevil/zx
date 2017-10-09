@@ -25,7 +25,7 @@
             <div class="title_bar">
               <img src="../../static/img/multi-report.png" alt="">
               <span class="title_new"><span class="ellipsis titleEll">{{item.title}}</span><span class="date_new">生成日期：<span>{{item.createTime}}</span></span></span>
-              <img src="../../static/img/delete.png" alt="" class="delete" @click="delete_(item.id)" :data-id='item.id'>
+              <img src="../../static/img/delete.png" alt="" class="delete" @click="delete_(item.id)" :data-id='item.id' v-show="(level=='0'||level=='2'||level=='3'||level=='100')?false:true">
               <a :href="'http://'+fwLink+'/api/article/downloadAttachment?attachmentId='+item.bulletinUrl" target="blank" class="downloadBtn">
               <!-- <a :href="item.bulletinUrl" class="downloadBtn" target="blank"> -->
                 <!-- <span class="includeBtn"> -->
@@ -66,7 +66,7 @@
                 <!-- 生成日期：<span>{{item.createTime}}</span> -->
               </span>
               </span>
-              <img src="../../static/img/delete.png" alt="" class="delete" @click="delete_(item.id)" :data-id='item.id'>
+              <img src="../../static/img/delete.png" alt="" class="delete" @click="delete_(item.id)" :data-id='item.id' v-show="(level=='0'||level=='2'||level=='3'||level=='100')?false:true">
               <a :href="'http://'+fwLink+'/api/article/downloadAttachment?attachmentId='+item.bulletinUrl" target="blank" class="downloadBtn">
               <!-- <a :href="item.bulletinUrl" target="blank" class="downloadBtn"> -->
               <!-- <a :href="item.bulletinUrl" class="downloadBtn" target="blank"> -->
@@ -75,6 +75,7 @@
                   <!-- <span>下载报告</span> -->
                 <!-- </span> -->
               </a>
+               <!-- v-show="(level=='0'||level=='4'||level=='1'||level=='100')?true:false" -->
             </div>
           </div>
           <!-- <div class="rightContent">
@@ -195,10 +196,6 @@ export default {
             that.getInitReporter(that.type);
             // window.location.reload();
           }
-          else if(data.state=='9000'){
-            // alert("用户未登录！")
-            that.$router.push({path:'/login',query: {}});
-          }
           else{
             alert(data.data);
           }
@@ -241,10 +238,6 @@ export default {
           // else{}
           that.insertData(data,that.type);
         }
-        else if(data.state=='9000'){
-          // alert("用户未登录！")
-          that.$router.push({path:'/login',query: {}});
-        }
         else{
           alert(data.data);
         }
@@ -274,17 +267,12 @@ export default {
           // }
           that.insertData(data,that.type);
         }
-        else if(data.state=='9000'){
-          // alert("用户未登录！")
-          that.$router.push({path:'/login',query: {}});
-        }
         else{
           alert(data.data);
         }
       })
     },
     linkChange:function(e){
-      console.log(this.file_val);
       var that=this;
       var file = e.target.files; //获取图片资源
       var formData = new FormData();
@@ -302,10 +290,6 @@ export default {
               that.open("报告上传成功！");
               that.getInitReporter(that.type);
               $(e.target).val("");
-            }
-            else if(data.state=='9000'){
-              // alert("用户未登录！")
-              that.$router.push({path:'/login',query: {}});
             }
             else{
               alert(data.data);
@@ -342,10 +326,6 @@ export default {
               $(document).scrollTop(height);
             })
           }
-          else if(data.state=='9000'){
-              // alert("用户未登录！")
-              that.$router.push({path:'/login',query: {}});
-            }
             else{
               alert(data.data);
             }
@@ -363,10 +343,6 @@ export default {
               $(document).scrollTop(height-280);
             })
           }
-          else if(data.state=='9000'){
-              // alert("用户未登录！")
-              that.$router.push({path:'/login',query: {}});
-            }
             else{
               alert(data.data);
             }
@@ -450,10 +426,6 @@ export default {
           // that.listFilter_1=res.list;
           that.insertData(data,that.type);
         }
-        else if(data.state=='9000'){
-          // alert("用户未登录！")
-          that.$router.push({path:'/login',query: {}});
-        }
         else{
           alert(data.data);
         }
@@ -491,6 +463,25 @@ export default {
       this.type='0';
     }
     this.getInitReporter(this.type);
+    $.when(checkState()).done(function(data){
+      if(data.state=='0'){
+        that.type='0';
+      }
+      else{
+        that.level=100;
+        that.type='1';
+        that.$nextTick(function(){
+          $(".el-tabs__header").hide();
+          // $(".el-tabs__header").find(".el-tabs__item").eq(0).hide();
+          // $(".el-tabs__header").find(".el-tabs__item").eq(1).addClass("is-active");
+          // $(".el-tabs__header").find(".el-tabs__item").css("border-bottom","3px solid #20a0ff");
+          $(".el-tabs__content").find(".tab1").hide();
+          $(".el-tabs__content").find(".tab2").show();
+          $(".btnUpload").hide();
+          $(".delete").hide();
+        })
+      }
+    })
   },
 }
 </script>

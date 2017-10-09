@@ -134,10 +134,6 @@ export default {
           that.insertData(data.data);
           // that.filterArray=data.data.list;有用
         }
-        else if(data.state=='9000'){
-          // alert("用户未登录！")
-          that.$router.push({path:'/login',query: {}});
-        }
         else{
           alert(data.data);
         }
@@ -151,10 +147,6 @@ export default {
           that.insertData(data.data);
           // that.filterArray=data.data.list;有用
         }
-        else if(data.state=='9000'){
-          // alert("用户未登录！")
-          that.$router.push({path:'/login',query: {}});
-        }
         else{
           alert(data.data);
         }
@@ -163,13 +155,11 @@ export default {
     showMesBox(){
       $(".mask1").addClass("showBtn");
       $(".mesBox").addClass("showBtn");
-      console.log(this.username);
       // this.$store.dispatch('clearMesInfo').then(function(resp){});
     },
     showDetail(id,index,e){
       $(".mask1").addClass("showBtn");
       $(".mesDetailBox").addClass("showBtn");
-      console.log(id);
       // this.$store.dispatch('changeMesId',{mesId:id}).then(function(resp){});
       this.$store.dispatch('changeMesId',{mesId:id,method:this.type}).then(function(resp){});
       if(this.type=='1'){
@@ -217,10 +207,6 @@ export default {
           that.insertData(data.data);
           that.filterArray=data.data.list;
           that.$store.dispatch('changeMesFlag',false).then(function(resp){});
-        }
-        else if(data.state=='9000'){
-          // alert("用户未登录！")
-          that.$router.push({path:'/login',query: {}});
         }
         else{
           alert(data.data);
@@ -275,10 +261,6 @@ export default {
               $(document).scrollTop(height-350);
             })
           }
-          else if(data.state=='9000'){
-            // alert("用户未登录！")
-            that.$router.push({path:'/login',query: {}});
-          }
           else{
             alert(data.data);
           }
@@ -292,10 +274,6 @@ export default {
               $(document).scrollTop(height);
             })
           }
-          else if(data.state=='9000'){
-            // alert("用户未登录！")
-            that.$router.push({path:'/login',query: {}});
-          }
           else{
             alert(data.data);
           }
@@ -308,10 +286,6 @@ export default {
           that.insertData(data.data);
           that.filterArray=data.data.list;
           that.$store.dispatch('changeMesFlag',false).then(function(resp){});
-        }
-        else if(data.state=='9000'){
-          // alert("用户未登录！")
-          that.$router.push({path:'/login',query: {}});
         }
         else{
           alert(data.data);

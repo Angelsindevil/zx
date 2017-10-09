@@ -196,10 +196,6 @@ export default {
               that.open("流程关闭成功！");
               that.$router.push('/homePage/managementCenter');
             }
-            else if(data.state=='9000'){
-              // alert("用户未登录！")
-              that.$router.push({path:'/login',query: {}});
-            }
             else{
               alert(data.data);
             }
@@ -211,10 +207,6 @@ export default {
       var that=this;
       $.when(downloadAnnex(name)).done(function(data){
         if(data.state=='0'){
-        }
-        else if(data.state=='9000'){
-          // alert("用户未登录！")
-          that.$router.push({path:'/login',query: {}});
         }
         else{
           alert(data.data);
@@ -281,10 +273,6 @@ export default {
           //   }
           // }
           that.$store.dispatch('changepsDetailFlag',false).then(function(resp){});
-        }
-        else if(data.state=='9000'){
-          // alert("用户未登录！")
-          that.$router.push({path:'/login',query: {}});
         }
         else{
           alert(data.data);

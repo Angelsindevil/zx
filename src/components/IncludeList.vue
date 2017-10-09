@@ -286,10 +286,6 @@ export default {
               el.removeClass("grey red").find("span").text("收录");
               el.find("img").attr("src","./static/img/plus.png");
             }
-            else if(data.state=='9000'){
-              // alert("用户未登录！")
-              that.$router.push({path:'/login',query: {}});
-            }
             else{
               alert(data.data);
             }
@@ -307,10 +303,6 @@ export default {
         if(data.state=="0"){
           that.insertData(data);
         }
-        else if(data.state=='9000'){
-          // alert("用户未登录！")
-          that.$router.push({path:'/login',query: {}});
-        }
         else{
           alert(data.data);
         }
@@ -323,10 +315,6 @@ export default {
       $.when(getIncludedSearch(that.userid,that.input2,val,that.pageNo)).done(function(data){
         if(data.state=="0"){
           that.insertData(data);
-        }
-        else if(data.state=='9000'){
-          // alert("用户未登录！")
-          that.$router.push({path:'/login',query: {}});
         }
         else{
           alert(data.data);
@@ -399,10 +387,6 @@ export default {
             $(document).scrollTop(height-350);
           })
         }
-        else if(data.state=='9000'){
-          // alert("用户未登录！")
-          that.$router.push({path:'/login',query: {}});
-        }
         else{
           alert(data.data);
         }
@@ -439,10 +423,6 @@ export default {
     $.when(getIncludedList(that.userid,that.value,that.pageNo)).done(function(data){
       if(data.state=='0'){
         that.insertData(data);;
-      }
-      else if(data.state=='9000'){
-        // alert("用户未登录！")
-        that.$router.push({path:'/login',query: {}});
       }
       else{
         alert(data.data);

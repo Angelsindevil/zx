@@ -170,7 +170,6 @@ export default {
   watch:{
     mesCount:{
       handler: function (val, oldVal) {
-        console.log(val);
         if(val!=0){
           this.xtNum=val;
           $(this.$refs.redMes).children('span').show();
@@ -259,10 +258,6 @@ export default {
               $(that.$refs.redDot).children('span').show();
             }
           }
-          else if(data.state=='9000'){
-            // alert("用户未登录！")
-            that.$router.push({path:'/login',query: {}});
-          }
           else{
             alert(data.data);
           }
@@ -287,37 +282,100 @@ export default {
               $(that.$refs.redMes).children('span').hide();
             }
             else{
-              console.log("11");
               if(data.data>30){
                 that.xtNum='...';
               }
               else{
                 that.xtNum=data.data;
               }
-              console.log(data.data);
               // that.xtNum=data.data;
               that.$store.dispatch('changeMesCount',{"mesCount":data.data}).then(function(resp){});
               $(that.$refs.redMes).children('span').show();
             }
-          }
-          else if(data.state=='9000'){
-            // alert("用户未登录！")
-            that.$router.push({path:'/login',query: {}});
           }
           else{
             alert(data.data);
           }
         }
       });
+    },
+    setMenu(){
+      this.$nextTick(function(){
+        if(this.userSource){
+          if(this.userSource.level==0||this.userSource.level==4){//系统管理员
+            $(".articleManage").addClass("showBtn");
+            $(".articleManage").css("margin-top",'20px');
+            $(".platManage").addClass("showBtn");
+            $(".messageManage").addClass("showBtn");
+            $(".messageManage").children("li").eq(1).hide();
+            $(".dataManage").removeClass("showBtn");
+            if(this.userSource.level==0){
+              $(".reporterManage").addClass("showBtn newUl");
+              $(".reporterManage").children("li").eq(1).hide();
+              $(".reporterManage").children("li").eq(2).show();
+            }
+            else{
+              $(".reporterManage").removeClass("newUl");
+              $(".dataManage").addClass("showBtn");
+            }
+          }
+          else{}
+          if(this.userSource.level==1||this.userSource.level==4){//内容管理员
+            $(".contentManage").addClass("showBtn");
+            $(".articleManage").addClass("showBtn");
+            $(".reporterManage").addClass("showBtn newUl");
+            $(".reporterManage").children("li").eq(1).show();
+            $(".reporterManage").children("li").eq(2).show();
+            $(".messageManage").addClass("showBtn");
+            if(this.userSource.level==1){
+              $(".messageManage").children("li").eq(2).hide();
+              $(".dataManage").removeClass("showBtn");
+            }
+            else{
+              $(".reporterManage").removeClass("newUl");
+            }
+          }
+          else{}
+          if(this.userSource.level==2||this.userSource.level==3){//批示用户
+            $(".articleManage").css("margin-top",'20px');
+            $(".articleManage").addClass("showBtn");
+            $(".messageManage").addClass("showBtn");
+            $(".messageManage").children("li").eq(2).hide();
+            $(".reporterManage").addClass("showBtn newUl");
+            $(".reporterManage").children("li").eq(1).hide();
+            $(".reporterManage").children("li").eq(2).show();
+            $(".dataManage").removeClass("showBtn");
+          }
+          else{//普通用户
+          }
+        }
+      })//userful
     }
   },
   created(){
-    this.$nextTick(function(){
-      matchMenu();
-    })
     var that=this;
     this.userSource=JSON.parse(localStorage.getItem("userSource"));
     this.userid=this.userSource?this.userSource.id:'';
+    $.when(checkState()).done(function(data){
+      if(data.state=='0'){
+        that.setMenu();
+      }
+      else{
+        that.$nextTick(function(){
+          $(".articleManage").css("margin-top",'20px');
+          $(".articleManage").addClass("showBtn");
+          $(".reporterManage").addClass("showBtn newUl");
+          $(".reporterManage").children("li").eq(1).hide();
+          $(".reporterManage").children("li").eq(2).show();
+        })
+      }
+    })
+
+    // that.setMenu();//测试
+
+    this.$nextTick(function(){
+      matchMenu();
+    })
     $.when(getArticleType()).done(function(data){
       if(data.state=="0"){
         var res=data.data;
@@ -333,10 +391,6 @@ export default {
           matchMenu();
         })
       }
-      else if(data.state=='9000'){
-        // alert("用户未登录！")
-        that.$router.push({path:'/login',query: {}});
-      }
       else{
         alert(data.data);
       }
@@ -348,67 +402,65 @@ export default {
     setInterval(this.getMesRed,300000);
     // 可见菜单设置
 
-    this.$nextTick(function(){
-      if(this.userSource){
-        if(this.userSource.level==0||this.userSource.level==4){//系统管理员
-          $(".articleManage").addClass("showBtn");
-          $(".articleManage").css("margin-top",'20px');
-          $(".platManage").addClass("showBtn");
-          $(".messageManage").addClass("showBtn");
-          $(".messageManage").children("li").eq(1).hide();
-          $(".dataManage").removeClass("showBtn");
-          if(this.userSource.level==0){
-            $(".reporterManage").addClass("showBtn newUl");
-            $(".reporterManage").children("li").eq(1).hide();
-            $(".reporterManage").children("li").eq(2).show();
-          }
-          else{
-            $(".reporterManage").removeClass("newUl");
-            $(".dataManage").addClass("showBtn");
-          }
-        }
-        else{}
-        if(this.userSource.level==1||this.userSource.level==4){//内容管理员
-          $(".contentManage").addClass("showBtn");
-          $(".articleManage").addClass("showBtn");
-          $(".reporterManage").addClass("showBtn newUl");
-          $(".reporterManage").children("li").eq(1).show();
-          $(".reporterManage").children("li").eq(2).show();
-          $(".messageManage").addClass("showBtn");
-          if(this.userSource.level==1){
-            $(".messageManage").children("li").eq(2).hide();
-            $(".dataManage").removeClass("showBtn");
-          }
-          else{
-            $(".reporterManage").removeClass("newUl");
-          }
-        }
-        else{}
-        if(this.userSource.level==2||this.userSource.level==3){//批示用户
-          $(".articleManage").css("margin-top",'20px');
-          $(".articleManage").addClass("showBtn");
-          $(".messageManage").addClass("showBtn");
-          $(".messageManage").children("li").eq(2).hide();
-          $(".reporterManage").addClass("showBtn newUl");
-          $(".reporterManage").children("li").eq(1).hide();
-          $(".reporterManage").children("li").eq(2).show();
-          $(".dataManage").removeClass("showBtn");
-        }
-        else{//普通用户
-        }
-      }
-    })//userful
+    // this.$nextTick(function(){
+    //   if(this.userSource){
+    //     if(this.userSource.level==0||this.userSource.level==4){//系统管理员
+    //       $(".articleManage").addClass("showBtn");
+    //       $(".articleManage").css("margin-top",'20px');
+    //       $(".platManage").addClass("showBtn");
+    //       $(".messageManage").addClass("showBtn");
+    //       $(".messageManage").children("li").eq(1).hide();
+    //       $(".dataManage").removeClass("showBtn");
+    //       if(this.userSource.level==0){
+    //         $(".reporterManage").addClass("showBtn newUl");
+    //         $(".reporterManage").children("li").eq(1).hide();
+    //         $(".reporterManage").children("li").eq(2).show();
+    //       }
+    //       else{
+    //         $(".reporterManage").removeClass("newUl");
+    //         $(".dataManage").addClass("showBtn");
+    //       }
+    //     }
+    //     else{}
+    //     if(this.userSource.level==1||this.userSource.level==4){//内容管理员
+    //       $(".contentManage").addClass("showBtn");
+    //       $(".articleManage").addClass("showBtn");
+    //       $(".reporterManage").addClass("showBtn newUl");
+    //       $(".reporterManage").children("li").eq(1).show();
+    //       $(".reporterManage").children("li").eq(2).show();
+    //       $(".messageManage").addClass("showBtn");
+    //       if(this.userSource.level==1){
+    //         $(".messageManage").children("li").eq(2).hide();
+    //         $(".dataManage").removeClass("showBtn");
+    //       }
+    //       else{
+    //         $(".reporterManage").removeClass("newUl");
+    //       }
+    //     }
+    //     else{}
+    //     if(this.userSource.level==2||this.userSource.level==3){//批示用户
+    //       $(".articleManage").css("margin-top",'20px');
+    //       $(".articleManage").addClass("showBtn");
+    //       $(".messageManage").addClass("showBtn");
+    //       $(".messageManage").children("li").eq(2).hide();
+    //       $(".reporterManage").addClass("showBtn newUl");
+    //       $(".reporterManage").children("li").eq(1).hide();
+    //       $(".reporterManage").children("li").eq(2).show();
+    //       $(".dataManage").removeClass("showBtn");
+    //     }
+    //     else{//普通用户
+    //     }
+    //   }
+    // })//userful
 
   }
   // beforeMount(){
   //   var self=this;
   //   self.styleObject.minHeight=window.screen.height-74;
-  //   console.log(self.styleObject.minHeight);
   // },
   // created:function(){
   //   var self=this;
   //   self.styleObject.minHeight=window.screen.height-74;
-  //   console.log(self.styleObject.minHeight);
   // }
 }
 </script>

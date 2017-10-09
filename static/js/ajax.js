@@ -3,9 +3,9 @@
 // var url="http://192.168.2.108:9000";//ct
 // var url="http://192.168.2.173:8888";
 // var url="http://192.168.2.144:8080";//ct
-var url="http://192.168.2.129:9000";//bh
+// var url="http://192.168.2.129:9000";//bh
 // var url="127.0.0.1:8080";
-// var url="";
+var url="";
 function getAllUsers(){
 	var ajax = $.ajax({
         url: url+"/api/user/fetchAllUser",
@@ -730,6 +730,18 @@ function logOut(userId){//退出登录
     type:'get',
     data:{
       "userId":userId,
+    },
+    // data:JSON.stringify({
+    //   "userId":userId,
+    // })
+  })
+  return ajax;
+}
+function checkState(){//退出登录
+  var ajax=$.ajax({
+    url:url+'/api/user/checkLogin',
+    type:'get',
+    data:{
     },
     // data:JSON.stringify({
     //   "userId":userId,

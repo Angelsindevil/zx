@@ -76,7 +76,6 @@
     watch:{
       clrId:{
         handler: function (val, oldVal) {//监听学校和指标数组，只要学科id没有变化，则不变化
-          console.log(val);
         },
         deep:true,
         immediate: true,
@@ -109,7 +108,6 @@
       },
       handleSelect(item) {
         // var el=event.currentTarget;
-        console.log(item.value);
         for (var i=0;i<this.commonData.length;i++) {
           if(this.commonData[i].value==item.value){
             if(this.isSelect){
@@ -130,7 +128,6 @@
           // this.radio1=this.radio;
         }
         else if(!this.isSelect){
-          console.log("success");
           this.input2=item.value;
           // this.radio2=this.radio;
         }
@@ -138,7 +135,6 @@
         $(selector).find(".alertContent .el-table__body-wrapper").scrollTop(height)
       },
       handleTableCurrentChange(val){//点击具体表格中的条目
-        console.log('哈哈哈哈');
         if(val){
           if(this.commonData==this.alltableData){
             this.currentRow=val.value;
@@ -173,10 +169,6 @@
                 id:value.id,
               }
             })
-          }
-          else if(data.state=='9000'){
-            // alert("用户未登录！")
-            that.$router.push({path:'/login',query: {}});
           }
           else{
             alert(data.data);

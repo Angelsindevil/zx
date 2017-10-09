@@ -33,7 +33,7 @@
 
 
                 <span class="includeBtn" 
-                v-show="(level!=3)?true:false"
+                v-show="(level==3||level==100)?false:true"
                 :class="((level==0||level==2)?(item.isInstructions=='0'?'':'grey'):((level==1||level==4)?(item.isInclude=='0'?'':'grey'):''))"
                 :data-state="item.isInstructions" 
                 :data-pid="item.instructionId" 
@@ -54,7 +54,7 @@
               </span>
               <router-link target="_blank" :to="{ path: '/homePage/articleDetail', query: { id:item.id,index:index,edit:'0'}}">
                 <div class="rightContent">
-                  <p class="title_bar" style="padding-right: 160px;" @mouseover="showElse(item.indexTooltips,index)" @mouseout="showElse(false,index)">
+                  <p class="title_bar" :class="level!=100?'rightRest':''" @mouseover="showElse(item.indexTooltips,index)" @mouseout="showElse(false,index)">
                     <span class="ellipsis" style="display:block">{{item.title}}</span>
                     <span class="showElse" v-show="item.showFLagIndex">{{item.title}}</span>
                   </p>       
@@ -335,10 +335,6 @@ export default {
             })
             that.flag=false;
           }
-          else if(data.state=='9000'){
-              // alert("用户未登录！")
-              that.$router.push({path:'/login',query: {}});
-            }
             else{
               alert(data.data);
             }
@@ -354,10 +350,6 @@ export default {
                 $(document).scrollTop(0);
               })
                   // that.articlesAarry=data.data.list;
-            }
-            else if(data.state=='9000'){
-              // alert("用户未登录！")
-              that.$router.push({path:'/login',query: {}});
             }
             else{
               alert(data.data);
@@ -442,10 +434,6 @@ export default {
               el.removeClass("grey red").find("span").text("收录");
               el.find("img").attr("src","./static/img/plus.png");
             }
-            else if(data.state=='9000'){
-              // alert("用户未登录！")
-              that.$router.push({path:'/login',query: {}});
-            }
             else{
               alert(data.data);
             }
@@ -454,10 +442,6 @@ export default {
         else{
           $.when(included(id,this.userid)).done(function(data){
             if(data.state=="0"){
-            }
-            else if(data.state=='9000'){
-              // alert("用户未登录！")
-              that.$router.push({path:'/login',query: {}});
             }
             else{
               alert(data.data);
@@ -485,7 +469,6 @@ export default {
           "id":id,
         }
         if(state=="0"){//文章不在批示中，可新增批示
-          console.log("hhhhhh ");
           this.$store.dispatch('changeNewArticle',{newArcticle:articleObj}).then(function(resp){});
           this.$store.dispatch('changePsShow',{psShow:psObj}).then(function(resp){});
           this.$store.dispatch('getNewUser',{'flag':true,'type':''}).then(function(resp){});
@@ -558,7 +541,6 @@ export default {
           // value.summary=value.summary.replace(/<[^>]+>/g,"");
           that.articlesAarry.push(value); 
         })
-        console.log(that.articlesAarry);
         // that.articlesAarry.concat(that.copyArr(res.list));
       }
       else{
@@ -588,10 +570,6 @@ export default {
                 $(document).scrollTop(height-350);
               })
             }
-            else if(data.state=='9000'){
-              // alert("用户未登录！")
-              that.$router.push({path:'/login',query: {}});
-            }
             else{
               alert(data.data);
             }
@@ -607,10 +585,6 @@ export default {
               $(document).scrollTop(height-350);
             })
             // that.articlesAarry=data.data.list;
-          }
-          else if(data.state=='9000'){
-            // alert("用户未登录！")
-            that.$router.push({path:'/login',query: {}});
           }
           else{
             alert(data.data);
@@ -659,6 +633,13 @@ export default {
     }
     this.$nextTick(function(){
       matchMenu();
+    })
+    $.when(checkState()).done(function(data){
+      if(data.state=='0'){
+      }
+      else{
+        that.level=100;
+      }
     })
     // $.when(getArticleType()).done(function(data){
     //   if(data.state=="0"){
@@ -912,6 +893,9 @@ export default {
       right: 15px;
       top: 12px;
       width: 120px;
+    }
+    .rightRest{
+      padding-right: 160px!important;
     }
   }
 </style>

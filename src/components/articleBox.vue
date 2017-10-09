@@ -194,9 +194,6 @@
                 that.radio=0;
                 that.insertData(data);
               }
-              else if(data.state=='9000'){
-                that.$router.push({path:'/login',query: {}});
-              }
               else{
                 alert(data.data);
               }
@@ -218,10 +215,6 @@
           if(data.state=="0"){
             that.insertData(data); 
             $(".articleBox").find(".scrollContainer").scrollTop(0);
-          }
-          else if(data.state=='9000'){
-            // alert("用户未登录！")
-            that.$router.push({path:'/login',query: {}});
           }
           else{
             alert(data.data);
@@ -295,9 +288,6 @@
             // this.input2=val.value;//有用吗？
             // this.radio2=val.i;
           }
-          console.log(val);
-          console.log(val.i);
-          console.log(val.radio);
           this.radio=val.radio;
           // this.articleObj=val;
           this.articleObj={
@@ -389,7 +379,6 @@
         this.$nextTick(function(){
           // height=$(".rightContent_").last().offset().top;
           height=$(".articleBox").find(".article_table tbody").children("tr").last().position().top;
-          console.log(height);
         })
 
         var that=this;
@@ -401,10 +390,6 @@
                 that.$nextTick(function(){
                   $(".articleBox").find(".scrollContainer").scrollTop(height-240);
                 })
-              }
-              else if(data.state=='9000'){
-                // alert("用户未登录！")
-                that.$router.push({path:'/login',query: {}});
               }
               else{
                 alert(data.data);
@@ -422,10 +407,6 @@
               })
               // that.articlesAarry=data.data.list;
             }
-            else if(data.state=='9000'){
-              // alert("用户未登录！")
-              that.$router.push({path:'/login',query: {}});
-            }
             else{
               alert(data.data);
             }
@@ -436,16 +417,13 @@
       //   alert("....");
       //   this.$nextTick(function(){
       //     this.scroll = $(".el-table").scrollTop;
-      //     console.log(this.scroll)
       //   })
       // },
       onScroll(e,position){
         this.position = position;
         var scrollTop=position.scrollTop;
-        // console.log(scrollTop);
         var m=Math.floor(scrollTop/40);
         if(m==(14+20*(this.pageNo-1))){
-          console.log("1111");
           this.loadMore();
         }
         // if(n==1){
@@ -454,14 +432,12 @@
         // this.loadMore(n+1);
         // this.$nextTick(function(){
         //   var wid=$(".el-table .el-table__body-wrapper").width();
-        //   console.log(wid);
         // })
       },
     },
     mounted(){
       // document.getElementsByClassName("article_table")[0].addEventListener('scroll', this.jump)
       // this.$nextTick(function(){
-      //   console.log(document.getElementsByClassName("el-table")[0]);
       //   document.getElementsByClassName("el-table")[0].addEventListener('scroll', this.jump)
       // })  
     },
@@ -475,10 +451,6 @@
       $.when(getAllArticles(this.userid,this.method,this.type,this.pageNo)).done(function(data){
         if(data.state=="0"){
           that.insertData(data);
-        }
-        else if(data.state=='9000'){
-          // alert("用户未登录！")
-          that.$router.push({path:'/login',query: {}});
         }
         else{
           alert(data.data);

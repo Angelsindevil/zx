@@ -170,7 +170,6 @@ export default {
     },
     clickDel(e,id){
       var that=this;
-      console.log(e);
       e.stopPropagation();
       e.preventDefault();
       if(confirm("确认删除该批示流程？")){
@@ -181,10 +180,6 @@ export default {
               $(el).remove();
             })
             // window.location.reload();
-          }
-          else if(data.state=='9000'){
-            // alert("用户未登录！")
-            that.$router.push({path:'/login',query: {}});
           }
           else{
             alert(data.data);
@@ -239,10 +234,6 @@ export default {
         if(data.state=="0"){
           that.insertData(data);
         }
-        else if(data.state=='9000'){
-          // alert("用户未登录！")
-          that.$router.push({path:'/login',query: {}});
-        }
         else{
           alert(data.data);
         }
@@ -255,10 +246,6 @@ export default {
         $.when(searchInstructionList(that.userid,that.input2,val,that.pageNo,that.value1)).done(function(data){
           if(data.state=="0"){
             that.insertData(data);
-          }
-          else if(data.state=='9000'){
-            // alert("用户未登录！")
-            that.$router.push({path:'/login',query: {}});
           }
           else{
             alert(data.data);
@@ -288,10 +275,6 @@ export default {
         $.when(searchInstructionList(that.userid,that.input2,that.value,that.pageNo,val)).done(function(data){
           if(data.state=="0"){
             that.insertData(data);
-          }
-          else if(data.state=='9000'){
-            // alert("用户未登录！")
-            that.$router.push({path:'/login',query: {}});
           }
           else{
             alert(data.data);
@@ -401,7 +384,6 @@ export default {
             that.articlesAarry.push(item);
             // that.strLen=that.getStrLen(value.title);
           },that)
-          console.log(that.articlesAarry);
         // }
       }
       else{   
@@ -439,10 +421,6 @@ export default {
               $(document).scrollTop(height-350);
             })
           }
-          else if(data.state=='9000'){
-            // alert("用户未登录！")
-            that.$router.push({path:'/login',query: {}});
-          }
           else{
             alert(data.data);
           }
@@ -457,9 +435,6 @@ export default {
           that.insertData(data);
           that.$store.dispatch('changepsFlag',false).then(function(resp){});
         }
-        else if(data.state=='9000'){
-          that.$router.push({path:'/login',query: {}});
-        }
         else{
           alert(data.data);
         }
@@ -471,7 +446,6 @@ export default {
     // this.articlesAarry=this.articles.map(function(value,index){
     //   var indexTooltips;
     //   var btn_con;
-    //   console.log("111");
     //   if(value.rowState=='0'){
     //     btn_con="流程已结束";
     //   }
@@ -502,7 +476,6 @@ export default {
     //   }
     //   // that.strLen=that.getStrLen(value.title);
     // },that)
-    // console.log(this.articlesAarry);
     // this.articlesAarry=this.articles;
     // this.openWarn("谢谢谢谢🙏！");
     // this.open("h哈哈哈哈");

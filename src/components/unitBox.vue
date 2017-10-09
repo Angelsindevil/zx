@@ -168,7 +168,6 @@
               this.orgid=val.orgid;//编辑时弹窗的渲染
             }
             else{}
-            console.log(this.orgid);
 
             // $.fn.zTree.init($("#tree"), that.setting, that.data2);//insert。弃之
             // that.rootObj=$.fn.zTree.getZTreeObj("tree");//弃之
@@ -195,10 +194,6 @@
               if(data.state=='0'){
                 that.data2=data.data;
                 that.initTree();
-              }
-              else if(data.state=='9000'){
-                // alert("用户未登录！")
-                that.$router.push({path:'/login',query: {}});
               }
               else{
                 alert(data.data);
@@ -280,7 +275,6 @@
       //   cb(results);
       // },
       querySearch(queryString, cb) {
-        // console.log(this.nodeAll);
         // var alltableData = this.nodeAll;
         var alltableData=this.nodeAll.map(function(value,index){
           return{
@@ -299,7 +293,6 @@
         };
       },
       // handleSelect(item) {
-      //   console.log(item.value);
       //   for (var i=0;i<this.commonData.length;i++) {
       //     if(this.commonData[i].value==item.value){
       //       // if(this.isSelect){
@@ -332,7 +325,6 @@
         }
       },
       handleIconSelect(){
-        console.log(this.state2);
         for(var i=0;i<this.nodeAll.length;i++){
           if(this.state2==this.nodeAll[i].name){
             // this.rootObj.expandAll(false);
@@ -374,10 +366,6 @@
         if(data.state=='0'){
           that.data2=data.data;
           that.initTree();
-        }
-        else if(data.state=='9000'){
-          // alert("用户未登录！")
-          that.$router.push({path:'/login',query: {}});
         }
         else{
           alert(data.data);

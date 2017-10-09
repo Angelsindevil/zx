@@ -264,10 +264,6 @@
                 // $(".mask1,.userBox").removeClass("showBtn userBoxAdd");
                 // window.location.reload();
               }
-              else if(data.state=='9000'){
-                // alert("用户未登录！")
-                that.$router.push({path:'/login',query: {}});
-              }
               else{
                 alert(data.data);
               }
@@ -284,10 +280,6 @@
                 // window.location.reload();
                 that.$store.dispatch('changeUserFlag',true).then(function(resp){});
                 that.hideUserBox();
-              }
-              else if(data.state=='9000'){
-                // alert("用户未登录！")
-                that.$router.push({path:'/login',query: {}});
               }
               else{
                 alert(data.data);
@@ -309,10 +301,6 @@
                 that.$store.dispatch('changeUserFlag',true).then(function(resp){});
                 that.hideUserBox();
               }
-              else if(data.state=='9000'){
-                // alert("用户未登录！")
-                that.$router.push({path:'/login',query: {}});
-              }
               else{
                 alert(data.data);
               }
@@ -332,10 +320,6 @@
                 // this.alreadyCancel=false;//是否有这个需求，反注销后 不退出编辑
                 // window.location.reload();
               }
-              else if(data.state=='9000'){
-                // alert("用户未登录！")
-                that.$router.push({path:'/login',query: {}});
-              }
               else{
                 alert(data.data);
               }
@@ -354,10 +338,6 @@
               that.$store.dispatch('changeUserFlag',true).then(function(resp){});
               that.hideUserBox();
               // window.location.reload();
-            }
-            else if(data.state=='9000'){
-              // alert("用户未登录！")
-              that.$router.push({path:'/login',query: {}});
             }
             else{
               alert(data.data);

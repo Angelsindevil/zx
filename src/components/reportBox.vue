@@ -114,7 +114,6 @@
       },
       build(){
         var that=this;
-        console.log(this.list);
         this.article_id=this.list.map(function(value,index){
           return value.id;
         })
@@ -135,10 +134,6 @@
             that.setReporterNum();
             // this.$store.dispatch('changeWord',{wordObj:data.data}).then(function(resp){});
           }
-          else if(data.state=='9000'){
-            // alert("用户未登录！")
-            that.$router.push({path:'/login',query: {}});
-          }
           else{
             alert(data.data);
           }
@@ -153,7 +148,6 @@
         $.when(getReportNum(this.userid)).done(function(data){
           if(data.state=="0"){
             var count=data.data<10?'0'+data.data:data.data;
-            console.log(count);
             var str="高等教育信息动态-"+that.time+"-V"+count;
             that.form.name=str;
             that.reportName=str;
@@ -170,7 +164,6 @@
     mounted() {
     },
     created: function () {
-      console.log(this.fwLink);
       this.$nextTick(function(){
         matchMenu();
       })

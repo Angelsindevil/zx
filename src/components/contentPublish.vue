@@ -125,7 +125,6 @@ export default {
     },
     clickBtn:function(e,id){
       var that=this;
-      console.log(e);
       e.stopPropagation();
       e.preventDefault();
       $.when(cancelArticle(id)).done(function(data){
@@ -133,10 +132,6 @@ export default {
           that.open("取消发布成功！");
           that.getInitData();
           // window.location.reload();
-        }
-        else if(data.state=='9000'){
-          // alert("用户未登录！")
-          that.$router.push({path:'/login',query: {}});
         }
         else{
           alert(data.data);
@@ -193,10 +188,6 @@ export default {
           that.articlesAarry=[];
           that.insertData(data.data);
         }
-        else if(data.state=='9000'){
-          // alert("用户未登录！")
-          that.$router.push({path:'/login',query: {}});
-        }
         else{
           alert(data.data);
         }
@@ -217,10 +208,6 @@ export default {
               $(document).scrollTop(height);
             })
           }
-          else if(data.state=='9000'){
-            // alert("用户未登录！")
-            that.$router.push({path:'/login',query: {}});
-          }
           else{
             alert(data.data);
           }
@@ -233,10 +220,6 @@ export default {
             that.$nextTick(function(){
               $(document).scrollTop(height);
             })
-          }
-          else if(data.state=='9000'){
-            // alert("用户未登录！")
-            that.$router.push({path:'/login',query: {}});
           }
           else{
             alert(data.data);
@@ -251,10 +234,6 @@ export default {
         if(data.state=="0"){
           that.isShowData=true;
           that.insertData(data.data);
-        }
-        else if(data.state=='9000'){
-          // alert("用户未登录！")
-          that.$router.push({path:'/login',query: {}});
         }
         else{
           alert(data.data);

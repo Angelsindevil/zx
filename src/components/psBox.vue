@@ -199,14 +199,12 @@
         else{
           this.input3=val.name[0]+'...';
         }
-        console.log(val);
       },
       deep:true,
       immediate: true,
     },
     peopleObj:{
       handler: function (val, oldVal) {//监听学校和指标数组，只要学科id没有变化，则不变化
-        console.log(val);
         if(val.value!=undefined){
           this.input2=val.value;
           this.psId=val.id;
@@ -217,10 +215,8 @@
     },
     psShow:{
       handler: function (val, oldVal) {//用于判断由文章列表或者文章详情点入的还是在批示那边新建批示流程
-        console.log("hahhahha ");
         // this.quill.setContents('');
         if(Object.keys(val).length!=0){//不为空对象，由文章列表或者文章详情点入
-          console.log("ehajkdshaj");
           this.currentRow=val.value;
           this.articleId=val.id;//需要有，当未点击打开文章的时候，需要有直接的id
           this.artChoose=false;
@@ -251,7 +247,6 @@
     },
     singleObj:{
       handler: function (val, oldVal) {//批示人选择后 相应渲染
-        console.log(val);
         if(val.value!=undefined){
           if(this.level=='0'||this.level=='4'){//权限为管理员 批示人可选
             this.input2=val.value;
@@ -265,10 +260,7 @@
     },
     psBox:{
       handler: function (val, oldVal) {//
-        console.log('psBox');
-        console.log(val);
         if(val.flag){
-          console.log('psBox1111');
           if(val.psType=='0'){//批示管理新增
             this.currentRow="";
             this.articleId="";
@@ -288,7 +280,6 @@
           // this.psDisabled=true;//判断不是系统管理员
           this.alertType=val.type;
           if(val.type=='0'){//批示弹窗
-            console.log("type");
             this.peopleTips='处理人';
             this.$nextTick(function(){
               $(".blueBot").show();
@@ -300,7 +291,6 @@
               this.input3="";
             }
             else{
-              console.log(this.userName);
               this.psDisabled=true;
               this.clDisabled=true;
               this.input2=this.userName;
@@ -404,10 +394,6 @@
             }
             that.$store.dispatch('changepsCount',{"psCount":data.data}).then(function(resp){});
           }
-          else if(data.state=='9000'){
-            // alert("用户未登录！")
-            that.$router.push({path:'/login',query: {}});
-          }
           else{
             alert(data.data);
           }
@@ -462,7 +448,6 @@
       }
     },
     solvePeople:function(){//处理人弹窗  反馈还是分发
-      console.log("111");
       if(this.level=="0"||this.level=='4'){//系统管理员无论反馈和分发 都弹窗 而且都默认选中自己
         if(this.alertType=='1'||this.alertType=='2'){//分发
           this.$store.dispatch('getNewUser',{
@@ -492,7 +477,6 @@
       // }
     },
     solveSinglePeople:function(){//批示人弹窗
-      console.log("222");
       $(".singleBox").addClass("showBtn");
       $(".mask2").addClass("showBtn");
       $(".mask1").removeClass("showBtn");
@@ -554,10 +538,6 @@
               that.$store.dispatch('changepsFlag',true).then(function(resp){});
               // window.location.reload();
             }
-            else if(data.state=='9000'){
-              // alert("用户未登录！")
-              that.$router.push({path:'/login',query: {}});
-            }
             else{
               alert(data.data);
               // that.fileFlag=false;
@@ -601,10 +581,6 @@
                 that.$store.dispatch('changeSelArr',{selectArr:{name:[],id:[]}}).then(function(resp){});
                 that.$store.dispatch('changepsDetailFlag',true).then(function(resp){});
                 // window.location.reload();
-              }
-              else if(data.state=='9000'){
-                // alert("用户未登录！")
-                that.$router.push({path:'/login',query: {}});
               }
               else{
                 alert(data.data);
@@ -659,10 +635,6 @@
               that.$store.dispatch('changeSelArr',{selectArr:{name:[],id:[]}}).then(function(resp){});
               that.$store.dispatch('changepsDetailFlag',true).then(function(resp){});
               // window.location.reload();
-            }
-            else if(data.state=='9000'){
-              // alert("用户未登录！")
-              that.$router.push({path:'/login',query: {}});
             }
             else{
               alert(data.data);

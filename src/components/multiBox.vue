@@ -88,21 +88,22 @@
 	  watch:{
 	    clearAll:{
 	      handler: function (val, oldVal) {//取消所有选择
-	      	console.log("execute");
+	      	this.state2="";
+	      	this.selectArr.name.length=0;
+	      	this.selectArr.id.length=0;
 	      	this.getCurrentUser();
-	     //  	this.$nextTick(function () {
-	     //  		$(".multiBox .el-table__body-wrapper").find("tbody tr").each(function(index,element){
-      //             $(element).children('td').find('.el-checkbox__input').removeClass("is-checked");
-      //             // $(element).children('td').eq(0).children('div').addClass("ellipsis");
-      //         	})
-		    // })	
+	      	this.$nextTick(function () {
+	      		$(".multiBox .el-table__body-wrapper").find("tbody tr").each(function(index,element){
+                  $(element).children('td').find('.el-checkbox__input').removeClass("is-checked");
+                  // $(element).children('td').eq(0).children('div').addClass("ellipsis");
+              	})
+		    })	
 	      },
 	      deep:true,
 	      immediate: true,
 	    },
 	    multiBrush:{
 	        handler: function (val, oldVal) {//监听学校和指标数组，只要学科id没有变化，则不变化
-	          console.log(val);
 	          if(val.flag){
 	            this.getCurrentUser();
 	          }
@@ -132,6 +133,10 @@
 	    querySearch(queryString, cb) {
 	      var alltableData = this.commonData;
 	      var results = queryString ? alltableData.filter(this.createFilter(queryString)) : alltableData;
+	      // var val=results.length>0?results[0]:'';
+	      // if(val!=''){
+	      //   this.handleSelect(val);
+	      // }
 	      cb(results);
 	    },
 	    // createFilter(queryString) {
@@ -145,7 +150,6 @@
           };
       	},
 	    handleSelect(item) {
-	      console.log(item.value);
 	      for (var i=0;i<this.commonData.length;i++) {
 	        if(this.commonData[i].value==item.value){
 	          // if(this.isSelect){
@@ -177,8 +181,10 @@
 	        $(selector).find(".article_table tbody").children("tr").eq(i).addClass("current-row");
 	      	var height=$(selector).find(".article_table tbody").children("tr").eq(i).position().top;
 	      	$(selector).find(".alertContent .el-table__body-wrapper").scrollTop(height)
-	      	$(selector).find(".article_table tbody").children("tr").eq(i).find(".el-checkbox__input").addClass("is-checked");
+	      	// $(selector).find(".article_table tbody").children("tr").eq(i).find(".el-checkbox__input").addClass("is-checked");
 	      	})
+	      	this.selectArr.name.push(item.value);
+	        this.selectArr.id.push(item.id);
 	    },
 	    handleTableCurrentChange(val){//点击具体表格中的条目
 	      if(val){
@@ -201,16 +207,14 @@
 	    },
 	    handleSelectionChange(val) {//点击多选的条目
 	      this.multipleSelection = val;
-	      console.log(val);
-	      this.selectArr.name.length=0;
-	      this.selectArr.id.length=0;
+	      // this.selectArr.name.length=0;
+	      // this.selectArr.id.length=0;
 	      for (var i=0;i<val.length;i++) {
 	        this.selectArr.name.push(val[i].value);
 	        this.selectArr.id.push(val[i].id);
 	      }
 	    },
 	    submit(){
-	    	console.log(this.selectArr);
 	    	if(this.type=='2'){
 		      	if(this.selectArr.id.length>1){
 		      		this.openWarn('反馈人数不能大于1');
@@ -238,10 +242,6 @@
 		              id:value.id,
 		            }
 		          })
-		        }
-		        else if(data.state=='9000'){
-		            // alert("用户未登录！")
-		            that.$router.push({path:'/login',query: {}});
 		        }
 		        else{
 		          alert(data.data);

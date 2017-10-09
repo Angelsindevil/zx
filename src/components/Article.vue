@@ -1,7 +1,7 @@
 <template>
   <div class="article">
     <div class="title_bar">
-      <p style="padding-right:110px">
+      <p :class="level!=100?'rightRest':''">
         <span style="display:block;font-size: 18px;color: #222;padding-top:0">{{title}}</span>
         <span>
           <span>来源：<span class="ellipsis" style="display: inline-block;width: 65%;vertical-align: middle;">{{source}}</span></span>
@@ -18,14 +18,14 @@
       <span class="includeBtn includeBtn_fb"
        @click="releaseChange(id,$event,type,isRelease)" 
        style="width:80px;font-size:12px"
-       v-show="(level!=3)?true:false"
+       v-show="(level==3||level==100)?false:true"
        :class="isRelease=='1'?'grey':false"
        @mouseover="overBtn($event,isRelease)" @mouseout="outBtn($event,isRelease)"
        >
         <span>{{isRelease=='1'?'已发布':'发布'}}</span>
        </span>
       <span class="includeBtn includeBtn_sl" 
-        v-show="(level!=3)?true:false"
+        v-show="(level==3||level==100)?false:true"
         :class="((level==0||level==2)?(isInstructions=='0'?'':'grey'):((level==1||level==4)?(isInclude=='0'?'':'grey'):''))"
         :data-state="isInstructions" 
         :data-pid="instructionId" 
@@ -128,7 +128,6 @@ export default {
       window.open(link);
     },
     releaseChange(id,e,type,isRelease){
-      console.log(isRelease);
       if(isRelease=='1'){
         this.clickBtn(e,id);
       }
@@ -148,10 +147,6 @@ export default {
           $(el).removeClass("grey");
           $(el).children("span").text("发布");
           that.isRelease='0'
-        }
-        else if(data.state=='9000'){
-          // alert("用户未登录！")
-          that.$router.push({path:'/login',query: {}});
         }
         else{
           alert(data.data);
@@ -300,10 +295,6 @@ export default {
           $.when(canceled(id,this.userid)).done(function(data){
             if(data.state=="0"){
             }
-            else if(data.state=='9000'){
-              // alert("用户未登录！")
-              that.$router.push({path:'/login',query: {}});
-            }
             else{
               alert(data.data);
             }
@@ -314,10 +305,6 @@ export default {
         else{
           $.when(included(id,this.userid)).done(function(data){
             if(data.state=="0"){
-            }
-            else if(data.state=='9000'){
-              // alert("用户未登录！")
-              that.$router.push({path:'/login',query: {}});
             }
             else{
               alert(data.data);
@@ -429,15 +416,19 @@ export default {
           that.isAdded=res.isAdded;
           that.isRelease=res.isRelease;
         }
-        else if(data.state=='9000'){
-          // alert("用户未登录！")
-          that.$router.push({path:'/login',query: {}});
-        }
         else{
           alert(data.data);
         }
       })
     }
+    else{}
+    $.when(checkState()).done(function(data){
+      if(data.state=='0'){
+      }
+      else{
+        that.level=100;
+      }
+    })
   },
 }
 </script>
@@ -540,6 +531,11 @@ export default {
     color:#FF6666!important;
     img{
       width:15px!important;
+    }
+  }
+  .article{
+    .rightRest{
+      padding-right:110px!important;
     }
   }
 </style>

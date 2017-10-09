@@ -21,7 +21,10 @@
               <!-- <span class="red-dot" ref='redMes'>{{xtNum}}</span> -->
               <span class="red-dot" ref='redMes'></span>
             </router-link>
-            <el-dropdown @command="showLoginBox">
+            <router-link to="/login" class="backLogin" ref="backLogin">
+              <span>返回登录</span>
+            </router-link>
+            <el-dropdown @command="showLoginBox" class="operateBtn" ref="operateBtn">
               <span class="el-dropdown-link">
                 <img src="../../static/img/user.png" alt="">
               </span>
@@ -225,6 +228,7 @@ export default {
   mounted() {
   },
   created(){
+    var that=this;
     this.userSource=JSON.parse(localStorage.getItem("userSource"));
     if(this.userSource&&(this.userSource.level==0||this.userSource.level==4)){
       this.$nextTick(function(){
@@ -241,6 +245,20 @@ export default {
     this.$nextTick(function(){
       matchMenu();
       scrollFun();
+    })
+    $.when(checkState()).done(function(data){
+      if(data.state=='0'){
+        that.$nextTick(function(){
+          $(".backLogin").css("display","none");
+          $(".operateBtn").css("display","inline-block");
+        })
+      }
+      else{
+        that.$nextTick(function(){
+          $(".backLogin").css("display","inline-block");
+          $(".operateBtn").css("display","none");
+        })
+      }
     })
   }
 }
@@ -357,11 +375,11 @@ body{
       >span:last-child{
         // float:right;
         position: absolute;
-        right: 0px;
+        right: 5px;
         width: 90px;
         >a{
           display: inline-block;
-          margin-right: 20px;
+          margin-right: 10px;
         }
         >img:first-child{
           margin-right:30px;
@@ -448,5 +466,16 @@ body{
 }
 .el-dropdown-menu .item_border{
   border-bottom:1px solid #ccc;
+}
+.operateBtn{
+  display:none;
+}
+.backLogin{
+  display:none;
+  color: #169BD5;
+  font-size: 13px;
+  position: absolute;
+  width: 80px;
+  top: 15px;
 }
 </style>

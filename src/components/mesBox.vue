@@ -71,9 +71,7 @@
       },
       // mesObj:{
       //   handler: function (val, oldVal) {//监听学校和指标数组，只要学科id没有变化，则不变化
-      //     console.log(val);
       //     if(val){
-      //       console.log('change');
       //       this.form.title=val.title;
       //       this.form.area=val.area;
       //       this.form.accept=val.accept;
@@ -112,13 +110,10 @@
           },
           success:function(data){
             if(data.state=="0"){
-              console.log(data.data);
-              console.log(typeof(data.data))
               if(data.data==0){
                 // $(that.$refs.redMes).children('span').hide();
               }
               else{
-                console.log("11");
                 if(data.data>30){
                   // that.xtNum='...';
                 }
@@ -128,10 +123,6 @@
                 // that.xtNum=data.data;
               }
               that.$store.dispatch('changeMesCount',{"mesCount":data.data}).then(function(resp){});
-            }
-            else if(data.state=='9000'){
-              // alert("用户未登录！")
-              that.$router.push({path:'/login',query: {}});
             }
             else{
               alert(data.data);
@@ -206,10 +197,6 @@
               that.form.area="";
               that.form.accept="";
               // that.$store.dispatch('changeMesInfo',{mesObj:that.form}).then(function(resp){});
-            }
-            else if(data.state=='9000'){
-              // alert("用户未登录！")
-              that.$router.push({path:'/login',query: {}});
             }
             else{
               alert(data.data);
